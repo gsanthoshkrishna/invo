@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+</head>
+<body>
+    <h1>Task List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task[0] }}</td> <!-- Assuming ID is the first column -->
+                <td>{{ task[1] }}</td> <!-- Assuming Name is the second column -->
+                <td>
+                    <form action="/items" method="POST">
+                        <select>
+                            <option value="{{ task[2] }}">{{ task[2] }}</option>
+                            <option value="{% if task[2] == 'Open' %}Done{% elif task[2] == 'Done' %}Open{% else %}Done{% endif %}">
+                                {% if task[2] == 'Open' %}
+                                    Done
+                                    {% elif task[2] == 'Done' %}
+                                        Open
+                                    {% else %}
+                                    Done
+                                {% endif %}
+                            </option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

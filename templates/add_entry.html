@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Entries</title>
+</head>
+<body>
+    <h1>Market Update</h1>
+    <form action="/market-update" method="POST">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{{ current_date }}" required>
+        <br><br>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Change</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for _ in range(5) %} <!-- Add 5 rows by default -->
+                <tr>
+                    <td>
+                        <select name="indicator">
+                            <option value="" disabled selected>Select an indicator</option>
+                            {% for indicator in indicators %}
+                            <option value={{ indicator[0] }}>{{ indicator[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="ind_change">
+                            <option value="" disabled selected>change</option>
+                            <option value='Positive'>Positive</option>
+                            <option value='Negative'>Negative</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="remark" placeholder="Enter remark">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <button onclick="location.href='/buckets'">Buckets</button>
+    <button onclick="location.href='/items'">Items</button>
+    <button onclick="location.href='/market-update'">Market Update</button>
+    <button onclick="location.href='/invo_tasks'">Tasks</button>
+    <button onclick="location.href='/daily_changes'">DailyChanges</button>
+    <button onclick="location.href='/watchlist'">WatchList</button>
+</body>
+</html>
+
