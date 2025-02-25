@@ -1,0 +1,28 @@
+<form action="/update-inventory" method="POST">
+    <label for="date">Date   :</label>
+    <input type="date" id="date" name="date" value="{{ current_date }}" required>
+    <br><label>Item:</label>
+    <select name="item">
+        <option value="" disabled selected>Item</option>
+        {% for item in items %}
+        <option value="{{ item[0] }}">{{ item[1] }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label>Buyer:</label>
+    <select name="buyer">
+        <option value="" disabled selected>Buyer</option>
+        {% for buyer in buyers %}
+        <option value="{{ buyer[0] }}">{{ buyer[1] }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label>Quantity:</label>
+    <input type="text" name="quantity">
+    <br>
+    <label>Model:</label>
+    <input type="text" name="model"><br>
+    <br>
+    <button>Submit</button>
+</form>
+<button onclick="location.href='/home'">Home</button>

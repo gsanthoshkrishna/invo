@@ -2,28 +2,29 @@
     <label for="date">Date   :</label>
     <input type="date" id="date" name="date" value="{{ current_date }}" required>
     <br>
-    <select name="open">
+    <select name="s_open">
         <option>Open</option>
     </select>
-    <input type="text" name="open"><br>
-    <select name="close">
-        <option>High</option>
-        <option>Low</option>
+    <input type="text" name="t_open"><br>
+
+    <select name="s_ch1">
+        <option value="tr_high">High</option>
+        <option value="tr_low">Low</option>
     </select>
-    <input type="text" name="close"><br>
-    <select name="high">
-        <option>High</option>
-        <option>Low</option>
+    <input type="text" name="t_ch1"><br>
+
+    <select name="s_ch2">
+        <option value="tr_high">High</option>
+        <option value="tr_low">Low</option>
     </select>
-    <input type="text" name="high"><br>
-    <select name="low">
+    <input type="text" name="t_ch2"><br>
+
+    <select name="s_close">
         <option>Close</option>
     </select>
-    <input type="text" name="low">
+    <input type="text" name="t_close">
+
     <button>Submit</button>
-</form>
-<form action="/get-daily-changes" method="GET">
-    <button>View</button>
 </form>
 <button onclick="location.href='/'">Home</button>
 <button onclick="location.href='/get-daily-update'">Get Market Updates</button>

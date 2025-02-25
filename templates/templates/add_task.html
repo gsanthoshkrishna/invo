@@ -1,0 +1,28 @@
+<form action="/create-task" method="POST">
+    <label for="date">Date   :</label>
+    <input type="date" id="date" name="date" value="{{ current_date }}" required>
+    <br><label>Task Owner:</label>
+    <select name="user">
+        <option value="" disabled selected>Owner</option>
+        {% for user in users %}
+        <option value="{{ user[1] }}">{{ user[1] }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label>Name:</label>
+    <input type="text" name="task_name"><br>
+    <label>Description:</label>
+    <textarea name="task_desc"></textarea><br>
+    <label>Recurrence:</label>
+    <input type="text" name="task_recc"><br>
+    <label>Bucket:</label>
+    <select name="task_bkt">
+        <option value="" disabled selected>Bucket</option>
+        {% for bucket in buckets %}
+        <option value="{{ bucket[0] }}">{{ bucket[1] }}</option>
+        {% endfor %}
+    </select><br>
+    <button>Submit</button>
+</form>
+<button onclick="location.href='/'">Home</button>
+

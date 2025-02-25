@@ -34,8 +34,10 @@ CREATE TABLE daily_indicators(
     id INT AUTO_INCREMENT PRIMARY KEY,
     date varchar(15),
     indicator varchar(30),
+    indicator_id int,
     remarks varchar(30),
-    ind_change varchar(20)
+    ind_change varchar(20),
+    user_id int
 )
 
 CREATE TABLE indicators (
@@ -47,10 +49,13 @@ create table invo_user (
     id INT AUTO_INCREMENT PRIMARY KEY, 
     name varchar(20), 
     user_id varchar(10), 
-    status int
+    status int,
+
 );
-insert into invo_user values(null,'Lakshmi','lakshmi',1);
-insert into invo_user values(null,'Raji','raji',1);
+insert into invo_user values(null,'Lakshmi','lakshmi',1,'123');
+insert into invo_user values(null,'Raji','raji',1,'raji123');
+insert into invo_user values(null,'Neelima','neelima',1,'n123');
+
 
 
 create table assign_task(     
@@ -125,7 +130,7 @@ create table tr_daily_changes(
     user_id int
 )
 
-/*New*/
+
 alter table invo_user add column passwd varchar(20) ;
 alter table items add column count int;
 
@@ -148,4 +153,46 @@ create table scripts(
     sector varchar(20),
     exchange ENUM('NSE', 'BSE')
 )
+
+
+alter table daily_indicators add column user_name varchar(20) after user_id
+/*New*/ - confirm
+
+/*in instance*/
+alter table tr_daily_changes add column user_name varchar(20)
+
+/*New*/
+alter table invo_task add column user_name varchar(20);
+create table bucket_details(
+    name varchar(50),
+    script varchar(20),
+    exchange varchar(10),
+    quantity int,
+    last_updated date,
+    avg_price decimal(10,2),
+    current_price decimal(10,2)
+)
+
+alter table items add column bucket varchar(50)
+alter table tr_share add column bucket varchar(50)
+
+create table tr_account(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    account varchar(20), 
+    debt int, 
+    credit int, 
+    date date, 
+    remarks varchar(50)
+
+)
+
+create table account(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(20),
+    description varchar(30)
+)
 /* nohup python3 app.py & > /dev/null &  */      
+
+
+
+

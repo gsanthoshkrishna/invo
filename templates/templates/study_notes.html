@@ -1,0 +1,106 @@
+<html>
+    <title>Study Notes</title>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+
+    <body>
+        <select name="study-notes" id="study-notes">
+                <option value="" disabled selected>Select Note</option>
+                {% for note in notes %}
+                <option value="{{ note[0] }}">{{ note[1] }}</option>
+                {% endfor %}
+        </select>
+        <button onclick="getNotes()">Load</button>
+        <button onclick="showPopup()">New</button>
+        
+        <div id="overlay" class="overlay"></div>
+
+        <div id="popupForm" class="popup">
+            <form action="/insert-note" method="POST">
+                <label for="name">Enter new note name:</label>
+                <input type="text" id="name" name="name" required>
+                <input type="submit" value="Create">
+                <button type="button" onclick="hidePopup()">Cancel</button>
+            </form>
+        </div>
+        <div id="updateForm" class="popup">
+            <label> Updated successfully.</label>
+            <button type="button" onclick="hidePopup()">Ok</button>
+        </div>
+        <br>
+            <textarea rows="20" cols="80" id="notes-content" name="notes-content">{{ study_content }}</textarea>
+        <br>
+        <button onclick="updateNotes()">Save</button>
+        <button onclick="location.href='/'">Home</button>
+    </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function getNotes() {
+        var inputValue = $('#study-notes').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/get-study-notes',
+            data: JSON.stringify({ 'note_id': inputValue,'request_type': 'ajax' }), 
+            contentType: 'application/json; charset=utf-8', 
+            dataType: 'json',
+            success: function(response) {
+                        $('#notes-content').val(response.study_content); // Update ONLY the textarea's value
+                    }
+        });
+    }
+
+    function updateNotes() {
+        var select = document.getElementById('study-notes');
+        var noteName = select.options[select.selectedIndex].text;
+        var notesContent = $('#notes-content').val();
+        console.log(noteName)
+        console.log(notesContent);
+        $.ajax({
+            type: 'POST',
+            url: '/update-note',
+            data: JSON.stringify({ 'note-name': noteName,'notes-content':notesContent, 'request_type': 'ajax' }), 
+            contentType: 'application/json; charset=utf-8', 
+            dataType: 'json',
+            success: function(response){
+                document.getElementById("updateForm").style.display = "block";
+            } 
+        });
+    }
+
+
+    function showPopup() {
+        document.getElementById("popupForm").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function hidePopup() {
+        document.getElementById("popupForm").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("updateForm").style.display = "none";
+    }
+
+</script>
