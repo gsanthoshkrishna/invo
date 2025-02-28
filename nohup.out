@@ -1,0 +1,16 @@
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 304-862-885
+223.178.85.87 - - [27/Feb/2025 04:25:37] "GET / HTTP/1.1" 302 -
+223.178.85.87 - - [27/Feb/2025 04:25:37] "GET /login HTTP/1.1" 200 -
+223.178.85.87 - - [27/Feb/2025 04:25:38] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.85.87 - - [27/Feb/2025 04:27:29] "POST /login HTTP/1.1" 200 -
+223.178.85.87 - - [27/Feb/2025 04:27:37] "POST /login HTTP/1.1" 200 -

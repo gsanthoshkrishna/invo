@@ -3,8 +3,11 @@ import mysql.connector, time
 from datetime import date
 from flask_session import Session
 from decimal import Decimal
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'study-notes/img'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
@@ -16,6 +19,27 @@ mysql = mysql.connector.connect(
   database="invo",
   consume_results=True
 )
+
+@app.route('/upload-note', methods=['GET', 'POST'])
+def upload_note():
+    if request.method == 'POST':
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            return 'No file part'
+        
+        file = request.files['file']
+        
+        # If user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return jsonify({'notes':notes, 'ret_msg':"No file name."})
+        
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return jsonify({'notes':notes, 'ret_msg':"File uploaded successfully"})
+
+    return jsonify({'notes':notes, 'ret_msg':"Error while uploading file."})
 
 @app.route('/job_daily_task_creation')
 def job_daily_task_creation():
@@ -732,4 +756,5 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
+
 

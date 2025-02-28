@@ -1,0 +1,32 @@
+non current liabilities
+	long term loans 
+		notes.
+		Financial Liab
+			borrowings - maturity profile
+			Other Financial Liab
+		Other Financial Liab
+			Check in notes for more details needed.
+			Provisions: 
+		
+current 
+	financial
+		Borrowings
+		Trade payables 
+Liabilites are source of funds.
+
+Assets are spending of funds.
+
+Assets:
+	Non-Current
+	Current
+Check what are the parts mentined under Non-Current and Current. Understand about those 
+
+Next Check the Debt/Equity ration which is important by using below formula.
+From balance sheet get the values of below 
+	Total Non Current Borrowings from Liabilites (NCB)
+	Total Current Borrowings from liabilities (CB)
+	Total Equity from liabilities (TE)
+	then calculate (NCB + CB)/TE
+	compare this value with the D/E in screener.
+
+
