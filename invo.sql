@@ -156,12 +156,12 @@ create table scripts(
 
 
 alter table daily_indicators add column user_name varchar(20) after user_id
-/*New*/ - confirm
+
 
 /*in instance*/
 alter table tr_daily_changes add column user_name varchar(20)
 
-/*New*/
+
 alter table invo_task add column user_name varchar(20);
 create table bucket_details(
     name varchar(50),
@@ -191,7 +191,50 @@ create table account(
     name varchar(20),
     description varchar(30)
 )
+
+/*New*/
+alter table invo_user add column user_type int;
+
+alter table invo_task modify name varchar(200);
+alter table invo_task modify description text;
+
+alter table daily_task modify name varchar(200);
+alter table daily_task modify description text;
+
+drop table invo_task_list;
+
+create table daily_script_updates(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+	timestamp varchar(10),
+	companyName varchar(50), 
+	currentValue varchar(50), 
+	changeValue varchar(50), 
+	pchange varchar(50), 
+	updatedOn varchar(20), 
+	securityID varchar(50), 
+	scripCode int, 
+	scriptGroup varchar(50), 
+	faceValue varchar(50), 
+	industry varchar(50), 
+	previousClose varchar(50), 
+	previousOpen varchar(50), 
+	dayHigh varchar(50), 
+	dayLow varchar(50), 
+	52weekHigh varchar(50), 
+	52weekLow varchar(50), 
+	weightedAvgPrice varchar(50), 
+	totalTradedValue varchar(50),
+	totalTradedUnit varchar(10),
+	totalTradedQuantity varchar(50), 
+	2WeekAvgQuantity varchar(50), 
+	marketCapFull varchar(50), 
+	marketCapFreeFloat varchar(50), 
+	marketCapFreeFloatUnit varchar(10)
+
+)
+
 /* nohup python3 app.py & > /dev/null &  */      
+
 
 
 

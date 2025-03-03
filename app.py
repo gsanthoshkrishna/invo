@@ -1,22 +1,31 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import mysql.connector, time
-from datetime import date
+import mysql.connector, time, sys, json
+from datetime import date, datetime
 from flask_session import Session
 from decimal import Decimal
 from werkzeug.utils import secure_filename
+from bsedata.bse import BSE
 
 app = Flask(__name__)
+db_name = ""
 UPLOAD_FOLDER = 'study-notes/img'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+config_data = {}
 
+env_val = sys.argv[1]
+file_name = "config-"+env_val+".json"
+print("file:"+file_name)
+with open(file_name, 'r') as config_file:
+    config_data = json.load(config_file)
+    db_name = config_data['database']
 # MySQL database configuration
 mysql = mysql.connector.connect(
   host="localhost",
   user="root",
   password="Pass@123",
-  database="invo",
+  database=db_name,
   consume_results=True
 )
 
@@ -137,6 +146,7 @@ def get_user_info(user_id, pswd):
         session['user_name'] = usr[1]
         session['user_id'] = usr[3]
         session['user_uid'] = usr[0]
+        session['user_type'] = usr[5]
 
     cur.close()
 
@@ -270,6 +280,18 @@ def invo_tasks():
         u.id = t.owner and 
         b.id = t.bucket_id
     """
+    print("sessuserid:"+str(session.get('user_type')))
+    if str(session.get('user_type')) == "1":
+        qry = f"""
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    """
+
     cur = mysql.cursor()
     print(qry)
     cur.execute(qry)
@@ -654,6 +676,7 @@ def update_bucket_details(bkt_name,scr_name,quantity,price,exchange):
 
 global_users_list = []
 
+
 def set_user_list():
     global global_users_list
     cursor = mysql.cursor()
@@ -670,6 +693,46 @@ def get_user_details(key):
         print("Checking "+str(key)+" against "+user)
         if "@"+str(key)+"@" in user:
             return user.split('@')
+
+@app.route("/update-invo-scripts")
+def update_invo_scripts():
+    b = BSE()
+    dt = datetime.today().strftime('%Y%m%d')
+    quotes = ["530517", "533206"]
+    columns = ["timestamp","companyName","currentValue","changeValue","pchange","updatedOn","securityID","scripCode","scriptGroup","faceValue","industry","previousClose","previousOpen","dayHigh","dayLow","52weekHigh","52weekLow","weightedAvgPrice","totalTradedValue","totalTradedUnit","totalTradedQuantity","2WeekAvgQuantity","marketCapFull","marketCapFreeFloat","marketCapFreeFloatUnit"]
+    insert_values = []
+    for qt in quotes:
+        q_vals = (dt)
+        q = b.getQuote(qt)
+        q_keys = list(q.keys())
+        print(f"======{qt}=========")
+        print(q)
+        for cname in columns:
+            if cname in q_keys:
+                q_vals = q_vals + (q[cname],)             
+            else:
+                print("Key not available")
+        insert_values.append(q_vals)
+    print(insert_values)
+    insert_multiple_rows('daily_script_updates', columns, insert_values)
+
+
+
+
+# Insert multiple rows into the table
+def insert_multiple_rows( table_name, columns, values_list):
+    cursor = mysql.cursor()
+    sql = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))})"
+    cursor.executemany(sql, values_list)
+    mysql.commit()
+    print(f"{len(values_list)} records inserted into {table_name}.")
+
+def get_latest_scripts(pScript_list):
+    b = BSE(update_codes = True)
+    b.getScripCodes()
+    
+
+
 
 ######################### ACCOUNTS ######################################
 @app.route("/add-tr-acc", methods=['GET', 'POST'])
@@ -748,8 +811,10 @@ def update_inventory():
 
 if __name__ == '__main__':
     set_user_list()
+
+
     print(global_users_list)
-    app.run(host='0.0.0.0',port=5000, debug=True)
+    app.run(host='0.0.0.0',port=config_data['port'], debug=True)
     
 
 
