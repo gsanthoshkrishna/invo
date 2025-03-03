@@ -1,11 +1,22 @@
-import json
+import json,sys
 import mysql.connector
-from datetime import date
+from datetime import date,datetime
+from bsedata.bse import BSE
+
+config_data = {}
+
+env_val = sys.argv[1]
+file_name = "config-"+env_val+".json"
+print("file:"+file_name)
+with open(file_name, 'r') as config_file:
+    config_data = json.load(config_file)
+    db_name = config_data['database']
+
 mysql = mysql.connector.connect(
   host="localhost",
   user="root",
   password="Pass@123",
-  database="invo",
+  database=db_name,
   consume_results=True
 )
 
@@ -32,4 +43,54 @@ def job_daily_task_creation():
     cur.close()
 
 
-job_daily_task_creation()
+def update_invo_scripts():
+    b = BSE()
+    dt = datetime.today().strftime('%Y%m%d')
+    quotes = ["530517", "533206"]
+    columns = ["timestamp","companyName","currentValue","changeValue","pChange","updatedOn","securityID","scripCode","scriptGroup","faceValue","industry","previousClose","previousOpen","dayHigh","dayLow","52weekHigh","52weekLow","weightedAvgPrice","totalTradedValue","totalTradedUnit","totalTradedQuantity","2WeekAvgQuantity","marketCapFull","marketCapFreeFloat","marketCapFreeFloatUnit"]
+    insert_values = []
+    for qt in quotes:
+        q_vals = (dt,)
+        q = b.getQuote(qt)
+        q_keys = list(q.keys())
+        print(f"======{qt}=========")
+        print(q)
+        for cname in columns:
+            if cname in q_keys:
+                q_vals = q_vals + (q[cname],)             
+            elif cname == "changeValue":
+                q_vals = q_vals + (q["change"],)
+            elif cname == "scriptGroup":
+                q_vals = q_vals + (q["group"],)
+            elif cname == "totalTradedUnit":
+                q_vals = q_vals + ("NA",)
+            elif cname == "marketCapFreeFloatUnit":
+                q_vals = q_vals + ("NA",)
+            elif cname == "updatedOn":
+                q_vals = q_vals + (datetime.today().strftime('%Y-%m-%d'),)                
+            else:
+                print(cname+" Key not available")
+        insert_values.append(q_vals)
+    print(insert_values)
+    insert_multiple_rows('daily_script_updates', columns, insert_values)
+
+
+
+
+# Insert multiple rows into the table
+def insert_multiple_rows( table_name, columns, values_list):
+    cursor = mysql.cursor()
+    sql = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))})"
+    print(sql)
+    cursor.executemany(sql, values_list)
+    mysql.commit()
+    print(f"{len(values_list)} records inserted into {table_name}.")
+
+def get_latest_scripts(pScript_list):
+    b = BSE(update_codes = True)
+    b.getScripCodes()
+
+
+#TODO temporarily disabled this. 
+#job_daily_task_creation()
+update_invo_scripts()
