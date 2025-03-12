@@ -9,17 +9,7 @@ CREATE TABLE bucket (
     duration INT
 );
 
-CREATE TABLE tr_share (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    description TEXT,
-    quantity INT,
-    price INT,
-    tr_date date,
-    exchange varchar(10),
-    bucket_id INT,
-    FOREIGN KEY (bucket_id) REFERENCES bucket(id)
-);
+
 
 -- Insert some sample data
 INSERT INTO bucket (name, description, duration) VALUES
@@ -192,7 +182,7 @@ create table account(
     description varchar(30)
 )
 
-/*New*/
+
 alter table invo_user add column user_type int;
 
 alter table invo_task modify name varchar(200);
@@ -233,6 +223,22 @@ create table daily_script_updates(
 
 )
 
+
+/* New */
+drop table tr_share;
+
+CREATE TABLE tr_share (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    script_code varchar(10),
+    name VARCHAR(255),
+    description TEXT,
+    quantity INT,
+    price INT,
+    tr_date date,
+    exchange varchar(10),
+    bucket_id INT,
+    FOREIGN KEY (bucket_id) REFERENCES bucket(id)
+);
 /* nohup python3 app.py & > /dev/null &  */      
 
 

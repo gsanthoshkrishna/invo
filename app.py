@@ -330,18 +330,34 @@ def buy_sell_load():
         act = "NA"
         name = ""
         if action.startswith('buy_'):
-            name = action.replace('buy_', '')
+            item_id = action.replace('buy_', '')
             # Handle add action for row with sid
+            print("SBuy button clicked for sid:"+item_id+":"+action)
             act = "buy"
         elif action.startswith('sell_'):
-            name = action.replace('sell_', '')
+            
+            item_id = action.replace('sell_', '')
             # Handle delete action for row with sid
-            print("Sell button clicked for sid:"+sid)
+            print("Sell button clicked for sid:"+item_id+":"+action)
             act = "sell"
         #This is a post call from items page for buy or sell button
+        item_sql = "SELECT script_code,name,bucket, bucket_id FROM items where id="+item_id
+        print(item_sql)
+        cursor = mysql.cursor()
+        cursor.execute(item_sql)
+        items = cursor.fetchall()
+        cursor.close()
         print("rendering buy sell")
-        bucket = request.form.get("bid_"+name)
-        return render_template("/buy-sell.html", name = name, bucket = bucket, btn_action = act)
+        
+        print(items)
+        item = items[0]
+        print("firtst item")
+        print(item)
+        s_code = item[0]
+        name = item[1]
+        bucket = item[2]
+        bucket_id = item[3]
+        return render_template("/buy-sell.html", name = name, bucket = bucket, bucket_id=bucket_id,script_code=s_code, btn_action = act)
 
 @app.route('/get-bucket-summary')
 def get_bucket_summary():
@@ -356,7 +372,9 @@ def buy_sell_insert():
     exchange = request.form.get('exchange')
     cnt = request.form.get('sc_cnt')
     price = request.form.get('sc_price')
-    sql_vals = "INSERT INTO tr_share VALUES (NULL,'%s', '','%s','%s',curdate(), '%s',1,'%s')" % (name,cnt, price,exchange,bucket)
+    scode = request.form.get('script_code')
+    bucket_id = request.form.get('bucket_id')
+    sql_vals = "INSERT INTO tr_share VALUES (NULL,'%s', '%s','','%s','%s',curdate(), '%s','%s')" % (scode,name,cnt, price,exchange,bucket_id)
     print('sql qry tr_sh')
     print(sql_vals)
     cursor = mysql.cursor()
@@ -368,7 +386,7 @@ def buy_sell_insert():
 @app.route('/items')
 def show_items1():
     cursor = mysql.cursor()
-    cursor.execute("SELECT name, description, bucket, count FROM items")
+    cursor.execute("SELECT name, description, bucket, count,id,script_code FROM items")
     items = cursor.fetchall()
     cursor.close()
     return render_template('items.html', items=items)
@@ -694,42 +712,8 @@ def get_user_details(key):
         if "@"+str(key)+"@" in user:
             return user.split('@')
 
-@app.route("/update-invo-scripts")
-def update_invo_scripts():
-    b = BSE()
-    dt = datetime.today().strftime('%Y%m%d')
-    quotes = ["530517", "533206"]
-    columns = ["timestamp","companyName","currentValue","changeValue","pchange","updatedOn","securityID","scripCode","scriptGroup","faceValue","industry","previousClose","previousOpen","dayHigh","dayLow","52weekHigh","52weekLow","weightedAvgPrice","totalTradedValue","totalTradedUnit","totalTradedQuantity","2WeekAvgQuantity","marketCapFull","marketCapFreeFloat","marketCapFreeFloatUnit"]
-    insert_values = []
-    for qt in quotes:
-        q_vals = (dt)
-        q = b.getQuote(qt)
-        q_keys = list(q.keys())
-        print(f"======{qt}=========")
-        print(q)
-        for cname in columns:
-            if cname in q_keys:
-                q_vals = q_vals + (q[cname],)             
-            else:
-                print("Key not available")
-        insert_values.append(q_vals)
-    print(insert_values)
-    insert_multiple_rows('daily_script_updates', columns, insert_values)
 
 
-
-
-# Insert multiple rows into the table
-def insert_multiple_rows( table_name, columns, values_list):
-    cursor = mysql.cursor()
-    sql = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))})"
-    cursor.executemany(sql, values_list)
-    mysql.commit()
-    print(f"{len(values_list)} records inserted into {table_name}.")
-
-def get_latest_scripts(pScript_list):
-    b = BSE(update_codes = True)
-    b.getScripCodes()
     
 
 
