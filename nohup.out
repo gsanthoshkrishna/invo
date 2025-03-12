@@ -14,3 +14,221 @@ Press CTRL+C to quit
 223.178.85.87 - - [27/Feb/2025 04:25:38] "GET /favicon.ico HTTP/1.1" 404 -
 223.178.85.87 - - [27/Feb/2025 04:27:29] "POST /login HTTP/1.1" 200 -
 223.178.85.87 - - [27/Feb/2025 04:27:37] "POST /login HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 914-603-132
+223.178.82.89 - - [03/Mar/2025 04:20:36] "GET / HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:20:37] "GET /login HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:20:38] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.82.89 - - [03/Mar/2025 04:20:43] "POST /login HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:20:44] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:20:46] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:20:47] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:20:50] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:21:00] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:21:01] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:21:02] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:21:04] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:07] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:14] "GET /login HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:20] "POST /login HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:23:20] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:24] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:23:24] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:26] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:45] "GET /login HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:51] "POST /login HTTP/1.1" 302 -
+223.178.82.89 - - [03/Mar/2025 04:23:52] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 04:23:54] "GET /invo_tasks HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 841-043-753
+223.178.82.89 - - [03/Mar/2025 16:46:24] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:46:25] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.82.89 - - [03/Mar/2025 16:46:29] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:46:39] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:46:42] "GET /items HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:46:51] "GET / HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:46:53] "GET /buckets HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:47:08] "GET /items HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:47:20] "POST /buy-sell-load HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:47:31] "POST /buy-sell-insert HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Column count doesn't match value count at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 363, in buy_sell_insert
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DataError: 1136 (21S01): Column count doesn't match value count at row 1
+223.178.82.89 - - [03/Mar/2025 16:47:32] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:47:32] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.82.89 - - [03/Mar/2025 16:47:33] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+223.178.80.162 - - [12/Mar/2025 15:54:10] "GET / HTTP/1.1" 302 -
+223.178.80.162 - - [12/Mar/2025 15:54:11] "GET /login HTTP/1.1" 200 -
+137.184.232.166 - - [12/Mar/2025 15:56:33] code 400, message Bad request version ('À\x14À')
+137.184.232.166 - - [12/Mar/2025 15:56:34] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03\x7fòÙM­.;\x8b¾Ò]|ü@\x0dÑx\x88á\x05ýÆw\x10ãÄq\x0bºbÔù\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+137.184.232.166 - - [12/Mar/2025 15:56:34] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00{\x01\x00\x00w\x03\x03NÕF~\x1aã@±ÝSDÅbý×+\x17\x19Ô$\x16Üë\x92àzÝ~Gv7Ð\x00\x00\x1aÀ/À+À\x11À\x07À\x13À')
+137.184.232.166 - - [12/Mar/2025 15:56:34] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03NÕF~\x1aã@±ÝSDÅbý×+\x17\x19Ô$\x16Üë\x92àzÝ~Gv7Ð\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+137.184.232.166 - - [12/Mar/2025 15:56:34] "GET / HTTP/1.1" 302 -
+137.184.232.166 - - [12/Mar/2025 15:56:34] "GET /login HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+223.178.80.162 - - [12/Mar/2025 16:04:00] "GET / HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:04:00] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.162 - - [12/Mar/2025 16:04:03] "GET / HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:04:07] "GET /get-daily-update HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 487, in get_daily_update
+    cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+TypeError: can only concatenate str (not "int") to str
+223.178.80.162 - - [12/Mar/2025 16:04:07] "GET /get-daily-update?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:04:07] "GET /get-daily-update?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:04:08] "GET /get-daily-update?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:04:12] "GET /buckets HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:22] "GET /buckets HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:24] "GET / HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:26] "GET /buckets HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:29] "GET /buckets HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:32] "GET /items HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:35] "GET / HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:08:37] "GET /buckets HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+223.178.80.162 - - [12/Mar/2025 16:08:59] "GET /buckets HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:09:41] "GET /items HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:09:51] "GET / HTTP/1.1" 200 -
+223.178.80.162 - - [12/Mar/2025 16:09:59] "GET /get-daily-update HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 487, in get_daily_update
+    cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+TypeError: can only concatenate str (not "int") to str
+223.178.80.162 - - [12/Mar/2025 16:10:00] "GET /get-daily-update?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.162 - - [12/Mar/2025 16:10:00] "GET /get-daily-update?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+ * Detected change in '/home/ec2-user/santhosh/invo/app.py', reloading
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+in market update
+getting data for today
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+ * Detected change in '/home/ec2-user/santhosh/invo/app.py', reloading
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+ * Detected change in '/home/ec2-user/santhosh/invo/app.py', reloading
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+ * Detected change in '/home/ec2-user/santhosh/invo/app.py', reloading
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
+ * Detected change in '/home/ec2-user/santhosh/invo/app.py', reloading
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-629-046
