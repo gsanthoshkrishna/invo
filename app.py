@@ -172,7 +172,7 @@ def test_get_changes():
                 print("In Ajax post")
                 entry_date = data.get('date_value')
                 cursor = mysql.cursor()
-                cursor.execute("select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+                cursor.execute("select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'")
                 day_changes = cursor.fetchall()
                 cursor.close()
                 print('rendering test-get template')
@@ -184,7 +184,7 @@ def test_get_changes():
             entry_date = request.form.get('date')
             #current_date = date.today().strftime('%Y-%m-%d')
             cursor = mysql.cursor()
-            cursor.execute("select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+            cursor.execute("select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'")
             day_changes = cursor.fetchall()
             cursor.close()
             print('rendering template for today')
@@ -193,7 +193,9 @@ def test_get_changes():
         print("getting data for today")
         entry_date = date.today().strftime('%Y-%m-%d')
         cursor = mysql.cursor()
-        cursor.execute("select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+        sql = "select tr_open, tr_open, tr_low, tr_close from tr_daily_changes where tr_date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'"
+        print(sql)
+        cursor.execute(sql)
         day_changes = cursor.fetchall()
         cursor.close()
         print('rendering template')
@@ -309,7 +311,7 @@ def watch_list():
 @app.route('/daily-changes')
 def daily_changes():
     cursor = mysql.cursor()
-    qry = "SELECT tr_date, tr_open, tr_close, tr_low, tr_high,user_id FROM tr_daily_changes where user_id = '"+session.get('user_id')+"' and tr_daily_changes = '"+ch_date+"'"
+    qry = "SELECT tr_date, tr_open, tr_close, tr_low, tr_high,user_id FROM tr_daily_changes where user_id = '"+str(session.get('user_id'))+"' and tr_daily_changes = '"+ch_date+"'"
     cursor.execute()
     details = cursor.fetchall()
     cursor.close()
@@ -481,7 +483,7 @@ def get_daily_update():
                 print("In Ajax post")
                 entry_date = data.get('date_value')
                 cursor = mysql.cursor()
-                cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+                cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'")
                 day_indicators = cursor.fetchall()
                 cursor.close()
                 print('rendering test-get template')
@@ -493,7 +495,7 @@ def get_daily_update():
             entry_date = request.form.get('date')
             #current_date = date.today().strftime('%Y-%m-%d')
             cursor = mysql.cursor()
-            cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+            cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'")
             day_indicators = cursor.fetchall()
             cursor.close()
             print('rendering template for today')
@@ -502,7 +504,9 @@ def get_daily_update():
         print("getting data for today")
         entry_date = date.today().strftime('%Y-%m-%d')
         cursor = mysql.cursor()
-        cursor.execute("select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+session.get('user_id')+"'")
+        sql = "select indicator, ind_change , remarks from daily_indicators where date='"+entry_date+"' and user_name='"+str(session.get('user_id'))+"'"
+        print(sql)
+        cursor.execute(sql)
         day_indicators = cursor.fetchall()
         cursor.close()
         print('rendering template')
@@ -805,5 +809,6 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
+
 
 
