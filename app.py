@@ -758,19 +758,87 @@ def add_buyer():
         cursor.close()
     return render_template("add_buyer.html")
 
-
-@app.route("/add-item", methods=['GET', 'POST'])
+@app.route('/add-item')
 def add_item():
+    cursor = mysql.cursor()
+    cursor.execute("SELECT id, name FROM inventory_item")
+    categories = cursor.fetchall()
+    cursor.close()
+    return render_template('/new_inventory1.html', items=categories)
+
+@app.route('/get_tags/<name>')
+def get_tags(name):
+    cursor = mysql.cursor()
+    query = "SELECT tag FROM inventory_item WHERE id = %s" % (name)
+    print(query)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    if result and result[0]:
+        print(result)
+        
+        return jsonify(tags=result[0].split(','))
+    return jsonify(tags=[])
+
+@app.route('/add-item', methods=['POST'])
+def insert_inv_item():
     if request.method == "POST":
-        print("Adding new Item.")
-        name = request.form.get('name')
-        model = request.form.get('model')
+        print("testprint")
+        form_data = request.form
+        print("testpr2")
+        print(form_data)
+        item_id = ""
         cursor = mysql.cursor()
-        sql_vals = "insert into item values(NULL,'%s','%s')" % (name, model)
-        cursor.execute(sql_vals)
+        item_str = ""
+        for key, value in form_data.items():
+            item_str = item_str + value + ";"
+            if key == "item_id":
+                item_id = value
+                continue
+            print(f"{key}: {value}")
+            #sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, key, value)
+            
+        sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, item_id, item_str)
+        print(sql)
+        cursor.execute(sql)
         mysql.commit()
         cursor.close()
-    return render_template("add_item.html")
+        print(item_str)
+    return redirect("/add-item")
+    
+@app.route('/get_fields', methods=['Get','POST'])
+def get_fields():
+    category_id = request.json['category_id']
+    cursor = mysql.cursor()
+    qry = "SELECT tag,id FROM inventory_item WHERE name = '%s'" % (category_id)
+    print(qry)
+    cursor.execute(qry)
+    fields = []
+    rows = cursor.fetchall()
+    print(rows)
+
+    cursor.close()
+    return render_template('new_inventory.html', categories=categories, rows=rows)
+
+@app.route("/add-item-details", methods=['GET', 'POST'])
+def add_item_details():
+    cursor = mysql.cursor()
+    if request.method == "POST":
+        print("Adding new Item Details.")
+        category = request.json['category_id']
+        tag1val = request.json['tag1val']
+        tag2val = request.json['tag2val']
+        print("test")
+        print(tag1val)
+        print(tag2val)
+        print(category)
+
+        sql = "INSERT INTO item_details VALUES (NULL,1,'"+tag1val+"','"+tag1val+"')"
+        print(sql)
+        #cursor.execute(sql, list(data.values()))
+        #mysql.commit()
+        #cursor.close()
+    return 'Data submitted successfully!'
 
 @app.route("/update-inventory", methods=['GET', 'POST'])
 def update_inventory():
@@ -781,8 +849,7 @@ def update_inventory():
         item = request.form.get('item')
         buyer = request.form.get('buyer')
         quantity = request.form.get('quantity')
-        model = request.form.get('model')
-        
+
         sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s')" % (item, buyer, quantity, tr_date)
         cursor.execute(sql_vals)
         mysql.commit()
@@ -790,12 +857,23 @@ def update_inventory():
         return redirect("/update-inventory")
     else:
         cursor.execute("SELECT id,name from buyer")
-        buyers = cursor.fetchall()        
-        cursor.execute("SELECT id,name from item")
+        buyers = cursor.fetchall()
+        cursor.execute("SELECT id,tagval from item_details")
         items = cursor.fetchall()
         cursor.close()
-        return render_template("/update_inventory.html",buyers=buyers, items=items,date=date.today().strftime('%Y-%m-%d'))
+        return render_template("/update_inventory.html",buyers=buyers, items=items,cur_date=date.today().strftime('%Y-%m-%d'))
 
+@app.route("/add-tag", methods=['GET', 'POST'] )
+def add_tag():
+    cursor = mysql.cursor()
+    name = request.form['name']
+    sql_vals = "insert into temp_tag values('%s')" % (name)
+    print("Inserting study notes:")
+    print(sql_vals)
+    cursor.execute(sql_vals)
+    mysql.commit()
+    cursor.close()
+    return redirect('/add-item')
 
 if __name__ == '__main__':
     set_user_list()
@@ -809,6 +887,7 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
+
 
 
 

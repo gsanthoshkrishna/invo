@@ -1,6 +1,6 @@
 <form action="/update-inventory" method="POST">
     <label for="date">Date   :</label>
-    <input type="date" id="date" name="date" value="{{ current_date }}" required>
+    <input type="date" id="date" name="date" value="{{ cur_date }}" required>
     <br><label>Item:</label>
     <select name="item">
         <option value="" disabled selected>Item</option>
@@ -20,9 +20,7 @@
     <label>Quantity:</label>
     <input type="text" name="quantity">
     <br>
-    <label>Model:</label>
-    <input type="text" name="model"><br>
-    <br>
     <button>Submit</button>
 </form>
 <button onclick="location.href='/home'">Home</button>
+
