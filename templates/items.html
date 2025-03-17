@@ -32,10 +32,10 @@
         <tbody>
             {% for item in items %}
             <tr>
-                <td>{{ item[0] }}</td>
                 <td>{{ item[1] }}</td>
-                <td>{{ item[2] }}<input type="hidden" name="bid_{{ item[0] }}" value="{{ item[2] }}"></td>
-                <td>{{ item[3] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[3] }}<input type="hidden" name="bid_{{ item[0] }}" value="{{ item[3] }}"></td>
+                <td>{{ item[4] }}</td>
                 <td>
                     <button type="submit" name="action" value="buy_{{ item[0] }}">Buy</button>
                     <button type="submit" name="action" value="sell_{{ item[0] }}">Sell</button>
@@ -57,4 +57,5 @@
 </body>
 
 </html>
+
 
