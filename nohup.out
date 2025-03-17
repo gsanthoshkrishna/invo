@@ -232,3 +232,24 @@ file:config-prod.json
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 103-629-046
+file:config-dev.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.31.7.4:5001
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 294-094-706
+157.10.167.29 - - [17/Mar/2025 12:48:41] "GET / HTTP/1.1" 302 -
+157.10.167.29 - - [17/Mar/2025 12:48:42] "GET /login HTTP/1.1" 200 -
+157.10.167.29 - - [17/Mar/2025 12:48:42] "GET /favicon.ico HTTP/1.1" 404 -
+157.10.167.29 - - [17/Mar/2025 12:48:55] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [17/Mar/2025 12:56:47] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [17/Mar/2025 12:56:48] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [17/Mar/2025 12:56:53] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [17/Mar/2025 12:57:02] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [17/Mar/2025 12:57:40] "GET /update-inventory HTTP/1.1" 200 -
