@@ -1,3 +1,53 @@
-<form>
-    Under Construction...
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buckets</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buckets</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Script</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vals in b_details %}
+            <tr>
+                <td>{{ vals[0] }}</td>
+                <td>{{ vals[1] }}</td>
+                <td>{{ vals[2] }}</td>
+                <td>{{ vals[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button onclick="location.href='/'">Home</button>
+    <button onclick="location.href='/get-daily-update'">Get Market Updates</button>
+    <button onclick="location.href='/buckets'">Buckets</button>
+    <button onclick="location.href='/items'">Items</button>
+    <button onclick="location.href='/market-update'">Market Update</button>
+    <button onclick="location.href='/invo_tasks'">Tasks</button>
+    <button onclick="location.href='/daily_changes'">DailyChanges</button>
+    <button onclick="location.href='/watchlist'">WatchList</button>
+</body>
+</html>
+
+
