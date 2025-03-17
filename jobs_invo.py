@@ -46,7 +46,7 @@ def job_daily_task_creation():
 def update_invo_scripts():
     b = BSE()
     dt = datetime.today().strftime('%Y%m%d')
-    quotes = ["530517", "533206"]
+    quotes = ["530517", "533206","500180","543265"]
     columns = ["timestamp","companyName","currentValue","changeValue","pChange","updatedOn","securityID","scripCode","scriptGroup","faceValue","industry","previousClose","previousOpen","dayHigh","dayLow","52weekHigh","52weekLow","weightedAvgPrice","totalTradedValue","totalTradedUnit","totalTradedQuantity","2WeekAvgQuantity","marketCapFull","marketCapFreeFloat","marketCapFreeFloatUnit"]
     insert_values = []
     for qt in quotes:
@@ -94,3 +94,4 @@ def get_latest_scripts(pScript_list):
 #TODO temporarily disabled this. 
 #job_daily_task_creation()
 update_invo_scripts()
+
