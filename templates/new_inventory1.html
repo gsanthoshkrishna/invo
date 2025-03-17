@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Management</title>
+</head>
+<body>
+    <select id="itemSelect" name="itemSelect" onchange="updateTags()">
+        <option value="">Select an item</option>
+        {% for item in items %}
+            <option value="{{ item[0] }}">{{ item[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <div id="tagContainer"></div>
+    <form id="tagForm" name="tagForm" action="/add-item" method="POST">
+        <!-- Textboxes will be generated here -->
+    </form>
+
+    <button type="submit" form="tagForm">Submit</button>
+    <button onclick="location.href='/home'">Inventory Home</button>
+    
+    <script>
+        function updateTags() {
+            const selectItem = document.getElementById('itemSelect')
+            const selectedItem = document.getElementById('itemSelect').value;
+            const selectedText = selectItem.options[selectItem.selectedIndex].text;
+            console.log(selectedItem)
+            console.log(selectedText)
+            fetch(`/get_tags/${selectedItem}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('tagForm');
+                    container.innerHTML = '';
+                    const h_input = document.createElement('input');
+                    h_input.type = 'hidden';
+                    h_input.name = `item_id`;
+                    h_input.value = `${selectedItem}`;
+                    container.appendChild(h_input);
+                    data.tags.forEach((tag, index) => {
+                        const input = document.createElement('input');
+                        
+                        input.type = 'text';
+                        input.placeholder = tag.trim();
+                        input.name = tag.trim();
+                        if (tag.trim() == "item") {
+                            input.type = 'hidden';
+                            input.value = selectedText;
+                        }
+                        else{
+                            const lbl = document.createElement('label');
+                            lbl.textContent = tag.trim();
+                            container.appendChild(lbl);
+                        }
+                        container.appendChild(input);
+                        container.appendChild(document.createElement('br'));
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
+
