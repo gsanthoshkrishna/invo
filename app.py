@@ -11,6 +11,7 @@ db_name = ""
 UPLOAD_FOLDER = 'study-notes/img'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 Session(app)
 config_data = {}
 
@@ -343,7 +344,7 @@ def buy_sell_load():
             print("Sell button clicked for sid:"+item_id+":"+action)
             act = "sell"
         #This is a post call from items page for buy or sell button
-        item_sql = "SELECT script_code,name,bucket, bucket_id FROM items where id="+item_id
+        item_sql = "SELECT script_code,name,bucket, bucket_id FROM items where id='"+item_id+"'"
         print(item_sql)
         cursor = mysql.cursor()
         cursor.execute(item_sql)
@@ -363,8 +364,13 @@ def buy_sell_load():
 
 @app.route('/get-bucket-summary')
 def get_bucket_summary():
-    #TODO calculate get the bucket status and render.
-    return render_template("bucket_details.html")       
+    qry="SELECT name,script, quantity, quantity * avg_price as Amount FROM bucket_details"
+    print(qry)
+    cursor = mysql.cursor()
+    cursor.execute(qry)
+    b_details = cursor.fetchall()
+    cursor.close()
+    return render_template("bucket_details.html",b_details=b_details)       
 
 @app.route('/buy-sell-insert', methods=['GET', 'POST'])
 def buy_sell_insert():
@@ -388,7 +394,7 @@ def buy_sell_insert():
 @app.route('/items')
 def show_items1():
     cursor = mysql.cursor()
-    cursor.execute("SELECT name, description, bucket, count,id,script_code FROM items")
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
     items = cursor.fetchall()
     cursor.close()
     return render_template('items.html', items=items)
@@ -682,6 +688,7 @@ def update_bucket_details(bkt_name,scr_name,quantity,price,exchange):
     if len(cur_vals) == 0:
         print("Newly added script to bucket")
         sql_vals = "insert into bucket_details values('%s','%s','%s','%s',curdate(),'%s',0)" % (bkt_name, scr_name, exchange, quantity, price)
+        print(sql_vals)
         cursor.execute(sql_vals)
         mysql.commit()
         cursor.close()

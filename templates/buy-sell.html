@@ -1,5 +1,7 @@
 <form action="/buy-sell-insert" method="POST">
+    <input type="hidden" name="script_code" value="{{ script_code }}">
     <label>Script:</label><input type="text" name="script" value="{{ name }}">
+    <input type="hidden" name="bucket_id" value="{{ bucket_id }}">
     <label>Bucket:</label><input type="text" name="bucket" value="{{ bucket }}">
     <label>Exchange:</label><input type="text" name="exchange" value="BSE">
     <label>Count</label><input type="text" name="sc_cnt">
@@ -8,5 +10,4 @@
     <input type="hidden" name="bucket_id" value="{{ bucket_id }}">
     <button name="{{ btn_action }}">{{ btn_action }}</button>
 </form>
-
 
