@@ -364,7 +364,7 @@ def buy_sell_load():
 
 @app.route('/get-bucket-summary')
 def get_bucket_summary():
-    qry="SELECT name,script, quantity, quantity * avg_price as Amount FROM bucket_details"
+    qry="SELECT name,script, quantity, avg_price, quantity * avg_price as Amount FROM bucket_details"
     print(qry)
     cursor = mysql.cursor()
     cursor.execute(qry)
@@ -394,7 +394,7 @@ def buy_sell_insert():
 @app.route('/items')
 def show_items1():
     cursor = mysql.cursor()
-    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+    cursor.execute("SELECT id, name, description, bucket, count,script_code FROM items")
     items = cursor.fetchall()
     cursor.close()
     return render_template('items.html', items=items)
