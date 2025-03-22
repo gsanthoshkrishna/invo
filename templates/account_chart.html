@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Line Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div>
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    </div>
+    <script>
+        var labels = {{ labels | tojson }};
+        var data = {{ data | tojson }};
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sample Data',
+                    data: data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.2 
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

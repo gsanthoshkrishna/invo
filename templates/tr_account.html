@@ -17,12 +17,38 @@
         }
     </style>
 </head>
+<style>
+    .popup{
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+</style>
 <body>
     <h2>Transactions</h2>
     <table>
         <thead>
             <tr>
-                <th>Account</th>
+                <th>Transaction</th>
+                <th>From</th>
+                <th>To</th>
                 <th>Debt</th>
                 <th>Credit</th>
                 <th>Date</th>
@@ -31,21 +57,39 @@
         </thead>
         <tbody>
             {% for row in data %}
-            <tr>
-                <td>{{ row[0] }}</td>
+            <tr>                
                 <td>{{ row[1] }}</td>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[6] }}</td>
                 <td>{{ row[2] }}</td>
                 <td>{{ row[3] }}</td>
                 <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
             </tr>
             {% endfor %}
             <tr>
                 <form action="/add-tr-acc" method="POST">
                 <td>
-                    <select name="account">
-                        <option value="" disabled selected>Select an Account</option>
+                    <select name="item">
+                        <option value="" disabled selected>Select an Item</option>
+                        {% for item in items %}
+                        <option value="{{ item[0] }}">{{ item[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    </td>
+                    <td>
+                    <select name="from_acc">
+                        <option value="" disabled selected>From</option>
                         {% for account in accounts %}
-                        <option value="{{ account[0] }}">{{ account[0] }}</option>
+                        <option value="{{ account[0] }}">{{ account[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="to_acc">
+                        <option value="" disabled selected>From</option>
+                        {% for account in accounts %}
+                        <option value="{{ account[0] }}">{{ account[1] }}</option>
                         {% endfor %}
                     </select>
                 </td>
@@ -60,6 +104,24 @@
             </tr>
         </tbody>
     </table>
+    <div id="popupForm" class="popup">
+        <form action="/insert-acc-item" method="POST">
+            <label for="name">Enter New Item Name:</label>
+            <input type="text" id="name" name="name" required>
+            <input type="submit" value="Create">
+            <button type="button" onclick="hidePopup()" >Cancel</button>
+        </form>
+    </div>
+    <button onclick="showPopup()">New Item</button>
 </body>
 </html>
+<script>
+    function showPopup(){
+        document.getElementById("popupForm").style.display = "block"
+    }
+    function hidePopup(){
+        document.getElementById("popupForm").style.display = "none"
+    }
+</script>
+
 
