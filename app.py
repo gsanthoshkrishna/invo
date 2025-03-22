@@ -589,18 +589,6 @@ def get_daily_task():
 
     cursor.close()
 
-@app.route("/ac", methods=['GET', 'POST'] )
-def account_transactions():
-    cursor = mysql.cursor()
-    sqlqry = "select account, debt, credit, date, remarks FROM tr_account"
-    cursor.execute(sqlqry)
-    data = cursor.fetchall()
-    sqlqry = "select name FROM account"
-    cursor.execute(sqlqry)
-    account = cursor.fetchall()
-    cursor.close()
-    return render_template("/tr_account.html", data = data,accounts=account,current_date=date.today().strftime('%Y-%m-%d'))
-
 @app.route("/get-study-notes", methods=['GET', 'POST'] )
 def get_study_notes():
     cursor = mysql.cursor()
@@ -730,20 +718,93 @@ def get_user_details(key):
 
 
 ######################### ACCOUNTS ######################################
+@app.route("/ac", methods=['GET', 'POST'] )
+def account_transactions():
+    cursor = mysql.cursor()
+    #todo add where condition for the records with date for the corrent month
+    sqlqry = "select fra.name,ta.name, i.name, debt, credit, date, remarks FROM tr_account tra, acc_item i, account fra,account ta where ta.id = tra.to_acc_id and fra.id = tra.from_acc_id and i.id = tra.item_id"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    sqlqry = "select id,name FROM account"
+    cursor.execute(sqlqry)
+    accounts = cursor.fetchall()
+    sqlqry = "select id,name FROM acc_item"
+    cursor.execute(sqlqry)
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template("/tr_account.html", data = data,accounts=accounts,items=items,current_date=date.today().strftime('%Y-%m-%d'))
+
 @app.route("/add-tr-acc", methods=['GET', 'POST'])
 def add_tr_account():
     print("Added new transaction.")
-    acc = request.form.get('account')
+    from_acc = request.form.get('from_acc')
+    to_acc = request.form.get('to_acc')
+    item = request.form.get('item')
     dr = request.form.get('dr')
     cr = request.form.get('cr')
     dt = request.form.get('date')
     remark = request.form.get('remarks')
     cursor = mysql.cursor()
-    sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s')" % (acc, dr, cr, dt, remark)
+    sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s','%s','%s')" % ( dr, cr, dt, remark,item,from_acc, to_acc)
     cursor.execute(sql_vals)
     mysql.commit()
     cursor.close()
     return redirect("/ac")
+
+@app.route("/insert-acc-item", methods=['GET', 'POST'] )
+def insert_acc_item():
+    print("Insreting new item.")
+    cursor = mysql.cursor()
+    name = request.form['name']
+    sql_vals = "insert into acc_item values(NULL,'%s','')" % (name)
+    print("Inserting New Item:")
+    print(sql_vals)
+    cursor.execute(sql_vals)
+    mysql.commit()
+    cursor.close()
+    return redirect('/ac')
+
+@app.route("/acc-dboard", methods=['GET', 'POST'] )
+def acc_dboard():
+    cursor = mysql.cursor()
+    #name = request.form['name']
+    #sql_vals = "insert into acc_item values(NULL,'%s','')" % (name)
+    #print("Inserting New Item:")
+    #print(sql_vals)
+    #cursor.execute(sql_vals)
+    #mysql.commit()
+    #cursor.close()
+    data = [65, 59, 80, 81, 56, 55]
+    labels = ['January', 'February', 'March', 'April', 'May', 'June']
+    return render_template('/account_chart.html',data=data, labels=labels)
+
+@app.route("/ac-budget", methods=['GET', 'POST'] )
+def ac_budget():
+    cursor = mysql.cursor()
+    sqlqry = "select i.name, trb.amount,trb.remarks FROM tr_budget trb, acc_item i where i.id = trb.item_id and trb.month='"+date.today().strftime('%b').upper()+"'"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    sqlqry = "select id,name FROM acc_item"
+    cursor.execute(sqlqry)
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template("/tr_acc_budget.html", data = data,items=items,current_month=date.today().strftime('%b').upper())
+
+@app.route("/add-tr-budget", methods=['GET', 'POST'])
+def add_tr_budget():
+    print("Added new Budget Item.")
+    item = request.form.get('item')
+    amt = request.form.get('amount')
+    month = request.form.get('month')
+    remark = request.form.get('remarks')
+    cursor = mysql.cursor()
+    sql_vals = "insert into tr_budget values(NULL,'%s','%s','%s','%s')" % ( item,amt,month,remark)
+    cursor.execute(sql_vals)
+    mysql.commit()
+    cursor.close()
+    return redirect("/ac-budget")
 
 ######################### Inventory ######################################
 @app.route("/home")
@@ -894,6 +955,7 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
+
 
 
 

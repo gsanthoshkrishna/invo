@@ -368,3 +368,1818 @@ mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_co
 157.10.167.107 - - [13/Mar/2025 11:26:00] "GET /job_daily_task_creation HTTP/1.1" 302 -
 157.10.167.107 - - [13/Mar/2025 11:26:01] "GET / HTTP/1.1" 200 -
 157.10.167.107 - - [13/Mar/2025 11:26:09] "GET /invo_tasks HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 433-085-598
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 433-085-598
+223.178.80.144 - - [18/Mar/2025 16:28:50] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:28:51] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [18/Mar/2025 16:28:57] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:28:59] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Table 'invo.inventory_item' doesn't exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 771, in add_item
+    cursor.execute("SELECT id, name FROM inventory_item")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1146 (42S02): Table 'invo.inventory_item' doesn't exist
+223.178.80.144 - - [18/Mar/2025 16:28:59] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:28:59] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:29:00] "GET /add-item?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:46:02] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:46:08] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:46:10] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Table 'invo.inventory_item' doesn't exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 771, in add_item
+    cursor.execute("SELECT id, name FROM inventory_item")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1146 (42S02): Table 'invo.inventory_item' doesn't exist
+223.178.80.144 - - [18/Mar/2025 16:46:10] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:46:10] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:37] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 517, in get_rows
+    row = fetch_row()
+_mysql_connector.MySQLInterfaceError: Table definition has changed, please retry transaction
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 772, in add_item
+    categories = cursor.fetchall()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 671, in fetchall
+    rows = self._connection.get_rows(raw=self._raw)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 563, in get_rows
+    raise get_mysql_exception(
+mysql.connector.errors.DatabaseError: 1412 (HY000): Table definition has changed, please retry transaction
+223.178.80.144 - - [18/Mar/2025 16:47:37] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:37] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:43] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 517, in get_rows
+    row = fetch_row()
+_mysql_connector.MySQLInterfaceError: Table definition has changed, please retry transaction
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 772, in add_item
+    categories = cursor.fetchall()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 671, in fetchall
+    rows = self._connection.get_rows(raw=self._raw)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 563, in get_rows
+    raise get_mysql_exception(
+mysql.connector.errors.DatabaseError: 1412 (HY000): Table definition has changed, please retry transaction
+223.178.80.144 - - [18/Mar/2025 16:47:43] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:44] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:44] "GET /add-item?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:48] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:47:49] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 517, in get_rows
+    row = fetch_row()
+_mysql_connector.MySQLInterfaceError: Table definition has changed, please retry transaction
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 772, in add_item
+    categories = cursor.fetchall()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 671, in fetchall
+    rows = self._connection.get_rows(raw=self._raw)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 563, in get_rows
+    raise get_mysql_exception(
+mysql.connector.errors.DatabaseError: 1412 (HY000): Table definition has changed, please retry transaction
+223.178.80.144 - - [18/Mar/2025 16:47:49] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [18/Mar/2025 16:47:50] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 433-085-598
+223.178.80.144 - - [18/Mar/2025 16:48:10] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:48:12] "GET /add-item HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:48:22] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:48:26] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:48:29] "GET /add-item HTTP/1.1" 200 -
+223.178.80.144 - - [18/Mar/2025 16:48:41] "GET /home HTTP/1.1" 200 -
+8.221.138.209 - - [18/Mar/2025 20:22:45] code 400, message Bad request version ('À\x13À')
+8.221.138.209 - - [18/Mar/2025 20:22:45] "\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03I\x06²ù¼\x99iÀYûøºe-\x83Ud]\x0e\x8d·b8´gÆÝ9dZ8f gÁ\x81i³öòË°©\x19NÖ½\x95g|püé<Z¡\x90T·é¥8'O;\x00&À+À/À,À0Ì©Ì¨À\x09À\x13À" HTTPStatus.BAD_REQUEST -
+8.221.138.209 - - [18/Mar/2025 20:22:55] "GET / HTTP/1.1" 302 -
+45.92.19.136 - - [18/Mar/2025 20:24:27] "GET / HTTP/1.1" 302 -
+206.168.34.87 - - [18/Mar/2025 20:35:29] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03Å\x04½9oñÄ9_<Ù\xadÓ«\x18â.M¬è\xadsjÌâÖ0UuÚé\x12')
+206.168.34.87 - - [18/Mar/2025 20:35:29] "\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03Å\x04½9oñÄ9_<Ù­Ó«\x18â.M¬è­sjÌâÖ0UuÚé\x12 \x95\x93×U\x89æmÏÈ\x98`Àoq[" HTTPStatus.BAD_REQUEST -
+206.168.34.87 - - [18/Mar/2025 20:35:37] "GET / HTTP/1.1" 302 -
+206.168.34.87 - - [18/Mar/2025 20:35:43] "GET / HTTP/1.1" 302 -
+206.168.34.87 - - [18/Mar/2025 20:35:45] code 505, message Invalid HTTP version (2.0)
+206.168.34.87 - - [18/Mar/2025 20:35:45] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+206.168.34.87 - - [18/Mar/2025 20:35:52] "GET /login HTTP/1.1" 200 -
+206.168.34.87 - - [18/Mar/2025 20:35:52] "GET /favicon.ico HTTP/1.1" 404 -
+206.168.34.87 - - [18/Mar/2025 20:35:53] code 505, message Invalid HTTP version (2.0)
+206.168.34.87 - - [18/Mar/2025 20:35:53] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+206.168.34.87 - - [18/Mar/2025 20:36:00] "GET /favicon.ico HTTP/1.1" 404 -
+206.168.34.87 - - [18/Mar/2025 20:36:04] code 400, message Bad request version ('À\x14À')
+206.168.34.87 - - [18/Mar/2025 20:36:04] "\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03\x08\x90ëXI£\x94MlH\x07<P\x7f\x12H=\x00ÇÝ¿µ7%U\x9d^<\x1c\x02·Ê \x89©ÔûlP¤Ç\x0blÎeÉRp\x8a3\x91Û¥8Z»\x7fïôÛ=\x82USä\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+64.62.197.16 - - [19/Mar/2025 01:40:19] "GET / HTTP/1.1" 302 -
+64.62.197.3 - - [19/Mar/2025 01:40:24] "GET / HTTP/1.1" 302 -
+64.62.197.10 - - [19/Mar/2025 01:40:24] "GET /login HTTP/1.1" 200 -
+64.62.197.16 - - [19/Mar/2025 01:40:31] "GET /favicon.ico HTTP/1.1" 404 -
+194.0.234.106 - - [19/Mar/2025 02:41:46] "GET /admin HTTP/1.1" 404 -
+223.178.80.144 - - [19/Mar/2025 04:08:42] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:08:43] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:08:44] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [19/Mar/2025 04:08:45] "GET /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 770, in add_item
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.80.144 - - [19/Mar/2025 04:08:46] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [19/Mar/2025 04:08:46] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [19/Mar/2025 04:08:47] "GET /add-item?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+223.178.80.144 - - [19/Mar/2025 04:11:18] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:11:21] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:11:24] "GET /login HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:11:30] "POST /login HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 116, in user_login
+    login_ret = get_user_info(request.form.get('name'),request.form.get('passwd'))
+  File "/home/ec2-user/santhosh/invo/app.py", line 129, in get_user_info
+    cur = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.80.144 - - [19/Mar/2025 04:11:30] "GET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:11:30] "GET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:11:31] "GET /login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:14:37] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:14:40] "GET /buckets HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 323, in show_buckets
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.80.144 - - [19/Mar/2025 04:14:40] "GET /buckets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:14:41] "GET /buckets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:14:41] "GET /buckets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:15:34] "GET /buckets HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 323, in show_buckets
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.80.144 - - [19/Mar/2025 04:15:34] "GET /buckets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [19/Mar/2025 04:15:34] "GET /buckets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 376-090-352
+223.178.80.144 - - [19/Mar/2025 04:17:13] "GET /buckets HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:17:16] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:17:18] "GET /add-item HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:19:13] "GET /get_tags/3 HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:19:19] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:19:20] "GET /update-inventory HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Table 'invo.item_details' doesn't exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 868, in update_inventory
+    cursor.execute("SELECT id,tagval from item_details")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1146 (42S02): Table 'invo.item_details' doesn't exist
+223.178.80.144 - - [19/Mar/2025 04:19:20] "GET /update-inventory?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:19:20] "GET /update-inventory?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:19:21] "GET /update-inventory?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 376-090-352
+223.178.80.144 - - [19/Mar/2025 04:22:05] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:22:07] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:22:20] "POST /update-inventory HTTP/1.1" 302 -
+223.178.80.144 - - [19/Mar/2025 04:22:20] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 04:23:05] "POST /update-inventory HTTP/1.1" 302 -
+223.178.80.144 - - [19/Mar/2025 04:23:06] "GET /update-inventory HTTP/1.1" 200 -
+205.210.31.5 - - [19/Mar/2025 06:02:02] "GET / HTTP/1.1" 302 -
+205.210.31.5 - - [19/Mar/2025 06:02:02] "GET /login HTTP/1.1" 200 -
+205.210.31.83 - - [19/Mar/2025 08:28:05] "GET / HTTP/1.1" 302 -
+205.210.31.83 - - [19/Mar/2025 08:28:05] "GET /login HTTP/1.1" 200 -
+139.59.179.197 - - [19/Mar/2025 10:19:56] code 400, message Bad request version ('À\x14À')
+139.59.179.197 - - [19/Mar/2025 10:19:56] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03÷\x0b\x97\x0d\x89r7Í×Jä\x12(Ö¥Éy¬\x17Ñï\x98ò6àÃÍoø6&\x92\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+139.59.179.197 - - [19/Mar/2025 10:19:56] code 400, message Bad request version ('À\x14À')
+139.59.179.197 - - [19/Mar/2025 10:19:56] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03dëéó$\x1b\x093¶\x004þzRß\x02\x80D\x06þ²vL\x17Ï³Ô\x1eW\x80Ó\x8a\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+139.59.179.197 - - [19/Mar/2025 10:19:56] "GET / HTTP/1.1" 302 -
+139.59.179.197 - - [19/Mar/2025 10:19:57] "GET /login HTTP/1.1" 200 -
+223.185.193.58 - - [19/Mar/2025 12:26:56] "GET / HTTP/1.1" 302 -
+223.185.193.58 - - [19/Mar/2025 12:26:57] "GET /login HTTP/1.1" 200 -
+223.185.193.58 - - [19/Mar/2025 12:26:58] "GET /favicon.ico HTTP/1.1" 404 -
+223.185.193.58 - - [19/Mar/2025 12:27:09] "GET /home HTTP/1.1" 200 -
+223.185.193.58 - - [19/Mar/2025 12:27:12] "GET /update-inventory HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 852, in update_inventory
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.185.193.58 - - [19/Mar/2025 12:27:13] "GET /update-inventory?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.185.193.58 - - [19/Mar/2025 12:27:13] "GET /update-inventory?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.185.193.58 - - [19/Mar/2025 12:27:14] "GET /update-inventory?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 853-815-090
+223.178.80.144 - - [19/Mar/2025 15:04:06] "GET / HTTP/1.1" 200 -
+36.255.18.60 - - [19/Mar/2025 15:04:06] "GET / HTTP/1.1" 302 -
+223.178.80.144 - - [19/Mar/2025 15:04:07] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [19/Mar/2025 15:04:07] "GET /login HTTP/1.1" 200 -
+36.255.18.60 - - [19/Mar/2025 15:04:07] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [19/Mar/2025 15:04:10] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [19/Mar/2025 15:04:45] "GET /lHOME HTTP/1.1" 404 -
+36.255.18.60 - - [19/Mar/2025 15:04:55] "GET /lhome HTTP/1.1" 404 -
+36.255.18.60 - - [19/Mar/2025 15:05:09] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [19/Mar/2025 15:05:15] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:05:15] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [19/Mar/2025 15:06:10] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:16:48] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:16:50] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:16:55] "GET /update-inventory HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:16:57] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [19/Mar/2025 15:16:58] "GET /update-inventory HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 853-815-090
+223.178.80.144 - - [19/Mar/2025 15:17:20] "GET /update-inventory HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-345-373
+223.178.80.144 - - [20/Mar/2025 04:32:01] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 04:32:01] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [20/Mar/2025 04:32:03] "GET /add-item HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 04:32:05] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 04:32:06] "GET /update-inventory HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-345-373
+223.178.80.144 - - [20/Mar/2025 05:39:42] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:39:48] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:00] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:00] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:04] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:04] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:07] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:07] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:10] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:10] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:12] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:13] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:16] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:16] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:19] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:19] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:22] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:23] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:26] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:26] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:29] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:29] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:32] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:32] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:35] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:35] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:38] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:38] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:40] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:40] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:43] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:43] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:45] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:45] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:49] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:49] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:52] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:52] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:54] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:40:55] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:40:59] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:41:00] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:41:06] "POST /daily-task-update HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:41:06] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:41:11] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:41:14] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:41:20] "GET /create-task HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 130
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 131
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 132
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 133
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 134
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 135
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 136
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 137
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 138
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 139
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 140
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 147
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 155
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 148
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 166
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 165
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 167
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 169
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 168
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 170
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+status:
+update daily_task set status = 'Done' where id = 171
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+Creating task
+sql qry daily indicator:
+223.178.80.144 - - [20/Mar/2025 05:41:56] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:41:56] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:42:18] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:42:18] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:42:45] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:42:46] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:06] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:43:06] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:10] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:12] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:43:12] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:14] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:25] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:27] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:43:57] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:43:57] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:44:31] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:44:31] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:45:04] "POST /create-task HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:45:05] "GET /create-task HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:45:08] "GET / HTTP/1.1" 200 -
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Check KM current status', 'Check current status','2', '0','Lakshmi','Open')
+inserted task id24
+Checking Lakshmi against @1@Lakshmi@lakshmi@
+user details
+['', '1', 'Lakshmi', 'lakshmi', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('1','24',1)
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Check Relaxo status', 'Check Relaxo status','2', '0','Raji','Open')
+inserted task id25
+Checking Raji against @1@Lakshmi@lakshmi@
+Checking Raji against @2@Raji@raji@
+user details
+['', '2', 'Raji', 'raji', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('2','25',1)
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Set next buy price for KM', 'Set next buy price for KM','2', '0','Lakshmi','Open')
+inserted task id26
+Checking Lakshmi against @1@Lakshmi@lakshmi@
+user details
+['', '1', 'Lakshmi', 'lakshmi', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('1','26',1)
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Set next buy price for Relaxo', 'Set next buy price for Relaxo','2', '0','Raji','Open')
+inserted task id27
+Checking Raji against @1@Lakshmi@lakshmi@
+Checking Raji against @2@Raji@raji@
+user details
+['', '2', 'Raji', 'raji', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('2','27',1)
+Inserting daily jobs
+
+    SELECT id,name,description,bucket_id,bucket_name,remarks,recuring,day_of_week,user_name,status
+    FROM invo_task where status = 'Open' and (day_of_week like CONCAT('%',DAYOFWEEK(CURDATE()),'%') or day_of_week like '%0%')
+    
+(24, 'Check KM current status', 'Check current status', 2, None, None, None, '0', 'Lakshmi', 'Open')
+SELECT user_id FROM assign_task where task_id = 24
+Checking 1 against @1@Lakshmi@lakshmi@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Check KM current status', 'Check current status', '24','2','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '1' )            
+            
+update invo_task set status = 'Progress' where id = 24
+(25, 'Check Relaxo status', 'Check Relaxo status', 2, None, None, None, '0', 'Raji', 'Open')
+SELECT user_id FROM assign_task where task_id = 25
+Checking 2 against @1@Lakshmi@lakshmi@
+Checking 2 against @2@Raji@raji@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Check Relaxo status', 'Check Relaxo status', '25','2','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '2' )            
+            
+update invo_task set status = 'Progress' where id = 25
+(26, 'Set next buy price for KM', 'Set next buy price for KM', 2, None, None, None, '0', 'Lakshmi', 'Open')
+SELECT user_id FROM assign_task where task_id = 26
+Checking 1 against @1@Lakshmi@lakshmi@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Set next buy price for KM', 'Set next buy price for KM', '26','2','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '1' )            
+            
+update invo_task set status = 'Progress' where id = 26
+(27, 'Set next buy price for Relaxo', 'Set next buy price for Relaxo', 2, None, None, None, '0', 'Raji', 'Open')
+SELECT user_id FROM assign_task where task_id = 27
+Checking 2 against @1@Lakshmi@lakshmi@
+Checking 2 against @2@Raji@raji@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Set next buy price for Relaxo', 'Set next buy price for Relaxo', '27','2','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '2' )            
+            
+update invo_task set status = 'Progress' where id = 27
+ insert into daily_task SELECT NULL,name, description,task_id,remarks,bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY),owner
+    FROM daily_task 
+    where status = 'Open' and next_task_date = CURDATE()
+    
+sessuserid:1
+
+    SELECT  t.id, t.name, t.description, b.name, u.name, t.task_date, t.status, t.remarks
+    FROM daily_task t , invo_user u, bucket b 
+    WHERE 
+        t.task_date <= CURDATE() and 
+        t.status = 'open' and 
+        u.id = t.owner and 
+        b.id = t.bucket_id
+    
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Get EBIT PBT and PAT for KM', 'Get EBIT PBT and PAT for KM','2', '0','Lakshmi','Open')
+inserted task id28
+Checking Lakshmi against @1@Lakshmi@lakshmi@
+user details
+['', '1', 'Lakshmi', 'lakshmi', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('1','28',1)
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Get Next Buy point for Railtel', 'Get Next Buy point for Railtel','3', '0','Santhosh','Open')
+inserted task id29
+Checking Santhosh against @1@Lakshmi@lakshmi@
+Checking Santhosh against @2@Raji@raji@
+Checking Santhosh against @3@Neelima@neelima@
+Checking Santhosh against @4@Santhosh@santhosh@
+user details
+['', '4', 'Santhosh', 'santhosh', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('4','29',1)
+Creating task
+sql qry daily indicator:
+INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('Set the plan for one time tasks in application', 'Set the plan for one time tasks in application','2', '0','Santhosh','Open')
+inserted task id30
+Checking Santhosh against @1@Lakshmi@lakshmi@
+Checking Santhosh against @2@Raji@raji@
+Checking Santhosh against @3@Neelima@neelima@
+Checking Santhosh against @4@Santhosh@santhosh@
+user details
+['', '4', 'Santhosh', 'santhosh', '']
+INSERT INTO assign_task(user_id, task_id, status) VALUES ('4','30',1)
+Inserting daily jobs
+
+    SELECT id,name,description,bucket_id,bucket_name,remarks,recuring,day_of_week,user_name,status
+    FROM invo_task where status = 'Open' and (day_of_week like CONCAT('%',DAYOFWEEK(CURDATE()),'%') or day_of_week like '%0%')
+    
+(28, 'Get EBIT PBT and PAT for KM', 'Get EBIT PBT and PAT for KM', 2, None, None, None, '0', 'Lakshmi', 'Open')
+SELECT user_id FROM assign_task where task_id = 28
+Checking 1 against @1@Lakshmi@lakshmi@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Get EBIT PBT and PAT for KM', 'Get EBIT PBT and PAT for KM', '28','2','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '1' )            
+            
+update invo_task set status = 'Progress' where id = 28
+(29, 'Get Next Buy point for Railtel', 'Get Next Buy point for Railtel', 3, None, None, None, '0', 'Santhosh', 'Open')
+SELECT user_id FROM assign_task where task_id = 29
+Checking 4 against @1@Lakshmi@lakshmi@
+Checking 4 against @2@Raji@raji@
+Checking 4 against @3@Neelima@neelima@
+Checking 4 against @4@Santhosh@santhosh@
+insert:
+insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
+            values( 'Get Next Buy point for Railtel', 'Get Next Buy point for Railtel', '29','3','None','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '4' )            
+            
+update invo_task set status = 'Progress' where id = 29
+(30, 'Set the plan for one time tasks in application', 'Set the plan for one time tasks in application', 2, None, None, None, '0', 'Santhosh', 'Open')
+SELECT user_id FROM assign_task where task_id = 30
+Checking 4 against @1@Lakshmi@lakshmi@
+Checking 4 against @2@Raji@raji@
+Checking 4 against @3@Neelima@neelima@
+Checking 4 against @4@Santhosh@santhosh@
+insert:
+223.178.80.144 - - [20/Mar/2025 05:45:12] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.80.144 - - [20/Mar/2025 05:45:12] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 05:45:15] "GET /invo_tasks HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-345-373
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-345-373
+223.178.80.144 - - [20/Mar/2025 08:38:07] "GET /get-study-notes HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 08:38:10] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 08:38:13] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 08:38:17] "GET /update-inventory HTTP/1.1" 200 -
+103.149.59.214 - - [20/Mar/2025 08:51:37] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 08:52:28] "GET / HTTP/1.1" 200 -
+205.210.31.47 - - [20/Mar/2025 08:55:52] "GET / HTTP/1.0" 302 -
+103.149.59.214 - - [20/Mar/2025 09:04:04] "GET / HTTP/1.1" 200 -
+103.149.59.214 - - [20/Mar/2025 09:06:04] "GET / HTTP/1.1" 200 -
+103.149.59.214 - - [20/Mar/2025 09:06:46] "GET /favicon.ico HTTP/1.1" 404 -
+103.149.59.214 - - [20/Mar/2025 09:07:06] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+103.149.59.214 - - [20/Mar/2025 09:07:06] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:06] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+223.178.80.144 - - [20/Mar/2025 09:07:06] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:07] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+103.149.59.214 - - [20/Mar/2025 09:07:07] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:07] "GET /items?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:17] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:21] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:40] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+223.178.80.144 - - [20/Mar/2025 09:07:40] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:07:41] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:07:51] "GET /market-update HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:07:53] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+223.178.80.144 - - [20/Mar/2025 09:07:54] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:07:54] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:08:36] "GET /invo_tasks HTTP/1.1" 200 -
+103.149.59.214 - - [20/Mar/2025 09:08:37] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:09:15] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:09:18] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+223.178.80.144 - - [20/Mar/2025 09:09:18] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:09:18] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:09:21] "GET /buckets HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:09:29] "GET /get-bucket-summary HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 09:09:36] "GET /items HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Unknown column 'script_code' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 397, in show_items1
+    cursor.execute("SELECT id, name, description, bucket, count,id,script_code FROM items")
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'script_code' in 'field list'
+223.178.80.144 - - [20/Mar/2025 09:09:36] "GET /items?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 09:09:36] "GET /items?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-345-373
+223.178.80.144 - - [20/Mar/2025 10:59:37] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 10:59:37] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [20/Mar/2025 10:59:48] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 10:59:51] "GET /update-inventory HTTP/1.1" 200 -
+206.168.34.32 - - [20/Mar/2025 11:08:23] "GET / HTTP/1.1" 302 -
+206.168.34.32 - - [20/Mar/2025 11:08:25] code 505, message Invalid HTTP version (2.0)
+206.168.34.32 - - [20/Mar/2025 11:08:25] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+206.168.34.32 - - [20/Mar/2025 11:08:32] "GET /login HTTP/1.1" 200 -
+206.168.34.32 - - [20/Mar/2025 11:08:33] "GET /favicon.ico HTTP/1.1" 404 -
+206.168.34.32 - - [20/Mar/2025 11:08:36] code 505, message Invalid HTTP version (2.0)
+206.168.34.32 - - [20/Mar/2025 11:08:36] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+206.168.34.32 - - [20/Mar/2025 11:08:41] "GET /favicon.ico HTTP/1.1" 404 -
+206.168.34.32 - - [20/Mar/2025 11:08:42] code 400, message Bad request syntax ('\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03¦=»¥\x9c\x04=Ëm]\x99\x06¦B\x8ah\x17Î')
+206.168.34.32 - - [20/Mar/2025 11:08:42] "\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03¦=»¥\x9c\x04=Ëm]\x99\x06¦B\x8ah\x17Î" HTTPStatus.BAD_REQUEST -
+223.178.80.144 - - [20/Mar/2025 15:11:39] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 15:11:39] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [20/Mar/2025 15:11:42] "GET /items HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 15:12:45] "POST /buy-sell-load HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 356, in buy_sell_load
+    item = items[0]
+IndexError: list index out of range
+223.178.80.144 - - [20/Mar/2025 15:12:45] "GET /buy-sell-load?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.80.144 - - [20/Mar/2025 15:12:46] "GET /buy-sell-load?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 570-447-728
+223.178.80.144 - - [20/Mar/2025 16:21:02] "GET / HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 16:21:03] "GET /home HTTP/1.1" 200 -
+223.178.80.144 - - [20/Mar/2025 16:21:04] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.80.144 - - [20/Mar/2025 16:21:06] "GET /update-inventory HTTP/1.1" 200 -
+205.210.31.110 - - [20/Mar/2025 19:59:22] "GET / HTTP/1.0" 302 -
+205.210.31.95 - - [20/Mar/2025 21:27:15] "GET / HTTP/1.1" 302 -
+205.210.31.95 - - [20/Mar/2025 21:27:15] "GET /login HTTP/1.1" 200 -
+72.68.166.160 - - [20/Mar/2025 22:26:05] "GET / HTTP/1.0" 302 -
+223.178.84.127 - - [21/Mar/2025 06:24:27] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:24:28] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.84.127 - - [21/Mar/2025 06:24:46] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:24:49] "GET /update-inventory HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 852, in update_inventory
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.84.127 - - [21/Mar/2025 06:24:50] "GET /update-inventory?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+223.178.84.127 - - [21/Mar/2025 06:24:50] "GET /update-inventory?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.84.127 - - [21/Mar/2025 06:24:51] "GET /update-inventory?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 256-885-361
+223.178.84.127 - - [21/Mar/2025 06:26:13] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:30:55] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:30:56] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 06:30:59] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:31:05] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:31:09] "GET /update-inventory HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:02] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:05] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:32:18] "GET /update-inventory HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:28] "POST /add-buyer HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:31] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:33] "GET /update-inventory HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:45] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:32:46] "GET /add-buyer HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:33:06] "POST /add-buyer HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:33:07] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:33:09] "GET /update-inventory HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:33:29] "POST /update-inventory HTTP/1.1" 302 -
+223.178.84.127 - - [21/Mar/2025 06:33:29] "GET /update-inventory HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 06:35:05] "GET /ac HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:44:09] "POST /update-inventory HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:44:09] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:44:50] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:44:55] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:45:07] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:45:10] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:45:29] "GET /get_tags/9 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:11] "POST /add-item HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:46:11] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:15] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:18] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:46] "POST /add-item HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Incorrect integer value: '' for column 'item_id' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 810, in insert_inv_item
+    cursor.execute(sql)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DatabaseError: 1366 (HY000): Incorrect integer value: '' for column 'item_id' at row 1
+36.255.18.60 - - [21/Mar/2025 06:46:46] "GET /add-item?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:47] "GET /add-item?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:46:48] "GET /add-item?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:47:29] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:47:30] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:49:36] "POST /update-inventory HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:49:36] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:49:36] "POST /update-inventory HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:49:37] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:51:09] "POST /update-inventory HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:51:09] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 06:51:59] "POST /update-inventory HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 06:52:00] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 07:23:13] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 07:23:16] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 07:23:24] "GET /add-item HTTP/1.1" 200 -
+205.210.31.153 - - [21/Mar/2025 07:46:25] "GET / HTTP/1.0" 302 -
+223.178.84.127 - - [21/Mar/2025 08:36:55] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 08:36:57] "GET /favicon.ico HTTP/1.1" 404 -
+152.59.214.63 - - [21/Mar/2025 08:38:06] "GET / HTTP/1.1" 302 -
+152.59.214.63 - - [21/Mar/2025 08:38:06] "GET /login HTTP/1.1" 200 -
+152.59.214.63 - - [21/Mar/2025 08:38:07] "GET /favicon.ico HTTP/1.1" 404 -
+152.59.214.63 - - [21/Mar/2025 08:38:34] "POST /login HTTP/1.1" 302 -
+152.59.214.63 - - [21/Mar/2025 08:38:34] "GET / HTTP/1.1" 200 -
+152.59.214.63 - - [21/Mar/2025 08:38:39] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:01:57] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:02:04] "GET /favicon.ico HTTP/1.1" 404 -
+103.159.192.108 - - [21/Mar/2025 10:13:33] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:13:55] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:14:27] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:14:34] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:14:54] "GET /login HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:15:21] "POST /login HTTP/1.1" 302 -
+103.159.192.108 - - [21/Mar/2025 10:15:21] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:15:25] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:25:53] "POST /daily-task-update HTTP/1.1" 302 -
+103.159.192.108 - - [21/Mar/2025 10:25:53] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:28:49] "POST /daily-task-update HTTP/1.1" 302 -
+103.159.192.108 - - [21/Mar/2025 10:28:50] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:29:09] "POST /daily-task-update HTTP/1.1" 302 -
+103.159.192.108 - - [21/Mar/2025 10:29:09] "GET /invo_tasks HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:29:28] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:29:30] "GET /create-task HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:30:12] "POST /create-task HTTP/1.1" 302 -
+223.178.84.127 - - [21/Mar/2025 10:30:12] "GET /create-task HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:30:14] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:30:16] "GET /job_daily_task_creation HTTP/1.1" 302 -
+223.178.84.127 - - [21/Mar/2025 10:30:16] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:30:27] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:30:33] "GET /invo_tasks HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:31:02] "GET /items HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:31:22] "POST /buy-sell-load HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:33:46] "POST /buy-sell-insert HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Data too long for column 'script' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 391, in buy_sell_insert
+    update_bucket_details(bucket,name,int(cnt),Decimal(price),exchange)
+  File "/home/ec2-user/santhosh/invo/app.py", line 692, in update_bucket_details
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'script' at row 1
+103.159.192.108 - - [21/Mar/2025 10:33:46] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:33:46] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:33:47] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:34:59] "POST /buy-sell-insert HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Data too long for column 'script' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 391, in buy_sell_insert
+    update_bucket_details(bucket,name,int(cnt),Decimal(price),exchange)
+  File "/home/ec2-user/santhosh/invo/app.py", line 692, in update_bucket_details
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'script' at row 1
+103.159.192.108 - - [21/Mar/2025 10:34:59] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+103.159.192.108 - - [21/Mar/2025 10:34:59] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+103.159.192.108 - - [21/Mar/2025 10:36:16] "POST /buy-sell-insert HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Data too long for column 'script' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 391, in buy_sell_insert
+    update_bucket_details(bucket,name,int(cnt),Decimal(price),exchange)
+  File "/home/ec2-user/santhosh/invo/app.py", line 692, in update_bucket_details
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'script' at row 1
+103.159.192.108 - - [21/Mar/2025 10:36:17] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+103.159.192.108 - - [21/Mar/2025 10:36:17] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+223.178.84.127 - - [21/Mar/2025 10:37:35] "GET /items HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:37:37] "POST /buy-sell-load HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:37:51] "POST /buy-sell-insert HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Data too long for column 'script' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 391, in buy_sell_insert
+    update_bucket_details(bucket,name,int(cnt),Decimal(price),exchange)
+  File "/home/ec2-user/santhosh/invo/app.py", line 692, in update_bucket_details
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DataError: 1406 (22001): Data too long for column 'script' at row 1
+223.178.84.127 - - [21/Mar/2025 10:37:51] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:37:52] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 10:37:52] "GET /buy-sell-insert?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 826-763-255
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 826-763-255
+103.159.192.108 - - [21/Mar/2025 10:42:05] "GET /items HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:42:11] "POST /buy-sell-load HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:42:23] "POST /buy-sell-load HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:42:52] "POST /buy-sell-insert HTTP/1.1" 302 -
+103.159.192.108 - - [21/Mar/2025 10:42:52] "GET /items HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:43:05] "GET / HTTP/1.1" 200 -
+103.159.192.108 - - [21/Mar/2025 10:43:11] "GET /get-bucket-summary HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:49:54] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:49:54] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 10:50:01] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:50:26] "POST /update-inventory HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 755, in cmd_query
+    self._cmysql.query(
+_mysql_connector.MySQLInterfaceError: Incorrect integer value: '' for column 'quantity' at row 1
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 861, in update_inventory
+    cursor.execute(sql_vals)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/cursor_cext.py", line 351, in execute
+    self._connection.cmd_query(
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/opentelemetry/context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 763, in cmd_query
+    raise get_mysql_exception(
+mysql.connector.errors.DatabaseError: 1366 (HY000): Incorrect integer value: '' for column 'quantity' at row 1
+36.255.18.60 - - [21/Mar/2025 10:50:26] "GET /update-inventory?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:50:27] "GET /update-inventory?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:50:27] "GET /update-inventory?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:51:12] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:51:15] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:52:34] "GET /get_tags/4 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:53:10] "GET /get_tags/5 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 10:53:37] "GET /get_tags/13 HTTP/1.1" 200 -
+64.62.197.203 - - [21/Mar/2025 10:54:13] "GET / HTTP/1.1" 302 -
+64.62.197.208 - - [21/Mar/2025 10:54:28] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 11:11:52] "GET /get_tags/23 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:12:04] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:12:07] "GET /update-inventory HTTP/1.1" 200 -
+80.82.70.133 - - [21/Mar/2025 11:14:41] "GET / HTTP/1.0" 302 -
+36.255.18.60 - - [21/Mar/2025 11:15:59] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:16:29] "GET /get_tags/7 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:16:49] "GET /add-item HTTP/1.1" 200 -
+80.82.77.202 - - [21/Mar/2025 11:17:41] code 400, message Bad request version ('À\x13À')
+80.82.77.202 - - [21/Mar/2025 11:17:41] "\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03ÄÒôÞoh\x06\x02,\x86\x14{*;ç\x1bm´Ñº±\x87\x06quð«N8Rnª 1\x8bÕ\x8e<&ª~ß»qn8\x19M2]-<ÀïÁÐt6°H±íï¨Î\x00&À+À/À,À0Ì©Ì¨À\x09À\x13À" HTTPStatus.BAD_REQUEST -
+80.82.77.202 - - [21/Mar/2025 11:17:41] "GET /aaa9 HTTP/1.1" 404 -
+80.82.77.202 - - [21/Mar/2025 11:17:42] code 400, message Bad request version ('À\x13À')
+80.82.77.202 - - [21/Mar/2025 11:17:42] "\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03\x9cZ*\x00JQ2[HiiX\x12eú[\x05\x96\x86\x7fl'è+¯r\x99F­ª\x1fF É6\x93+¶µtûZ\x12Ò!XOHÆÐØH\x8d\x8fGM\x1b·Gð^\x9fW%\x8b\x00&À+À/À,À0Ì©Ì¨À\x09À\x13À" HTTPStatus.BAD_REQUEST -
+80.82.77.202 - - [21/Mar/2025 11:17:42] "GET /aab9 HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 11:17:56] "GET /get_tags/13 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:19:16] "GET /get_tags/9 HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:21:25] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:21:25] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 11:23:31] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:23:34] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:23:41] "GET /add-item HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:24:59] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:25:03] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:25:13] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:25:19] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:25:27] "GET /get_tags/5 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:25:39] "GET /get_tags/6 HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 11:25:42] "GET /get_tags/6 HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:32:29] "GET / HTTP/1.1" 302 -
+36.255.18.60 - - [21/Mar/2025 11:32:30] "GET /login HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:32:50] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:32:55] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 11:33:03] "GET /get_tags/6 HTTP/1.1" 200 -
+211.55.141.210 - - [21/Mar/2025 11:48:39] "GET / HTTP/1.0" 302 -
+36.255.18.60 - - [21/Mar/2025 12:17:19] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 12:17:20] "GET /favicon.ico HTTP/1.1" 404 -
+36.255.18.60 - - [21/Mar/2025 12:17:26] "GET /add-buyer HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 12:17:34] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 12:17:47] "GET /update-inventory HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 13:29:12] "GET /home HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 13:29:16] "GET /add-item HTTP/1.1" 200 -
+36.255.18.60 - - [21/Mar/2025 13:29:22] "GET /get_tags/4 HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-878-347
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-878-347
+223.178.84.127 - - [21/Mar/2025 14:12:12] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 14:12:13] "GET /favicon.ico HTTP/1.1" 404 -
+223.178.84.127 - - [21/Mar/2025 14:12:18] "GET /home HTTP/1.1" 200 -
+223.178.84.127 - - [21/Mar/2025 14:12:19] "GET /ac HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 130-546-611
+223.178.84.127 - - [21/Mar/2025 14:26:14] "GET /ac HTTP/1.1" 200 -
+149.202.132.197 - - [21/Mar/2025 14:59:53] code 400, message Bad request version ('À#À¬À®À+À')
+149.202.132.197 - - [21/Mar/2025 14:59:53] "\x16\x03\x03\x01¦\x01\x00\x01¢\x03\x03è §¨¹\x1eF |( å¶Ã\x02ÑîÂy\x93\x02íÑ\x10\x12õ"\x01CØ\x1fø -; H=8>.\x82l¢ú÷|îÝC\x13Óíø\x1fï ©i\x1c½ø?¬5\x00\x8a\x00\x16\x003\x00gÀ\x9eÀ¢\x00\x9e\x009\x00kÀ\x9fÀ£\x00\x9f\x00E\x00¾\x00\x88\x00Ä\x00\x9aÀ\x08À\x09À#À¬À®À+À" HTTPStatus.BAD_REQUEST -
+149.202.132.206 - - [21/Mar/2025 14:59:57] "GET / HTTP/1.1" 302 -
+137.74.181.241 - - [21/Mar/2025 15:06:06] code 400, message Bad request version ('À#À¬À®À+À')
+137.74.181.241 - - [21/Mar/2025 15:06:06] "\x16\x03\x03\x01¦\x01\x00\x01¢\x03\x03ÍT\x93Ò\x1f\x17\x1cÁÚ~?\x84ÒsßÈÛ\x88`©\x8fGj<k¬\x91'ã?\x16" û\x03\x8e$«\x978$ÿí?\x02!àOàó>¼q0\x1c\x19ð\x14\x07ÿ\x84Oì\x1e7\x00\x8a\x00\x16\x003\x00gÀ\x9eÀ¢\x00\x9e\x009\x00kÀ\x9fÀ£\x00\x9f\x00E\x00¾\x00\x88\x00Ä\x00\x9aÀ\x08À\x09À#À¬À®À+À" HTTPStatus.BAD_REQUEST -
+137.74.181.252 - - [21/Mar/2025 15:06:08] code 400, message Bad request syntax ('\x16\x03\x03\x01¦\x01\x00\x01¢\x03\x03ßñá"C£Bx7(°7ÀøK.\x11\x11³«Èû:7')
+137.74.181.252 - - [21/Mar/2025 15:06:08] "\x16\x03\x03\x01¦\x01\x00\x01¢\x03\x03ßñá"C£Bx7(°7ÀøK.\x11\x11³«Èû:7" HTTPStatus.BAD_REQUEST -
+137.74.181.245 - - [21/Mar/2025 15:06:09] "GET /favicon.ico HTTP/1.1" 404 -
+137.74.181.251 - - [21/Mar/2025 15:06:10] "GET /login HTTP/1.1" 200 -
+91.196.152.215 - - [21/Mar/2025 15:12:44] code 400, message Bad request version ('À#À¬À®À+À')
+91.196.152.215 - - [21/Mar/2025 15:12:44] "\x16\x03\x03\x01¦\x01\x00\x01¢\x03\x03Ì\x9b7:2¡\x0cÜø?$8tkuïèÌ­\x11C\x14áªû5J¡iÝ²Ò ÌÙhÐ9Äo=¹F*\x7f<ô\x13ñà'ÁÝ&vM³2SÝì©\x13ò\x1d\x00\x8a\x00\x16\x003\x00gÀ\x9eÀ¢\x00\x9e\x009\x00kÀ\x9fÀ£\x00\x9f\x00E\x00¾\x00\x88\x00Ä\x00\x9aÀ\x08À\x09À#À¬À®À+À" HTTPStatus.BAD_REQUEST -
+91.196.152.181 - - [21/Mar/2025 15:12:45] "GET /favicon.ico HTTP/1.1" 404 -
+205.210.31.67 - - [21/Mar/2025 21:47:24] "GET / HTTP/1.0" 302 -
+24.199.127.12 - - [21/Mar/2025 23:47:44] code 400, message Bad request version ('À\x14À')
+24.199.127.12 - - [21/Mar/2025 23:47:44] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03\x16Wè\x19Ú:½\x88\x09«­D\x1d7yð\x8b\x9b\x03¼ ¬þrý\x12©\x96\x93\x18Ì÷\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+24.199.127.12 - - [21/Mar/2025 23:47:44] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00{\x01\x00\x00w\x03\x03æmÏ¯~wÓ³q´\x8d\x93\x90\x11¼¬\x9c»±\x83ÄÀ{µ·¤°iÇìÿo\x00\x00\x1aÀ/À+À\x11À\x07À\x13À')
+24.199.127.12 - - [21/Mar/2025 23:47:44] "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03æmÏ¯~wÓ³q´\x8d\x93\x90\x11¼¬\x9c»±\x83ÄÀ{µ·¤°iÇìÿo\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À" HTTPStatus.BAD_REQUEST -
+24.199.127.12 - - [21/Mar/2025 23:47:44] "GET / HTTP/1.1" 302 -
+24.199.127.12 - - [21/Mar/2025 23:47:45] "GET /login HTTP/1.1" 200 -
+167.94.138.188 - - [22/Mar/2025 02:07:12] "GET / HTTP/1.1" 302 -
+167.94.138.188 - - [22/Mar/2025 02:07:18] code 505, message Invalid HTTP version (2.0)
+167.94.138.188 - - [22/Mar/2025 02:07:18] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+167.94.138.188 - - [22/Mar/2025 02:07:25] "GET /login HTTP/1.1" 200 -
+167.94.138.188 - - [22/Mar/2025 02:07:27] "GET /favicon.ico HTTP/1.1" 404 -
+167.94.138.188 - - [22/Mar/2025 02:07:27] code 505, message Invalid HTTP version (2.0)
+167.94.138.188 - - [22/Mar/2025 02:07:27] "PRI * HTTP/2.0" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+167.94.138.188 - - [22/Mar/2025 02:07:34] "GET /favicon.ico HTTP/1.1" 404 -
+167.94.138.188 - - [22/Mar/2025 02:07:36] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03é\x0fï\x96')
+167.94.138.188 - - [22/Mar/2025 02:07:36] "\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03é\x0fï\x96 \x14" HTTPStatus.BAD_REQUEST -
+223.178.84.127 - - [22/Mar/2025 06:34:24] "GET / HTTP/1.1" 200 -
+223.178.84.127 - - [22/Mar/2025 06:34:25] "GET /ac HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ec2-user/santhosh/invo/app.py", line 594, in account_transactions
+    cursor = mysql.cursor()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/mysql/connector/connection_cext.py", line 824, in cursor
+    raise OperationalError("MySQL Connection not available.")
+mysql.connector.errors.OperationalError: MySQL Connection not available.
+223.178.84.127 - - [22/Mar/2025 06:34:25] "GET /ac?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+223.178.84.127 - - [22/Mar/2025 06:34:26] "GET /ac?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+223.178.84.127 - - [22/Mar/2025 06:34:26] "GET /ac?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+file:config-prod.json
+['@1@Lakshmi@lakshmi@', '@2@Raji@raji@', '@3@Neelima@neelima@', '@4@Santhosh@santhosh@']
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.7.4:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 116-746-805
+223.178.84.127 - - [22/Mar/2025 06:35:07] "GET /ac HTTP/1.1" 200 -
+223.178.84.127 - - [22/Mar/2025 06:35:07] "GET /favicon.ico HTTP/1.1" 404 -
+103.149.59.210 - - [22/Mar/2025 07:50:45] "GET /login HTTP/1.1" 200 -
+103.149.59.210 - - [22/Mar/2025 07:50:46] "GET /favicon.ico HTTP/1.1" 404 -
+65.49.1.123 - - [22/Mar/2025 09:14:22] "GET / HTTP/1.1" 302 -
+65.49.1.125 - - [22/Mar/2025 09:14:42] "GET / HTTP/1.1" 302 -
+65.49.1.130 - - [22/Mar/2025 09:14:42] "GET /login HTTP/1.1" 200 -
+65.49.1.124 - - [22/Mar/2025 09:14:50] "GET /favicon.ico HTTP/1.1" 404 -
