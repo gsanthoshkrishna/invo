@@ -241,7 +241,77 @@ CREATE TABLE tr_share (
 );
 /* nohup python3 app.py & > /dev/null &  */      
 
+CREATE TABLE `buyer` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE seller (
+  `id` int AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(50),
+  `email` varchar(50),
+  `phone` varchar(20),
+  `city` varchar(20)
+)
 
 
 
 
+/******* Tables list********
+
+==========Account=========
+acc_item     
+account      
+tr_account   
+tr_budget    
+
+==========INVO============
+invo_user    
+
+invo_task    
+daily_task   
+assign_task  
+
+items        
+bucket       
+bucket_details
+tr_share       
+
+indicators   
+daily_indicators    
+
+study_note   
+study_note_file     
+
+daily_script_updates
+scripts          
+watchlist    
+=============Inventory=======
+update_inventory    
+update_inventory_bkp
+inventory_item      
+buyer        
+item
+itembkp         
+item_details 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**************************/

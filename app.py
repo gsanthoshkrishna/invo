@@ -76,7 +76,7 @@ def job_daily_task_creation():
             #id,name,description,bucket_id,bucket_name,remarks,recuring,day_of_week,user_name,status
             #id,name,description,task_id,remarks,bucket_id,bucket_name,status,task_date,nxttsk,ownr
             insrt_qry = f"""insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
-            values( '{task[1]}', '{task[2]}', '{task[0]}','{task[3]}','{task[4]}','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) , '{user_details[1]}' )            
+            values( '{task[1]}', '{task[2]}', '{task[0]}','{task[3]}','{task[4]}','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 1 DAY) , '{user_details[1]}' )            
             """
             print("insert:")
             print(insrt_qry)
@@ -92,7 +92,7 @@ def job_daily_task_creation():
 
     
     #update the tasks of next_task_date is today.
-    qry = """ insert into daily_task SELECT NULL,name, description,task_id,remarks,bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY),owner
+    qry = """ insert into daily_task SELECT NULL,name, description,task_id,remarks,bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 1 DAY),owner
     FROM daily_task 
     where status = 'Open' and next_task_date = CURDATE()
     """
@@ -826,6 +826,22 @@ def add_buyer():
         cursor.close()
     return render_template("add_buyer.html")
 
+@app.route("/add-seller", methods=['GET', 'POST'])
+def add_seller():
+    if request.method == "POST":
+        print("Adding new Seller.")
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        city = request.form.get('city')
+        cursor = mysql.cursor()
+        sql_vals = "insert into seller values(NULL,'%s','%s','%s','%s')" % (name, email, phone, city)
+        cursor.execute(sql_vals)
+        mysql.commit()
+        cursor.close()
+    return render_template("/add_seller.html")
+
+
 @app.route('/add-item')
 def add_item():
     cursor = mysql.cursor()
@@ -917,8 +933,9 @@ def update_inventory():
         item = request.form.get('item')
         buyer = request.form.get('buyer')
         quantity = request.form.get('quantity')
+        amt = request.form.get('amount')
 
-        sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s')" % (item, buyer, quantity, tr_date)
+        sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s','%s')" % (item, buyer, quantity, tr_date, amt)
         cursor.execute(sql_vals)
         mysql.commit()
         cursor.close()
@@ -955,8 +972,3 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
-
-
-
-
-
