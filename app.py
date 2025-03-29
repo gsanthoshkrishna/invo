@@ -160,6 +160,9 @@ def index():
     name = session.get('user_name')
     return render_template('invo.html',name = name)
 
+@app.route('/trackers')
+def trackers():
+    return render_template("/trackers.html")
 
 @app.route('/daily_changes', methods=['GET', 'POST'])
 def test_get_changes():
