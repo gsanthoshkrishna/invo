@@ -817,15 +817,12 @@ def inventory_home():
 @app.route("/inv-report")
 def inv_report():
     cursor = mysql.cursor()
-    sqlqry = "select i.tagval, ic.item_id, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id"
+    sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
-    sqlqry = "select id,name FROM acc_item"
-    cursor.execute(sqlqry)
-    items = cursor.fetchall()
     cursor.close()
-    return render_template("inv_report.html",items)
+    return render_template("inv_report.html",items=data)
 
 @app.route("/add-buyer", methods=['GET', 'POST'])
 def add_buyer():
