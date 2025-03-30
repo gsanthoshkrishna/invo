@@ -258,8 +258,29 @@ CREATE TABLE seller (
   `city` varchar(20)
 )
 
+CREATE TABLE `update_inventory` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `item_id` int DEFAULT NULL,
+  `buyer_id` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `tr_date` date DEFAULT NULL,
+  `amount` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) 
 
+CREATE TABLE inv_count(
+    item_id int  PRIMARY KEY,
+    quantity int,
+    FOREIGN KEY (item_id) REFERENCES item_details(id) 
+)
 
+ CREATE TABLE `item_details` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `item_id` int DEFAULT NULL,
+  `tag` varchar(20) DEFAULT NULL,
+  `tagval` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) 
 
 /******* Tables list********
 

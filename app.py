@@ -814,6 +814,19 @@ def add_tr_budget():
 def inventory_home():
     return render_template("inventory_home.html")
 
+@app.route("/inv-report")
+def inv_report():
+    cursor = mysql.cursor()
+    sqlqry = "select i.tagval, ic.item_id, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    sqlqry = "select id,name FROM acc_item"
+    cursor.execute(sqlqry)
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template("inv_report.html",items)
+
 @app.route("/add-buyer", methods=['GET', 'POST'])
 def add_buyer():
     if request.method == "POST":
