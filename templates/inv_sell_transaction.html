@@ -1,0 +1,32 @@
+<div>
+    <form action="/add-buyer" method="POST">
+
+    <label>Mobile:</label>
+    <input type="text" id="mobile"><button onclick="getUser()">Search</button><br>
+    <label>Name</label>
+    <input type="text" id="custname"><br>
+    <label>Item</label>
+    <select name="items">
+        {% for item in items %}
+        <option value="{{ item[0] }}">{{ item[1] }}</option>
+        {% endfor %}
+    </select>
+    <button>Submit</button>
+</form>
+<button onclick="location.href='/home'">Home</button>
+</div>
+<script>
+function getUser() {
+    var mobno = document.getElementById('mobile').value;
+    $.ajax({
+        type: 'POST',
+        url: '/get-inv-customer',
+        data: JSON.stringify({ 'mobile': mobno}), 
+        contentType: 'application/json; charset=utf-8', 
+        dataType: 'json',
+        success: function(response){
+            document.getElementById('custname').value = response.custname;
+        } 
+    });
+}
+</script>

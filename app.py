@@ -895,7 +895,7 @@ def insert_inv_item():
             print(f"{key}: {value}")
             #sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, key, value)
             
-        sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, item_id, item_str.replace(item_id,''))
+        sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, item_id, item_str.replace(item_id+";",''))
         print(sql)
         cursor.execute(sql)
         mysql.commit()
