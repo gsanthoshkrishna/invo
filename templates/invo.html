@@ -4,6 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index Page</title>
+
+    <style>
+        /* Keyframes for fade-in animation */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+    
+        /* Keyframes for fade-out animation */
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+        }
+    
+        /* Styling the list */
+        ul {
+          list-style: none; /* Remove default bullets */
+          padding-left: 0;
+          position: relative;
+        }
+    
+        /* Styling each image list item */
+        li {
+          position: absolute; /* Stack all images on top of each other */
+          opacity: 0; /* Initially hidden */
+          transition: opacity 0.5s ease; /* Smooth transition */
+        }
+    
+        /* Image styling */
+        img {
+          width: 100px; /* Adjust size as needed */
+          height: auto;
+          display: block;
+        }
+    
+        /* Classes for fade-in and fade-out */
+        .fadeIn {
+          animation: fadeIn 0.5s ease forwards;
+        }
+    
+        .fadeOut {
+          animation: fadeOut 0.5s ease forwards;
+        }
+      </style>
 </head>
 <body>
     <h1>Welcome {{ name }} to the Inventory System</h1>
@@ -19,6 +75,60 @@
     <button onclick="location.href='/get-bucket-summary'">Get Bucket Details</button>
     <button onclick="location.href='/get-study-notes'">Get Notes</button>
     <button onclick="location.href='/trackers'">Trackers</button>
+    <div>
+
+ 
+
+  <h1>Highlights</h1>
+  <ul id="imageList">
+    <li><img src="{{ url_for('static', filename='images/img1.jpeg') }}" alt="Image 1"></li>
+    <li><img src="images/img2.jpeg" alt="Image 2"></li>
+    <li><img src="images/img3.jpeg" alt="Image 3"></li>
+    <li><img src="images/img4.jpeg" alt="Image 4"></li>
+    <li><img src="images/img5.jpeg" alt="Image 5"></li>
+    <li><img src="images/img6.jpeg" alt="Image 6"></li>
+    <li><img src="images/img7.jpeg" alt="Image 7"></li>
+    <li><img src="images/img8.jpeg" alt="Image 8"></li>
+    <li><img src="images/img9.jpeg" alt="Image 9"></li>
+  </ul>
+
+
+    </div>
 </body>
+
+<script>
+    const imageList = document.getElementById('imageList');
+    const images = imageList.children;
+
+    let currentImage = 0;
+
+    function showNextImage() {
+      // Fade out the current image
+      images[currentImage].classList.remove('fadeIn');
+      images[currentImage].classList.add('fadeOut');
+
+      // Move to the next image after fading out
+      setTimeout(() => {
+        images[currentImage].classList.remove('fadeOut');
+        images[currentImage].style.opacity = 0; // Ensure it's hidden
+
+        // Move to the next image
+        currentImage = (currentImage + 1) % images.length;
+
+        // Fade in the next image
+        images[currentImage].classList.add('fadeIn');
+        images[currentImage].style.opacity = 1;
+
+        // Call this function again after 4 seconds (4 seconds visible + transition time)
+        setTimeout(showNextImage, 4000);
+      }, 500); // Wait for fade-out animation to complete
+    }
+
+    // Start the animation
+    images[currentImage].classList.add('fadeIn');
+    images[currentImage].style.opacity = 1;
+    setTimeout(showNextImage, 4000); // Start after initial delay
+  </script>
+
 </html>
 

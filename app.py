@@ -6,6 +6,8 @@ from decimal import Decimal
 from werkzeug.utils import secure_filename
 from bsedata.bse import BSE
 
+
+
 app = Flask(__name__)
 db_name = ""
 UPLOAD_FOLDER = 'study-notes/img'
@@ -16,7 +18,7 @@ Session(app)
 config_data = {}
 
 env_val = sys.argv[1]
-file_name = "config-"+env_val+".json"
+file_name = "/home/ec2-user/santhosh/invo/config-"+env_val+".json"
 print("file:"+file_name)
 with open(file_name, 'r') as config_file:
     config_data = json.load(config_file)
@@ -29,6 +31,25 @@ mysql = mysql.connector.connect(
   database=db_name,
   consume_results=True
 )
+
+def insert_mysql_record(mysql,sql):
+    print(sql)
+    if not mysql.is_connected():
+        print("Mysaql connection disconnected")
+        mysql = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Pass@123",
+            database=db_name,
+            consume_results=True
+        )
+    cursor = mysql.cursor()
+    cursor.execute(sql)
+    mysql.commit()
+    t_id = cursor.lastrowid
+    cursor.close()
+    #mysql.close()
+    return t_id
 
 @app.route('/upload-note', methods=['GET', 'POST'])
 def upload_note():
@@ -78,17 +99,10 @@ def job_daily_task_creation():
             insrt_qry = f"""insert into daily_task (name, description, task_id,bucket_id,bucket_name,status,task_date,next_task_date,owner) 
             values( '{task[1]}', '{task[2]}', '{task[0]}','{task[3]}','{task[4]}','Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 1 DAY) , '{user_details[1]}' )            
             """
-            print("insert:")
-            print(insrt_qry)
-            cur.execute(
-            insrt_qry
-            )
-            mysql.commit()
+            insert_mysql_record(mysql,insrt_qry)
             #after successful insertion mark as in progress in invo_tasks;
             qry = f"update invo_task set status = 'Progress' where id = {task[0]}"
-            print(qry)
-            cur.execute(qry)
-            mysql.commit()
+            insert_mysql_record(mysql,qry)
 
     
     #update the tasks of next_task_date is today.
@@ -96,15 +110,13 @@ def job_daily_task_creation():
     FROM daily_task 
     where status = 'Open' and next_task_date = CURDATE()
     """
-    print(qry)
-    cur.execute(qry)
+    insert_mysql_record(mysql,qry)
     #Update the pushed task to null to avoid repeated creation.
     qry = """
     update daily_task set next_task_date = NULL 
     where status = 'Open' and next_task_date = CURDATE()
     """
-    mysql.commit()
-    cur.close()
+    insert_mysql_record(mysql,qry)
     return redirect("/")
 
 
@@ -207,7 +219,6 @@ def test_get_changes():
 
 @app.route('/create-task', methods=['GET', 'POST'])
 def create_task():
-    cursor = mysql.cursor()
     if request.method == 'POST':
         print("Creating task")
         
@@ -220,20 +231,14 @@ def create_task():
 
         sql_vals = "INSERT INTO invo_task (name, description ,bucket_id, day_of_week, user_name, status) VALUES ('%s', '%s','%s', '%s','%s','Open')" % (t_name, t_desc,t_bucket,t_recc,t_user)
         print('sql qry daily indicator:')
-        print(sql_vals)
-        cursor.execute(sql_vals)
-        t_id = cursor.lastrowid
+        t_id = insert_mysql_record(mysql,sql_vals)
         print("inserted task id"+str(t_id))
         user_details = get_user_details(t_user)
         print("user details")
         print(user_details)
         sql_vals = "INSERT INTO assign_task(user_id, task_id, status) VALUES ('%s','%s',1)" % (user_details[1], t_id)
-        print(sql_vals)
-        cursor.execute(sql_vals)
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sql_vals)
         return redirect('/create-task')
-        cursor = mysql.cursor()
     else:
         cursor.execute("SELECT user_id,name from invo_user")
         users = cursor.fetchall()
@@ -260,11 +265,7 @@ def daily_changes_update():
 
         sql_vals = "INSERT INTO tr_daily_changes (tr_date, tr_open ,tr_close, "+i_ch1+","+i_ch2+", user_name) VALUES ('%s', '%s','%s', '%s','%s','%s')" % (entry_date,i_open, i_close,i_ch_val1,i_ch_val2,session.get('user_id'))
         print('sql qry daily indicator:')
-        print(sql_vals)
-        cursor.execute(sql_vals)
-
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sql_vals)
         print("rendering daily changes insert .")
         return redirect('/daily-changes-update')
         cursor = mysql.cursor()
@@ -386,11 +387,7 @@ def buy_sell_insert():
     scode = request.form.get('script_code')
     bucket_id = request.form.get('bucket_id')
     sql_vals = "INSERT INTO tr_share VALUES (NULL,'%s', '%s','','%s','%s',curdate(), '%s','%s')" % (scode,name,cnt, price,exchange,bucket_id)
-    print('sql qry tr_sh')
-    print(sql_vals)
-    cursor = mysql.cursor()
-    cursor.execute(sql_vals)
-    mysql.commit()
+    insert_mysql_record(mysql,sql_vals)
     update_bucket_details(bucket,name,int(cnt),Decimal(price),exchange)
     return redirect("/items")
 
@@ -462,6 +459,7 @@ def test_post_update():
 
         mysql.commit()
         cursor.close()
+        
         print("rendering test get .")
         return redirect('/get-daily-update')
 
@@ -564,7 +562,6 @@ def add_entries():
 def get_daily_task():
     print("Updating daily task")
     #Get tasks for today.
-    cursor = mysql.cursor()
     #Get the task which is for this day of the week.
     #cursor.execute("SELECT id FROM invo_task where day_of_week like  CONCAT('%',DAYOFWEEK(CURDATE()),'%')")
     #todays_tasks = cursor.fetchall()
@@ -576,21 +573,14 @@ def get_daily_task():
     #TODO
     #Insert in daily_task for the newly created invo_task 
     #by checking if the task id in not present in daily_task.
-    cursor.execute(
-        "insert into daily_task select null,name,'',id,'',bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) from invo_task where id not in (select distinct task_id from daily_task)"
-    )
-    mysql.commit
-    
+    qry = "insert into daily_task select null,name,'',id,'',bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) from invo_task where id not in (select distinct task_id from daily_task)"
+    insert_mysql_record(mysql,qry)    
     #Insert the task from daily_task where next_task_date is today and insert the same record
     #with task_date as today and next_task_date is date + 7Days. And avoid duplicate insertions by checking
-    #if for the same task there is another record with next 7 days.
-    
-    cursor.execute(
-        "insert into daily_task select null,name,'',task_id,'',bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) from daily_task where next_task_date = CURDATE() and task_id not in (select distinct task_id from daily_task where next_task_date= DATE_ADD(CURDATE(),INTERVAL 7 DAY) )"       
-    )
-    mysql.commit
+    #if for the same task there is another record with next 7 days. 
+    qry = "insert into daily_task select null,name,'',task_id,'',bucket_id,bucket_name,'Open',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 7 DAY) from daily_task where next_task_date = CURDATE() and task_id not in (select distinct task_id from daily_task where next_task_date= DATE_ADD(CURDATE(),INTERVAL 7 DAY) )"       
+    insert_mysql_record(mysql,qry)
 
-    cursor.close()
 
 @app.route("/get-study-notes", methods=['GET', 'POST'] )
 def get_study_notes():
@@ -626,25 +616,18 @@ def get_study_notes():
 
 @app.route("/insert-note", methods=['GET', 'POST'] )
 def insert_note():
-    cursor = mysql.cursor()
     name = request.form['name']
     file_path = "study-notes/"+name+".txt"
     sql_vals = "insert into study_note values(NULL,'%s',1,'%s')" % (name, session['user_uid'])
     print("Inserting study notes:")
-    print(sql_vals)
-    cursor.execute(sql_vals)
-    mysql.commit()    
-    n_id = cursor.lastrowid    
+    n_id = insert_mysql_record(mysql,sql_vals)    
     #Immediately create an empty note and its file.
     sql_vals = "insert into study_note_file values('%s','%s')" % (n_id, file_path)
     print("Inserting study notes:")
-    print(sql_vals)
-    cursor.execute(sql_vals)
-    mysql.commit()
+    insert_mysql_record(mysql,sql_vals)
     with open(file_path, 'a') as file:
     # Write content to the file
         file.write("################### Notes for "+name+" ##################")
-    cursor.close()
     return redirect('/get-study-notes')
 
 @app.route("/update-note", methods=['GET', 'POST'] )
@@ -679,10 +662,7 @@ def update_bucket_details(bkt_name,scr_name,quantity,price,exchange):
     if len(cur_vals) == 0:
         print("Newly added script to bucket")
         sql_vals = "insert into bucket_details values('%s','%s','%s','%s',curdate(),'%s',0)" % (bkt_name, scr_name, exchange, quantity, price)
-        print(sql_vals)
-        cursor.execute(sql_vals)
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sql_vals)
     else:
         #TODO please validate the below avg_price calculation formula
         for cur_val in cur_vals:
@@ -738,6 +718,7 @@ def account_transactions():
     cursor.close()
     return render_template("/tr_account.html", data = data,accounts=accounts,items=items,current_date=date.today().strftime('%Y-%m-%d'))
 
+
 @app.route("/add-tr-acc", methods=['GET', 'POST'])
 def add_tr_account():
     print("Added new transaction.")
@@ -750,9 +731,7 @@ def add_tr_account():
     remark = request.form.get('remarks')
     cursor = mysql.cursor()
     sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s','%s','%s')" % ( dr, cr, dt, remark,item,from_acc, to_acc)
-    cursor.execute(sql_vals)
-    mysql.commit()
-    cursor.close()
+    insert_mysql_record(mysql,sql_vals)
     return redirect("/ac")
 
 @app.route("/insert-acc-item", methods=['GET', 'POST'] )
@@ -802,17 +781,62 @@ def add_tr_budget():
     amt = request.form.get('amount')
     month = request.form.get('month')
     remark = request.form.get('remarks')
-    cursor = mysql.cursor()
     sql_vals = "insert into tr_budget values(NULL,'%s','%s','%s','%s')" % ( item,amt,month,remark)
-    cursor.execute(sql_vals)
-    mysql.commit()
-    cursor.close()
+    insert_mysql_record(mysql,sql_vals)
     return redirect("/ac-budget")
 
 ######################### Inventory ######################################
 @app.route("/home")
 def inventory_home():
     return render_template("inventory_home.html")
+
+@app.route("/inv-sell-transaction")
+def inv_sell_transaction():
+    print("In sell transaction")
+    cursor = mysql.cursor()
+    sqlqry = "select id,tagval from item_details"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template('/inv_sell_transaction.html',items=items)
+
+@app.route("/inv-load-transaction", methods=['POST'])
+def inv_load_transaction():
+    print("In load transaction")
+    reqdata = request.get_json()
+    mobno = reqdata.get("mobile")
+    print("mobile")
+    print(reqdata)
+    cursor = mysql.cursor()
+    sqlqry = "select id,name from inv_customer where mobile='"+mobno+"'"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()    
+    name = "NA"
+    cust_id = "-1"
+    for names in data: 
+        cust_id = names[0]
+        name = names[1]
+    return jsonify({'custname': name, 'cust_id': cust_id})
+
+@app.route("/inv-submit-transaction", methods=['POST'])
+def inv_submit_transaction():
+    print("In submit transaction")
+    reqdata = request.get_json()
+    mobno = reqdata.get("mobile")
+    custname = reqdata.get("custname")
+    cust_id = reqdata.get("cust_id")
+    cost = reqdata.get("cost")
+    itemid = reqdata.get("itemid")
+    #Check if user is -1 then first insert into customer.
+    if cust_id == "-1":
+        sqlqry = "insert into inv_customer values(NULL,'%s','%s','')" % (mobno, custname)
+        cust_id = insert_mysql_record(mysql,sqlqry)
+
+    sqlqry = "insert into tr_inv_sale values(NULL,'%s','%s','%s','%s','%s')" % (cust_id, custname, itemid, cost, date.today().strftime('%Y-%m-%d'))
+    insert_mysql_record(mysql,sqlqry)
+    return jsonify({'retval': 'success'})
 
 @app.route("/inv-report")
 def inv_report():
@@ -824,6 +848,33 @@ def inv_report():
     cursor.close()
     return render_template("inv_report.html",items=data)
 
+@app.route("/inv-entry-edit", methods=['GET', 'POST'])
+def inv_entry_edit():
+    if request.method == "POST":
+        cnt = request.json['cnt']
+        rowid = request.json['rowid']
+        qry = f"update update_inventory set quantity = {cnt} where id = {rowid}"
+        insert_mysql_record(mysql,qry)
+    return jsonify({'ret_msg':"done."})
+
+@app.route("/inv-entry-delete", methods=['GET', 'POST'])
+def inv_entry_delete():
+    if request.method == "POST":
+        rowid = request.json['rowid']
+        qry = f"delete from update_inventory where id = {rowid}"
+        insert_mysql_record(mysql,qry)
+    return jsonify({'ret_msg':"done."})
+
+@app.route("/inv-entry-report")
+def inv_entry_report():
+    cursor = mysql.cursor()
+    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template("inv_entry_report.html",entries=data)
+
 @app.route("/add-buyer", methods=['GET', 'POST'])
 def add_buyer():
     if request.method == "POST":
@@ -832,11 +883,8 @@ def add_buyer():
         email = request.form.get('email')
         phone = request.form.get('phone')
         city = request.form.get('city')
-        cursor = mysql.cursor()
         sql_vals = "insert into buyer values(NULL,'%s','%s','%s','%s')" % (name, email, phone, city)
-        cursor.execute(sql_vals)
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sqlqry)
     return render_template("add_buyer.html")
 
 @app.route("/add-seller", methods=['GET', 'POST'])
@@ -847,11 +895,8 @@ def add_seller():
         email = request.form.get('email')
         phone = request.form.get('phone')
         city = request.form.get('city')
-        cursor = mysql.cursor()
         sql_vals = "insert into seller values(NULL,'%s','%s','%s','%s')" % (name, email, phone, city)
-        cursor.execute(sql_vals)
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sql_vals)
     return render_template("/add_seller.html")
 
 
@@ -896,11 +941,7 @@ def insert_inv_item():
             #sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, key, value)
             
         sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, item_id, item_str.replace(item_id+";",''))
-        print(sql)
-        cursor.execute(sql)
-        mysql.commit()
-        cursor.close()
-        print(item_str)
+        insert_mysql_record(mysql,sql)
     return redirect("/add-item")
     
 @app.route('/get_fields', methods=['Get','POST'])
@@ -917,25 +958,25 @@ def get_fields():
     cursor.close()
     return render_template('new_inventory.html', categories=categories, rows=rows)
 
-@app.route("/add-item-details", methods=['GET', 'POST'])
-def add_item_details():
-    cursor = mysql.cursor()
-    if request.method == "POST":
-        print("Adding new Item Details.")
-        category = request.json['category_id']
-        tag1val = request.json['tag1val']
-        tag2val = request.json['tag2val']
-        print("test")
-        print(tag1val)
-        print(tag2val)
-        print(category)
+# @app.route("/add-item-details", methods=['GET', 'POST'])
+# def add_item_details():
+#     cursor = mysql.cursor()
+#     if request.method == "POST":
+#         print("Adding new Item Details.")
+#         category = request.json['category_id']
+#         tag1val = request.json['tag1val']
+#         tag2val = request.json['tag2val']
+#         print("test")
+#         print(tag1val)
+#         print(tag2val)
+#         print(category)
 
-        sql = "INSERT INTO item_details VALUES (NULL,1,'"+tag1val+"','"+tag1val+"')"
-        print(sql)
-        #cursor.execute(sql, list(data.values()))
-        #mysql.commit()
-        #cursor.close()
-    return 'Data submitted successfully!'
+#         sql = "INSERT INTO item_details VALUES (NULL,1,'"+tag1val+"','"+tag1val+"')"
+#         print(sql)
+#         #cursor.execute(sql, list(data.values()))
+#         #mysql.commit()
+#         #cursor.close()
+#     return 'Data submitted successfully!'
 
 @app.route("/update-inventory", methods=['GET', 'POST'])
 def update_inventory():
@@ -949,9 +990,7 @@ def update_inventory():
         amt = request.form.get('amount')
 
         sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s','%s')" % (item, buyer, quantity, tr_date, amt)
-        cursor.execute(sql_vals)
-        mysql.commit()
-        cursor.close()
+        insert_mysql_record(mysql,sql_vals)
         return redirect("/update-inventory")
     else:
         cursor.execute("SELECT id,name from buyer")
@@ -963,14 +1002,10 @@ def update_inventory():
 
 @app.route("/add-tag", methods=['GET', 'POST'] )
 def add_tag():
-    cursor = mysql.cursor()
     name = request.form['name']
     sql_vals = "insert into temp_tag values('%s')" % (name)
     print("Inserting study notes:")
-    print(sql_vals)
-    cursor.execute(sql_vals)
-    mysql.commit()
-    cursor.close()
+    insert_mysql_record(mysql,sql_vals)
     return redirect('/add-item')
 
 if __name__ == '__main__':
@@ -985,3 +1020,4 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
+

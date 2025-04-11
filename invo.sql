@@ -282,6 +282,24 @@ CREATE TABLE inv_count(
   PRIMARY KEY (`id`)
 ) 
 
+/*******NEW****/
+create table inv_customer(
+    id int AUTO_INCREMENT PRIMARY KEY,
+    mobile varchar(15),
+    name varchar(30),
+    location varchar(50)
+)
+
+CREATE TABLE `tr_inv_sale` (
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cust_id int,
+  name varchar(50) DEFAULT NULL,
+  itemid int DEFAULT NULL,
+  cost int DEFAULT NULL,
+  trdate date DEFAULT NULL,     
+  FOREIGN KEY (itemid) REFERENCES item_details(id),
+   FOREIGN KEY (cust_id) REFERENCES inv_customer(id),
+)
 /******* Tables list********
 
 ==========Account=========

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Entry</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <h1>Inventory Entry</h1>
+
+    <table border="1" cellpadding="10">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Item</th>
+                <th>Buyer</th>
+                <th>Quantity</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr id="row-{{ entry[4] }}">
+                <td><span class="editable" contenteditable="false">{{ entry[0] }}</span></td>
+                <td><span class="editable" contenteditable="false">{{ entry[1] }}</span></td>
+                <td><span class="editable" contenteditable="false">{{ entry[2] }}</span></td>
+                <td><span class="editable" contenteditable="false">{{ entry[3] }}</span></td>
+                <td><button  class="edit-btn" data-id="{{ entry[4] }}">Edit</button>
+                <button  class="del-btn" data-id="{{ entry[4] }}">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+<script>
+    $(document).ready(function() {
+        $('.edit-btn').on('click', function() {
+            const rowId = $(this).data('id');
+            console.log("ROWID")
+            console.log(rowId)
+            const row = $(`#row-${rowId}`);
+            console.log("ROW")
+            console.log(row)
+            // Toggle edit mode
+            if ($(this).text() === 'Edit') {
+                currentValue = row.find('.editable').eq(3).text();
+                currentValue = row.find('.editable').eq(3).text();
+                console.log("Curval")
+                console.log(currentValue)
+                row.find('.editable').eq(3).html(`<input type="text" id="cnt" value="${currentValue}" />`)
+                $(this).text('Update');
+            } else {
+                var cnt = document.getElementById('cnt').value;
+                console.log("CNT")
+                console.log(cnt)
+                // Send AJAX request to update data
+                $.ajax({
+                    url: '/inv-entry-edit',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ cnt: cnt, rowid: rowId}),
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Updated successfully!');
+                            row.find('.editable').attr('contenteditable', 'false').css('border', 'none');
+                            $(`#row-${rowId} .edit-btn`).text('Edit');
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('.del-btn').on('click', function() {
+            const rowId = $(this).data('id');
+            console.log("ROWID")
+            console.log(rowId)
+            const row = $(`#row-${rowId}`);
+            console.log("ROW")
+            console.log(row)
+                // Send AJAX request to update data
+            $.ajax({
+                url: '/inv-entry-delete',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({rowid: rowId}),
+                success: function(response) {
+                    console.log();
+                        location.reload();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

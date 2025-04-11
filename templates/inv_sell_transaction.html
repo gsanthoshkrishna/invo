@@ -1,32 +1,62 @@
 <div>
-    <form action="/add-buyer" method="POST">
+
 
     <label>Mobile:</label>
-    <input type="text" id="mobile"><button onclick="getUser()">Search</button><br>
+    <input type="text" id="mobile"><button onclick="getUser()">Search</button>
+    <input type="hidden" id="cust_id"><br>
     <label>Name</label>
     <input type="text" id="custname"><br>
     <label>Item</label>
-    <select name="items">
+    <select name="items" id="items">
+        <option disabled>Items</option>
         {% for item in items %}
         <option value="{{ item[0] }}">{{ item[1] }}</option>
         {% endfor %}
     </select>
-    <button>Submit</button>
-</form>
+    <label>Cost</label>
+    <input type="text" id="cost"><br>
+    <button onclick="sell()">Submit</button>
+
 <button onclick="location.href='/home'">Home</button>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
 function getUser() {
     var mobno = document.getElementById('mobile').value;
+    console.log("in ajax call")
     $.ajax({
         type: 'POST',
-        url: '/get-inv-customer',
+        url: '/inv-load-transaction',
         data: JSON.stringify({ 'mobile': mobno}), 
-        contentType: 'application/json; charset=utf-8', 
+        headers: {
+        "Content-Type": "application/json"
+        }, 
         dataType: 'json',
         success: function(response){
+            console.log("in ajax response")
             document.getElementById('custname').value = response.custname;
+            document.getElementById('cust_id').value = response.cust_id;
         } 
     });
 }
+function sell() {
+	var cust_id =	 document.getElementById('cust_id').value;
+	var custname =  document.getElementById('custname').value;
+	var cost =  document.getElementById('cost').value;
+	var itemid =  document.getElementById('items').value;
+	    console.log("in submi")
+	    $.ajax({
+            type: 'POST',
+            url: '/inv-submit-transaction',
+            data: JSON.stringify({ 'cust_id': cust_id, 'custname': custname, "cost": cost, "itemid": itemid}),
+            headers: {
+                    "Content-Type": "application/json"
+                    },
+            dataType: 'json',
+            success: function(response){
+                        console.log("in ajax response")
+                        document.getElementById('custname').value = response.custname;
+                    }
+        });
+    }
 </script>
