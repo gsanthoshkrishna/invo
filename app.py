@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, flash, render_template, request, redirect, url_for, session, jsonify
 import mysql.connector, time, sys, json
 from datetime import date, datetime
 from flask_session import Session
@@ -18,7 +18,7 @@ Session(app)
 config_data = {}
 
 env_val = sys.argv[1]
-file_name = "/home/ec2-user/santhosh/invo/config-"+env_val+".json"
+file_name = "/home/invo/invo/config-"+env_val+".json"
 print("file:"+file_name)
 with open(file_name, 'r') as config_file:
     config_data = json.load(config_file)
@@ -31,6 +31,26 @@ mysql = mysql.connector.connect(
   database=db_name,
   consume_results=True
 )
+
+def insert_many_mysql_record(mysql,sql,rows_to_insert):
+    print(sql)
+    print(rows_to_insert)
+    if not mysql.is_connected():
+        print("Mysaql connection disconnected")
+        mysql = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Pass@123",
+            database=db_name,
+            consume_results=True
+        )
+    cursor = mysql.cursor()
+    cursor.executemany(sql,rows_to_insert)
+    mysql.commit()
+    cursor.close()
+    print("Ins Cnt:"+str(cursor.rowcount))
+    print(cursor.rowcount)
+    return cursor.rowcount
 
 def insert_mysql_record(mysql,sql):
     print(sql)
@@ -48,7 +68,6 @@ def insert_mysql_record(mysql,sql):
     mysql.commit()
     t_id = cursor.lastrowid
     cursor.close()
-    #mysql.close()
     return t_id
 
 @app.route('/upload-note', methods=['GET', 'POST'])
@@ -325,7 +344,7 @@ def daily_changes():
 @app.route('/buckets')
 def show_buckets():
     cursor = mysql.cursor()
-    cursor.execute("SELECT name, description, duration FROM bucket")
+    cursor.execute("SELECT name, description, duration FROM bucket where FIND_IN_SET('"+str(session.get('user_uid'))+"', enabled_user) > 0 or "+str(session.get('user_type'))+" = '1'")
     buckets = cursor.fetchall()
     cursor.close()
     return render_template('buckets.html', buckets=buckets)
@@ -366,9 +385,9 @@ def buy_sell_load():
         bucket_id = item[3]
         return render_template("/buy-sell.html", name = name, bucket = bucket, bucket_id=bucket_id,script_code=s_code, btn_action = act)
 
-@app.route('/get-bucket-summary')
+@app.route('/get-bucket-summary',methods=['GET', 'POST'])
 def get_bucket_summary():
-    qry="SELECT name,script, quantity, avg_price, quantity * avg_price as Amount FROM bucket_details"
+    qry="SELECT b.name,bd.script, bd.quantity, bd.avg_price, bd.quantity * bd.avg_price as Amount FROM bucket_details bd, bucket b where b.id = bd.bucket_id and (FIND_IN_SET('"+str(session.get('user_uid'))+"', b.enabled_user) > 0 or "+str(session.get('user_type'))+" = '1')"
     print(qry)
     cursor = mysql.cursor()
     cursor.execute(qry)
@@ -705,7 +724,7 @@ def get_user_details(key):
 def account_transactions():
     cursor = mysql.cursor()
     #todo add where condition for the records with date for the corrent month
-    sqlqry = "select fra.name,ta.name, i.name, debt, credit, date, remarks FROM tr_account tra, acc_item i, account fra,account ta where ta.id = tra.to_acc_id and fra.id = tra.from_acc_id and i.id = tra.item_id"
+    sqlqry = "select date,i.name, debt,fra.name ,remarks FROM tr_account tra, acc_item i, account fra where fra.id = tra.from_acc_id and i.id = tra.item_id"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -715,40 +734,43 @@ def account_transactions():
     sqlqry = "select id,name FROM acc_item"
     cursor.execute(sqlqry)
     items = cursor.fetchall()
+
+    cursor.execute("select ac.name, sum(debt) amt from tr_account tr, account ac where ac.id = tr.from_acc_id group by tr.from_acc_id")  # Replace with your table name
+    spendings = cursor.fetchall()
+    
     cursor.close()
-    return render_template("/tr_account.html", data = data,accounts=accounts,items=items,current_date=date.today().strftime('%Y-%m-%d'))
+    return render_template("/tr_account.html", spendings = spendings, data = data,accounts=accounts,items=items,current_date=date.today().strftime('%Y-%m-%d'))
 
 
 @app.route("/add-tr-acc", methods=['GET', 'POST'])
 def add_tr_account():
     print("Added new transaction.")
-    from_acc = request.form.get('from_acc')
-    to_acc = request.form.get('to_acc')
+    from_acc = request.form.get('from_acc')    
     item = request.form.get('item')
     dr = request.form.get('dr')
-    cr = request.form.get('cr')
     dt = request.form.get('date')
     remark = request.form.get('remarks')
     cursor = mysql.cursor()
-    sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s','%s','%s')" % ( dr, cr, dt, remark,item,from_acc, to_acc)
+    sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s',13)" % ( dr, dt, remark,item,from_acc)
     insert_mysql_record(mysql,sql_vals)
     return redirect("/ac")
 
 @app.route("/insert-acc-item", methods=['GET', 'POST'] )
 def insert_acc_item():
-    print("Insreting new item.")
-    cursor = mysql.cursor()
     name = request.form['name']
-    sql_vals = "insert into acc_item values(NULL,'%s','')" % (name)
-    print("Inserting New Item:")
-    print(sql_vals)
-    cursor.execute(sql_vals)
-    mysql.commit()
-    cursor.close()
+    sql_vals = "insert into account values(NULL,'%s','')" % (name)
+    insert_mysql_record(mysql,sql_vals)
+    return redirect('/ac')
+
+@app.route("/insert-item", methods=['GET', 'POST'] )
+def insert_item():
+    name = request.form['itemname']
+    sql_vals = "insert into acc_item values(NULL,'%s','','')" % (name)
+    insert_mysql_record(mysql,sql_vals)
     return redirect('/ac')
 
 @app.route("/acc-dboard", methods=['GET', 'POST'] )
-def acc_dboard():
+def acc_dboard2():
     cursor = mysql.cursor()
     #name = request.form['name']
     #sql_vals = "insert into acc_item values(NULL,'%s','')" % (name)
@@ -772,7 +794,7 @@ def ac_budget():
     cursor.execute(sqlqry)
     items = cursor.fetchall()
     cursor.close()
-    return render_template("/tr_acc_budget.html", data = data,items=items,current_month=date.today().strftime('%b').upper())
+    return render_template("/tr_account_budget.html", data = data,items=items,current_month=date.today().strftime('%b').upper())
 
 @app.route("/add-tr-budget", methods=['GET', 'POST'])
 def add_tr_budget():
@@ -785,6 +807,14 @@ def add_tr_budget():
     insert_mysql_record(mysql,sql_vals)
     return redirect("/ac-budget")
 
+@app.route('/dboard')
+def acc_dboard():
+    cursor = mysql.cursor()
+    cursor.execute("select ac.name, sum(debt) amt from tr_account tr, account ac where ac.id = tr.from_acc_id group by tr.from_acc_id")  # Replace with your table name
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('acc_dashboard.html', spendings=data)
+
 ######################### Inventory ######################################
 @app.route("/home")
 def inventory_home():
@@ -792,14 +822,27 @@ def inventory_home():
 
 @app.route("/inv-sell-transaction")
 def inv_sell_transaction():
+    inv_cust_id = request.args.get('inv_cust_id')
+    if inv_cust_id == None:
+        inv_cust_id = ""
+
+    inv_cust_mob = request.args.get('inv_cust_mob')
+    if inv_cust_mob == None:
+        inv_cust_mob = ""
+
+    inv_cust_name = request.args.get('inv_cust_name')
+    if inv_cust_name == None:
+        inv_cust_name = ""
+    
+    
     print("In sell transaction")
     cursor = mysql.cursor()
-    sqlqry = "select id,tagval from item_details"
+    sqlqry = "select id,tagval from item_details order by tagval"
     print(sqlqry)
     cursor.execute(sqlqry)
     items = cursor.fetchall()
     cursor.close()
-    return render_template('/inv_sell_transaction.html',items=items)
+    return render_template('/inv_sell_transaction.html',items=items,inv_cust_id=inv_cust_id, inv_cust_name=inv_cust_name,inv_cust_mob=inv_cust_mob,current_date=date.today().strftime('%Y-%m-%d'))
 
 @app.route("/inv-load-transaction", methods=['POST'])
 def inv_load_transaction():
@@ -819,24 +862,60 @@ def inv_load_transaction():
         cust_id = names[0]
         name = names[1]
     return jsonify({'custname': name, 'cust_id': cust_id})
+    
+@app.route("/insert-inv-cust", methods=['POST'])
+def insert_inv_cust():
+    custmob = request.form['pCustMob']
+    custname = request.form['pCustName']
+    custloc = request.form['pCustLoc']
+    sql_vals = "insert into inv_customer(mobile,name,location) values('%s','%s','%s')" % (custmob,custname,custloc)
+    cust_id = insert_mysql_record(mysql,sql_vals)
+    return redirect("/inv-sell-transaction?inv_cust_mob="+custmob+"&inv_cust_name="+custname+"&inv_cust_mob="+custmob+"&inv_cust_id="+str(cust_id))
 
 @app.route("/inv-submit-transaction", methods=['POST'])
 def inv_submit_transaction():
     print("In submit transaction")
     reqdata = request.get_json()
-    mobno = reqdata.get("mobile")
     custname = reqdata.get("custname")
     cust_id = reqdata.get("cust_id")
-    cost = reqdata.get("cost")
-    itemid = reqdata.get("itemid")
-    #Check if user is -1 then first insert into customer.
-    if cust_id == "-1":
-        sqlqry = "insert into inv_customer values(NULL,'%s','%s','')" % (mobno, custname)
-        cust_id = insert_mysql_record(mysql,sqlqry)
+    tot_cost = reqdata.get("totcost")
+    itemscnt = reqdata.get("itemscnt")
+    tr_date = reqdata.get("tr_date")
+    data = reqdata.get("data")
 
-    sqlqry = "insert into tr_inv_sale values(NULL,'%s','%s','%s','%s','%s')" % (cust_id, custname, itemid, cost, date.today().strftime('%Y-%m-%d'))
-    insert_mysql_record(mysql,sqlqry)
-    return jsonify({'retval': 'success'})
+    #First create a bill_reciept details and use the reciept number with detail info.
+    sqlqry = "insert into inv_sale_reciept values(NULL, '%s','%s','%s','%s')" % (cust_id, tr_date, tot_cost,itemscnt)
+    reciept_num = insert_mysql_record(mysql,sqlqry)
+    if reciept_num < 1 :
+        print("Generating reciept failed...")
+        return jsonify({'retval': 'failure'})
+
+    print("Reciept Generated.")
+    qty_list = data.get('qty', [])
+    price_list = data.get('price', [])
+    cost_list = data.get('cost', [])
+    items_list = data.get('items',[])
+
+    rows_to_insert = []
+    vals_to_update = []
+    for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
+        rows_to_insert.append((i, q, p, c))
+        vals_to_update.append((q,i))
+    
+    if rows_to_insert:
+        sql = "INSERT INTO tr_inv_sale (reciept_num, itemid, quantity, price, cost, trdate) VALUES ("+str(reciept_num)+",%s, %s, %s,%s,'"+tr_date+"')"
+        ins_cnt = insert_many_mysql_record(mysql,sql,rows_to_insert)
+        print(str(ins_cnt)+":"+str(itemscnt))
+
+        if str(ins_cnt) == str(itemscnt):
+            print("Items inserted:"+str(ins_cnt))
+            sqlqry = "update inv_count set quantity = quantity - %s where item_id = %s"
+            upd_cnt = insert_many_mysql_record(mysql,sqlqry,vals_to_update)
+            if upd_cnt > 0:
+                return jsonify({'retval': 'success'})
+
+    return jsonify({'retval': 'failure'})
+        
 
 @app.route("/inv-report")
 def inv_report():
@@ -990,12 +1069,23 @@ def update_inventory():
         amt = request.form.get('amount')
 
         sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s','%s')" % (item, buyer, quantity, tr_date, amt)
-        insert_mysql_record(mysql,sql_vals)
+        sub_id = insert_mysql_record(mysql,sql_vals)
+        if sub_id > 0:
+            #if item is not inserted earlier then insert with quantity
+            cursor.execute("SELECT quantity from inv_count where item_id = "+item)
+            qty = cursor.fetchall()
+            if not qty:
+                sqlqry = "insert into inv_count values('%s','%s')" % (item, quantity)
+                last_rec = insert_mysql_record(mysql,sqlqry)
+            else:
+                for qty_val in qty:
+                    sqlqry = "update inv_count set quantity = quantity + "+quantity+" where item_id = "+item
+                    last_rec = insert_mysql_record(mysql,sqlqry)
         return redirect("/update-inventory")
     else:
         cursor.execute("SELECT id,name from buyer")
         buyers = cursor.fetchall()
-        cursor.execute("SELECT id,tagval from item_details")
+        cursor.execute("SELECT id,tagval from item_details order by tagval")
         items = cursor.fetchall()
         cursor.close()
         return render_template("/update_inventory.html",buyers=buyers, items=items,cur_date=date.today().strftime('%Y-%m-%d'))
@@ -1008,6 +1098,76 @@ def add_tag():
     insert_mysql_record(mysql,sql_vals)
     return redirect('/add-item')
 
+######################### Music ######################################
+def read_notes(filename='notes.txt'):
+    with open(filename, 'r') as f:
+        # Read lines, strip whitespace, ignore empty lines
+        notes = [line.strip() for line in f if line.strip()]
+    return notes
+
+@app.route('/music')
+def music():
+    icons = ['noicon.gif','icon1.gif', 'icon2.gif','icon3.gif','icon4.gif','icon5.gif','icon6.gif','icon7.gif']
+    intvl = [2635, 1216, 1038, 607, 559, 502, 576, 500, 1171, 558, 519, 1159, 543, 550, 1544, 927, 175, 485, 512, 639, 487, 3686]
+    #intvl = [1171, 4558, 2519, 51159, 543, 550, 1154]
+    return render_template('notesplay.html', icons=icons, intvl = intvl)
+
+@app.route('/practice')
+def practice():
+    icons = ['noicon.gif','icon1.gif', 'icon2.gif','icon3.gif','icon4.gif','icon5.gif','icon6.gif','icon7.gif']
+    #intvl = [1171, 4558, 2519, 51159, 543, 550, 1154]
+    return render_template('practice.html', icons=icons)
+
+
+######################### Music ######################################
+######################### Kirana ######################################
+@app.route('/kirana')
+def kirana():
+    cursor = mysql.cursor()
+    sqlqry = "select * from kirana_category"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    cats = cursor.fetchall()
+    sqlqry = "select item.id,item.name,tr.quantity,tr.brand,tr.amount,tr.month,tr.remarks from tr_kirana tr, kirana_item item where item.id=tr.item_id"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    sqlqry = "select * from kirana_item"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template('tr_kirana_monthly.html',data=data, items = items, categories=cats)
+
+@app.route("/add-tr-kirana", methods=['GET', 'POST'])
+def add_tr_kirana():
+    print("Added new Kirana Item.")
+    item = request.form.get('item')
+    qty = request.form.get('quantity')
+    brand = request.form.get('brand')
+    amt = request.form.get('amount')
+    month = request.form.get('month')
+    remark = request.form.get('remarks')
+    sql_vals = "insert into tr_kirana values(NULL,'%s','%s','%s','%s','%s','%s')" % ( item,qty,brand,amt,month,remark)
+    insert_mysql_record(mysql,sql_vals)
+    return redirect("/kirana")
+
+@app.route("/insert-kirana-category", methods=['GET', 'POST'] )
+def insert_kirana_category():
+    name = request.form['name']
+    sql_vals = "insert into kirana_category values(NULL,'%s','')" % (name)
+    insert_mysql_record(mysql,sql_vals)
+    return redirect('/kirana')
+
+@app.route("/insert-new-kirana-item", methods=['GET', 'POST'] )
+def insert_new_kirana_item():
+    name = request.form['itemname']
+    cat_id = request.form['cat_id']
+    sql_vals = "insert into kirana_item values(NULL,'%s','%s','')" % (name,cat_id)
+    insert_mysql_record(mysql,sql_vals)
+    return redirect('/kirana')
+
+######################### Kirana ######################################
 if __name__ == '__main__':
     set_user_list()
 

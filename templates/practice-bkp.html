@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Practice</title>
+    <style>
+        .icon-row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .icon-row img {
+            width: 48px;
+            height: 48px;
+            border: 4px solid transparent;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .icon-row img.highlighted {
+            border-color: #e94e77;
+            box-shadow: 0 0 12px #e94e77;
+        }
+    </style>
+</head>
+<body>
+    <div class="icon-row" id="iconRow">
+        {% for icon in icons %}
+            <img src="{{ url_for('static', filename=icon) }}" alt="{{ icon }}" />
+        {% endfor %}
+    </div>
+    <div class="icon-row" id="iconRow">
+        {% for alphanote in alphanotes %}
+            <img src="{{ url_for('static', filename=alphanote) }}" alt="{{ alphanote }}" />
+        {% endfor %}
+    </div>
+    <!-- Radio buttons -->
+     <label>Speed</label>
+  <input type="radio" id="x1" name="multiplier" value="1000" checked>
+  <label for="x5">x1</label>
+
+  <input type="radio" id="x2" name="multiplier" value="2000">
+  <label for="x10">x2</label>
+
+  <input type="radio" id="x3" name="multiplier" value="3000">
+  <label for="x10">x3</label>
+
+  <input type="radio" id="x4" name="multiplier" value="4000">
+  <label for="x10">x3</label>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const icons = document.querySelectorAll('.icon-row img');
+            
+            
+            function wait(ms){
+                var start = new Date().getTime();
+                var end = start;
+                while(end < start + ms){
+                    end = new Date().getTime();
+                }
+                console.log("waiting.")
+            }
+            function highlightIcon(index) {
+                icons.forEach((icon, idx) => {
+                    icon.classList.toggle('highlighted', idx === index);
+                });    
+            }
+
+            function cycleIcons(){
+                console.log("next iteration...")
+                let rndm = Math.floor(Math.random() * 10)
+                let currentIndex = rndm % icons.length;
+                console.log("randoms")
+                console.log(rndm)
+                console.log(currentIndex)
+                speed = parseInt(document.querySelector('input[name="multiplier"]:checked').value);
+                console.log(speed)
+                wait(2000)
+                highlightIcon(currentIndex);
+            }
+
+            intervalId = setInterval(cycleIcons, 2000);
+            cycleIcons();
+
+        });
+    </script>
+</body>
+</html>

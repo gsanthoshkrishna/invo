@@ -298,8 +298,57 @@ CREATE TABLE `tr_inv_sale` (
   cost int DEFAULT NULL,
   trdate date DEFAULT NULL,     
   FOREIGN KEY (itemid) REFERENCES item_details(id),
-   FOREIGN KEY (cust_id) REFERENCES inv_customer(id),
+   FOREIGN KEY (cust_id) REFERENCES inv_customer(id)
 )
+
+ALTER TABLE acc_item add column category varchar(30)
+
+alter table tr_account drop column credit;
+
+CREATE TABLE inv_sale_reciept (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cust_id int,
+    bill_date date,
+    amount int,
+    item_cnt int,
+    FOREIGN KEY (cust_id) REFERENCES inv_customer(id)
+
+)
+
+alter table tr_inv_sale add column reciept_num int , add constraint fk_reciept FOREIGN  KEY (reciept_num) REFERENCES inv_sale_reciept(id)
+
+alter table bucket add column enabled_user varchar(20) ;
+
+alter table bucket_details add column id int primary key auto_increment;
+
+alter table bucket_details add column bucket_id int , add constraint fk_bkt_id FOREIGN  KEY (bucket_id) REFERENCES bucket(id)
+
+CREATE TABLE kirana_category(
+    id int not null auto_increment,
+    name varchar(30),
+    remarks varchar(30),
+    primary key (id)
+)
+CREATE TABLE kirana_item(
+    id int not null auto_increment,
+    name varchar(30),
+    category_id int,
+    remarks varchar(30),
+    primary key (id),
+    FOREIGN key (category_id) REFERENCES kirana_category(id)
+)
+CREATE TABLE tr_kirana (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `item_id` int,
+  `quantity` int ,
+  brand varchar(30) ,
+  amount int,
+  `month` varchar(10),
+  `remarks` varchar(50),
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (item_id) REFERENCES kirana_item(id) 
+)
+
 /******* Tables list********
 
 ==========Account=========
@@ -336,8 +385,9 @@ inventory_item
 buyer        
 item
 itembkp         
-item_details 
+item_details
 
+=============Kirana==========
 
 
 

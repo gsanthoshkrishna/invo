@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Transactions</title>
     <style>
+        .table-container {
+            max-height: 300px; /* Set the height for vertical scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 1px solid #ccc; /* Optional border for the container */
+            width: 50%; /* Set the width for horizontal scrolling */
+        }
         table {
-            width: 100%;
-            border-collapse: collapse;
+            width: 100%; /* Ensure the table takes up full width */
+            border-collapse: collapse; /* Remove gaps between table cells */
         }
+
+        thead th {
+            position: sticky; /* Fix header to the top */
+            top: 0;
+            background-color: #f1f1f1; /* Background color for headers */
+            z-index: 1; /* Ensure headers stay above content */
+        }
+
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
+            border: 1px solid #ddd; /* Add borders to cells */
         }
     </style>
 </head>
@@ -42,84 +54,103 @@
     }
 </style>
 <body>
+    <div style="width: 500px;">
+        <canvas id="marksChart"></canvas>
+    </div>
     <h2>Transactions</h2>
     <table>
         <thead>
             <tr>
-                <th>Transaction</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Debt</th>
-                <th>Credit</th>
                 <th>Date</th>
+                <th>Transaction</th>
+                <th>Amount</th>
+                <th>From</th>
                 <th>Remarks</th>
             </tr>
         </thead>
         <tbody>
             {% for row in data %}
-            <tr>                
-                <td>{{ row[2] }}</td>
+            <tr>
                 <td>{{ row[0] }}</td>
                 <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
                 <td>{{ row[3] }}</td>
                 <td>{{ row[4] }}</td>
-                <td>{{ row[5] }}</td>
             </tr>
             {% endfor %}
             <tr>
                 <form action="/add-tr-acc" method="POST">
-                <td>
-                    <select name="item">
-                        <option value="" disabled selected>Select an Item</option>
-                        {% for item in items %}
-                        <option value="{{ item[0] }}">{{ item[1] }}</option>
-                        {% endfor %}
-                    </select>
-                    </td>
+                    <td><input type="date" id="date" name="date" value="{{ current_date }}" required></td>
                     <td>
-                    <select name="from_acc">
-                        <option value="" disabled selected>From</option>
-                        {% for account in accounts %}
-                        <option value="{{ account[0] }}">{{ account[1] }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="to_acc">
-                        <option value="" disabled selected>From</option>
-                        {% for account in accounts %}
-                        <option value="{{ account[0] }}">{{ account[1] }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td><input type="text" name="dr" value="0"></td>
-                <td><input type="text" name="cr" value="0"></td>
-                <td><input type="date" id="date" name="date" value="{{ current_date }}" required></td>
-                <td>
-                    <input type="text" name="remarks">
-                    <button>Add</button>
-                </td>
+                        <select name="item">
+                            <option value="" disabled selected>Select an Item</option>
+                            {% for item in items %}
+                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input type="text" name="dr" value="0"></td>
+                    <td>
+                        <select name="from_acc">
+                            <option value="" disabled selected>From</option>
+                            {% for account in accounts %}
+                            <option value="{{ account[0] }}">{{ account[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>                
+                    <td><input type="text" name="remarks"><button>Add</button></td>
                 </form>
             </tr>
         </tbody>
     </table>
     <div id="popupForm" class="popup">
         <form action="/insert-acc-item" method="POST">
-            <label for="name">Enter New Item Name:</label>
+            <label for="name">Enter New Account Name:</label>
             <input type="text" id="name" name="name" required>
             <input type="submit" value="Create">
             <button type="button" onclick="hidePopup()" >Cancel</button>
         </form>
     </div>
-    <button onclick="showPopup()">New Item</button>
+    <div id="popupItemForm" class="popup">
+        <form action="/insert-item" method="POST">
+            <label for="name">Enter New Item Name:</label>
+            <input type="text" id="itemname" name="itemname" required>
+            <input type="submit" value="Create">
+            <button type="button" onclick="hideItemPopup()" >Cancel</button>
+        </form>
+    </div>
+    <button onclick="showPopup()">New Account</button>
+    <button onclick="showItemPopup()">New Item</button>
 </body>
 </html>
 <script>
+
+    const ctx = document.getElementById('marksChart').getContext('2d');
+        const spendingsData = {
+            labels: {{ spendings | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Student Marks',
+                data: {{ spendings | map(attribute=1) | list | tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+        };
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: spendingsData,
+            options: { responsive: true }
+        });
     function showPopup(){
         document.getElementById("popupForm").style.display = "block"
     }
     function hidePopup(){
         document.getElementById("popupForm").style.display = "none"
+    }
+    function showItemPopup(){
+        document.getElementById("popupItemForm").style.display = "block"
+    }
+    function hideItemPopup(){
+        document.getElementById("popupItemForm").style.display = "none"
     }
 </script>
 

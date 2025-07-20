@@ -1,0 +1,78 @@
+=========================== List ================================
+T1: TODO - Create category wise spendings chart dashboard.
+T2: TODO - Colouring as per thresholds for T1. 
+T3: Completed - remove FROM and TO accounts and make only Account in tr_account. - Completed
+T4: TODO - categorise the items in acc_table. - TODO
+T5: Progress - High - User based items and bucket details - 
+T6: TODO - Work on watchlist /watchlist in invo
+T7: TODO - High - /items has each share details and count but  share quantitiy count is not showing correct values. High
+T8: TODO - High - "Get Bucket details" /get-bucket-summary should show below investment status.
+            Target Amount
+            Duration
+            Exkpected Return
+            Total Amount Invested
+            Current values
+            Total Profit/Loss in bracket monthly
+            Remove quantity and avg price here it should be available in /items.
+T10: Completed - If search result is zero the it should provide an input to enter name and location update inv_customer.
+    "Urgent" - Completed
+T11: Progress - High - Inventory count should decrease after sale.
+T12: TODO - after submit entered and values got inserted into db then url should not have parameters
+                like /inv-sell-transaction?inv_cust_mob=126126&inv_cust_name=621621&inv_cust_mob=126126&inv_cust_id=13
+T13: Medium: Like inv-entry-report we need to have a sale entry report.
+T14: TODO High: Update inv_count when updated "Entry Report" /inv-entry-report
+T15: Progress Multiple Sale Items
+T16: Progress High: update sale to enter 10 items.
+=========================== TODO ================================
+T1: Create category wise spendings chart dashboard.
+    Getting all the data from tr_account table.
+    Show graph as per 
+        i.  as per account.
+        ii. as per item category
+    In dashboard html page provide radio buttons (Account, Category)
+
+T2: Colouring as per thresholds for T1.
+
+
+
+T4: categorise the items in acc_table.
+=========================== Progress  ================================
+T5: User based items and bucket details
+    admin should see all values
+    /buckets , /items, /get-bucket-summary is the list of buckets this need to get user based.
+    /buckets
+        SELECT name, description, duration FROM bucket is using
+        first add owner_id int with foreigh key as invo_user id
+    /items
+    /get-bucket-summary
+
+T11: Progress - High - Inventory count should decrease after sale.
+        Report is showing with page /inv-report and table inv_count.
+        after sale successfully completed it should substract in inv_count table.
+
+T15: Progress Multiple Sale Items
+        TODO here cost is summing up but cost_6 textbox value is not setting to totcost
+
+T16: Progress High: update sale to enter 10 items.
+    /inv-sell-transaction is the route.
+    
+
+=========================== Completed ================================
+T10: If search result is zero the it should provide an input to enter name and location update inv_customer.
+    "Urgent"    
+    /inv-load-transaction in app.py
+
+T3: remove FROM and TO accounts and make only Account in tr_account.
+Status: completed
+    remove FROM and TO accounts and make only Account in tr_account.
+    And also remove Credit and Debit make only Amount in tr_account.
+    In bakend table it should be only debt. Remove the column Credit.
+    In app.py in account_transactions method update the query 
+        sqlqry = "select fra.name,ta.name, i.name, debt, credit, date, remarks FROM tr_account tra, acc_item i, account fra,account ta where ta.id = tra.to_acc_id and fra.id = tra.from_acc_id and i.id = tra.item_id"
+    update the method account_transactions accordingly.
+    In tr_account.html remove the columns first put date item amount account remarks.
+    In add_tr_account method update the below query as per the updated table.
+        sql_vals = "insert into tr_account values(NULL,'%s','%s','%s','%s','%s','%s','%s')" % ( dr, cr, dt, remark,item,from_acc, to_acc)
+
+
+

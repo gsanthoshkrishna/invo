@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Practice</title>
+    <style>
+        .icon-row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .icon-row img {
+            width: 48px;
+            height: 48px;
+            border: 4px solid transparent;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .icon-row img.highlighted {
+            border-color: #e94e77;
+            box-shadow: 0 0 12px #e94e77;
+        }
+    </style>
+</head>
+<body>
+    <div class="icon-row" id="iconRow1">
+        {% for icon in icons %}
+            <img src="{{ url_for('static', filename=icon) }}" alt="{{ icon }}" />
+        {% endfor %}
+    </div>
+
+    <div class="icon-row" id="iconRow2">
+        {% for alphanote in alphanotes %}
+            <img src="{{ url_for('static', filename=alphanote) }}" alt="{{ alphanote }}" />
+        {% endfor %}
+    </div>
+
+    <!-- Radio buttons -->
+    <div style="text-align: center; margin-top: 30px;">
+        <label>Speed</label>
+        <input type="radio" id="x1" name="multiplier" value="1000" checked>
+        <label for="x1">x1</label>
+
+        <input type="radio" id="x2" name="multiplier" value="2000">
+        <label for="x2">x2</label>
+
+        <input type="radio" id="x3" name="multiplier" value="3000">
+        <label for="x3">x3</label>
+
+        <input type="radio" id="x4" name="multiplier" value="4000">
+        <label for="x4">x4</label>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const icons = document.querySelectorAll('.icon-row img');
+            let intervalId;
+
+            function highlightRandomIconWithDelay() {
+                // Step 1: Clear existing highlight
+                icons.forEach(icon => icon.classList.remove('highlighted'));
+
+                // Step 2: Wait 1 second before applying a new highlight
+                setTimeout(() => {
+                    const randomIndex = Math.floor(Math.random() * icons.length);
+                    icons[randomIndex].classList.add('highlighted');
+                }, 1000); // 1000ms = 1 second
+            }
+
+
+            function getSelectedSpeed() {
+                const checkedRadio = document.querySelector('input[name="multiplier"]:checked');
+                return checkedRadio ? parseInt(checkedRadio.value) : 2000;
+            }
+
+            function startCycle() {
+                clearInterval(intervalId); // Clear any existing interval
+                const speed = getSelectedSpeed();
+
+                console.log("Starting cycle with speed:", speed);
+
+                intervalId = setInterval(highlightRandomIconWithDelay, speed);
+            }
+
+            // Start with default speed
+            startCycle();
+
+            // Add listener to all radio buttons
+            document.querySelectorAll('input[name="multiplier"]').forEach((radio) => {
+                radio.addEventListener('change', startCycle);
+            });
+        });
+    </script>
+</body>
+</html>

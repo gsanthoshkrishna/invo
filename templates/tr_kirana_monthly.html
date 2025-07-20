@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kirana</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+</style>
+<body>
+    <h2>Kirana</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Edit</th>
+                <th>ItemID</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Brand</th>
+                <th>Amount</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td><button>Edit</button></td>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <form action="/add-tr-kirana" method="POST">
+                <td></td><td></td> <td>
+                    <select name="item">
+                        <option value="" disabled selected>Select an Item</option>
+                        {% for item in items %}
+                        <option value="{{ item[0] }}">{{ item[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td><input type="text" name="quantity"></td>
+                <td><input type="text" name="brand"></td>
+                <td><input type="text" name="amount" value="0"></td>
+                <td>
+                    <input type="text" name="remarks">
+                    <button>Add</button>
+                </td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+    <div id="popupForm" class="popup">
+        <form action="/insert-kirana-category" method="POST">
+            <label for="name">Enter New Category:</label>
+            <input type="text" id="name" name="name" required>
+            <input type="submit" value="Create">
+            <button type="button" onclick="hidePopup()" >Cancel</button>
+        </form>
+    </div>
+    <div id="popupItemForm" class="popup">
+        <form action="/insert-new-kirana-item" method="POST">
+            <label for="name">Enter New Item Name:</label>
+            <select name="cat_id">
+                <option value="" disabled selected>Select Category</option>
+                {% for category in categories %}
+                <option value="{{ category[0] }}">{{ category[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" id="itemname" name="itemname" required>
+            <input type="submit" value="Create">
+            <button type="button" onclick="hideItemPopup()" >Cancel</button>
+        </form>
+    </div>
+    <button onclick="showPopup()">New Category</button>
+    <button onclick="showItemPopup()">New Item</button>
+</body>
+</html>
+<script>
+    function showPopup(){
+        document.getElementById("popupForm").style.display = "block"
+    }
+    function hidePopup(){
+        document.getElementById("popupForm").style.display = "none"
+    }
+    function showItemPopup(){
+        document.getElementById("popupItemForm").style.display = "block"
+    }
+    function hideItemPopup(){
+        document.getElementById("popupItemForm").style.display = "none"
+    }
+</script>
+
+
+
