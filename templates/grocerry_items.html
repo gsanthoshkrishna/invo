@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><html>
+    <body>
+        <label for="month"><h1>which month:</h1></label>
+        <select name="month" id="month">
+            <option value="january">january</option>
+            <option value="febraury">febraury</option>
+            <option value="march">march</option>
+            <option value="april">april</option>
+            <option value="may">may</option>
+            <option value="june">june</option>
+            <option value="july">july</option>
+            <option value="august">august</option>
+            <option value="september">september</option>
+            <option value="october">october</option>
+            <option value="novmber">novmber</option>
+            <option value="december">december</option>  
+        </select>
+        {% for groc_item in groc_items %}
+            <br>
+            <label>
+                <input id="gr_{{ groc_item[0] }}" type="checkbox" name= "cb" value="gr_{{ groc_item[0] }}">
+                {{ groc_item[1] }}
+            </label>    
+        {% endfor %} 
+        <br>
+        <button type="submit" onclick="createlist()">submit</button>
+        <p id="result"></p>
+    </body>
+</html>
+<script>
+    function createlist(){
+        const checkboxes = document.querySelectorAll('input[name="cb"]:checked');
+        let values = [];
+        checkboxes.forEach((checkbox) => {
+            values.push((checkbox.value).replace("gr_",""));
+        });
+        //var monthvalue = $('#month').val();
+        //document.getElementById('result').textContent = values.length > 0 ? 
+        //'Selected values: ' + values.join(', ') : 'No checkbox selected';
+        $.ajax({
+            type: 'POST',
+            url: '/create-grocery-list',
+            data: JSON.stringify({ 'groc_items': values,'request_type': 'ajax' }), 
+            contentType: 'application/json; charset=utf-8', 
+            dataType: 'json'
+        });
+    }
+
+
+</script>

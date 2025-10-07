@@ -786,7 +786,8 @@ def acc_dboard2():
 @app.route("/ac-budget", methods=['GET', 'POST'] )
 def ac_budget():
     cursor = mysql.cursor()
-    sqlqry = "select i.name, trb.amount,trb.remarks FROM tr_budget trb, acc_item i where i.id = trb.item_id and trb.month='"+date.today().strftime('%b').upper()+"'"
+    #sqlqry = "select i.name, trb.amount,trb.remarks FROM tr_budget trb, acc_item i where i.id = trb.item_id and trb.month='"+date.today().strftime('%b').upper()+"'"
+    sqlqry = "select i.name, trb.amount,trb.remarks FROM tr_budget trb, acc_item i where i.id = trb.item_id"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -844,6 +845,22 @@ def inv_sell_transaction():
     cursor.close()
     return render_template('/inv_sell_transaction.html',items=items,inv_cust_id=inv_cust_id, inv_cust_name=inv_cust_name,inv_cust_mob=inv_cust_mob,current_date=date.today().strftime('%Y-%m-%d'))
 
+@app.route("/newjobcard",methods=['GET','POST'])
+def newjobcard():
+    inv_cust_id = request.args.get('inv_cust_id')
+    if inv_cust_id == None:
+        inv_cust_id = ""
+
+    inv_cust_mob = request.args.get('inv_cust_mob')
+    if inv_cust_mob == None:
+        inv_cust_mob = ""
+
+    inv_cust_name = request.args.get('inv_cust_name')
+    if inv_cust_name == None:
+        inv_cust_name = ""
+
+    return render_template('/inventory_jobcard.html',inv_cust_id=inv_cust_id, inv_cust_name=inv_cust_name,inv_cust_mob=inv_cust_mob)
+
 @app.route("/inv-load-transaction", methods=['POST'])
 def inv_load_transaction():
     print("In load transaction")
@@ -883,6 +900,36 @@ def inv_submit_transaction():
     tr_date = reqdata.get("tr_date")
     data = reqdata.get("data")
 
+    qty_list = data.get('qty', [])
+    price_list = data.get('price', [])
+    cost_list = data.get('cost', [])
+    items_list = data.get('items',[])
+
+    rows_to_insert = []
+    vals_to_update = []
+    for i,q in zip(items_list, qty_list):
+        cursor = mysql.cursor()
+        sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id and i.id =  "+i        
+        print(sqlqry)
+        cursor.execute(sqlqry)
+        data = cursor.fetchall()
+        cursor.close()
+        msg = "Items Not Available \n"
+        isUnavailable = 0
+        for row in data:
+            print("Available"+str(row[2])+":Ordered"+str(q))
+            if int(row[2]) < int(q):
+                isUnavailable = 1
+                msg = msg + row[1] + "(Available - "+str(row[2])+")\n"       
+                print(msg)
+                print("----------")
+            print(msg)
+            print("Is Unavailable:"+str(isUnavailable)) 
+
+        if isUnavailable == 1:
+            print("Returning with unavailable.")
+            return jsonify({'retval': "noresource",'msg':msg})
+
     #First create a bill_reciept details and use the reciept number with detail info.
     sqlqry = "insert into inv_sale_reciept values(NULL, '%s','%s','%s','%s')" % (cust_id, tr_date, tot_cost,itemscnt)
     reciept_num = insert_mysql_record(mysql,sqlqry)
@@ -891,13 +938,7 @@ def inv_submit_transaction():
         return jsonify({'retval': 'failure'})
 
     print("Reciept Generated.")
-    qty_list = data.get('qty', [])
-    price_list = data.get('price', [])
-    cost_list = data.get('cost', [])
-    items_list = data.get('items',[])
-
-    rows_to_insert = []
-    vals_to_update = []
+    
     for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
         rows_to_insert.append((i, q, p, c))
         vals_to_update.append((q,i))
@@ -916,6 +957,15 @@ def inv_submit_transaction():
 
     return jsonify({'retval': 'failure'})
         
+@app.route("/sale-report")
+def sale_report():
+    cursor = mysql.cursor()
+    sqlqry = "select tis.trdate, ic.name, itd.tagval item,tis.cost,tis.price,tis.quantity   from tr_inv_sale tis, inv_sale_reciept isr, item_details itd, inv_customer ic where isr.id = tis.reciept_num and itd.id = tis.itemid and ic.id = isr.cust_id"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template("sale_report.html",items=data)
 
 @app.route("/inv-report")
 def inv_report():
@@ -963,7 +1013,7 @@ def add_buyer():
         phone = request.form.get('phone')
         city = request.form.get('city')
         sql_vals = "insert into buyer values(NULL,'%s','%s','%s','%s')" % (name, email, phone, city)
-        insert_mysql_record(mysql,sqlqry)
+        insert_mysql_record(mysql,sql_vals)
     return render_template("add_buyer.html")
 
 @app.route("/add-seller", methods=['GET', 'POST'])
@@ -1121,6 +1171,42 @@ def practice():
 
 ######################### Music ######################################
 ######################### Kirana ######################################
+@app.route('/getgrocery')
+def getgrocery():
+    cursor = mysql.cursor()
+    sqlqry = "select * from kirana_item"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    groc_items = cursor.fetchall()
+    print(groc_items)
+
+    return render_template('grocery_items.html',groc_items = groc_items)
+
+@app.route('/create-grocery-list', methods=['GET', 'POST'])
+def create_grocery_list():
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            if data.get('request_type') == 'ajax':
+                print("In Ajax post")
+                groc_items = data.get('groc_items',[])
+                print("selected items")
+                print(groc_items)
+                cursor = mysql.cursor()
+                now = datetime.now()
+                listid = "mon"+now.strftime("%d%H%M")
+                print(listid)
+                sql = "INSERT INTO tr_inv_sale () VALUES ("+str(reciept_num)+",%s, %s, %s,%s,'"+tr_date+"')"
+                insert_many_mysql_record(mysql)
+                cursor.execute("select * from kirana_item where id in (%s)" % ','.join(['%s'] * len(groc_items)))
+                items = cursor.fetchall()
+                cursor.close()
+                print('rendering test-get template')
+                return render_template("/new_kirana_list.html")
+            else:
+                print("Post but not ajax")
+    return render_template('monthly_grocery_items.html',groc_items = groc_items)
+
 @app.route('/kirana')
 def kirana():
     cursor = mysql.cursor()
@@ -1132,7 +1218,7 @@ def kirana():
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
-    sqlqry = "select * from kirana_item"
+    sqlqry = "select * from kirana_item order by name"
     print(sqlqry)
     cursor.execute(sqlqry)
     items = cursor.fetchall()

@@ -349,6 +349,12 @@ CREATE TABLE tr_kirana (
   FOREIGN KEY (item_id) REFERENCES kirana_item(id) 
 )
 
+CREATE TABLE temp_groc_list(
+    listid varchar(30),
+    item_id int,
+    qty varchar(30),
+    FOREIGN key (item_id) REFERENCES kirana_item(id)
+)
 /******* Tables list********
 
 ==========Account=========
@@ -388,19 +394,6 @@ itembkp
 item_details
 
 =============Kirana==========
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 **************************/

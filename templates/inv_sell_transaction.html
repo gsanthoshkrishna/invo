@@ -36,13 +36,20 @@
     </form>
 </div>
 
+<div id="errPopupForm" class="popup">
+    <form>
+        <label id="errpopuptxt"></label>
+        <button type="button" onclick="hideErrPopup()" >Ok</button>
+    </form>
+</div>
+
 <div>
     <input type="date" id="tr_date" name="tr_date" value="{{ current_date }}" required><br>
     <label>Mobile:</label>
     <input type="text" id="mobile" value="{{ inv_cust_mob }}"><button onclick="getUser()">Search</button>
     <input type="hidden" id="cust_id" value="{{ inv_cust_id }}" ><br>
     <label>Name</label>
-    <input type="text" id="custname" value="{{ inv_cust_name }}"><br>
+    <input type="text" id="custname" value="{{ inv_cust_name }}" readonly><br>
     <input type="text" id="itemcnt" value="0" hidden="true">
     <table id="myTable">
         <tr><th>Item</th><th>Quantity</th><th>Price</th><th>Cost</th></tr>
@@ -145,9 +152,19 @@ function showPopup(){
     pCustMob.readOnly = true
     document.getElementById("popupForm").style.display = "block"
 }
+
+
 function hidePopup(){
     document.getElementById("popupForm").style.display = "none"
 }
+function showErrPopup(){    
+    document.getElementById("errPopupForm").style.display = "block"
+}
+
+function hideErrPopup(){    
+    document.getElementById("errPopupForm").style.display = "none"
+}
+
 function resetSale(){
     var itemcntval = document.getElementById("itemcnt").value
     let qty = [];
@@ -175,6 +192,8 @@ function sell() {
     
     console.log("Values list")
     for (let i = 1; i <= itemcntval; i++) {
+        console.log("ItemVal:")
+        console.log($('#items_'+ i).val())
         console.log($('#qty_' + i).val())
       qty.push($('#qty_' + i).val());
       price.push($('#price_' + i).val());
@@ -203,10 +222,18 @@ function sell() {
                     },
             dataType: 'json',
             success: function(response){
-                        console.log("in ajax response");
-                        window.open("/inv-sell-transaction", '_self');
-                        //resetSale();
+                        if (response.retval == "Success"){
+                            console.log("in ajax response");
+                            window.open("/inv-sell-transaction", '_self');
+                            //resetSale();
+                        }
+                        if (response.retval == "noresource"){
+                            errpopelement = document.getElementById("errpopuptxt")
+                            errpopelement.textContent = response.msg
+                            showErrPopup()
+                        }
                     }
+            
         });
     }
 </script>
