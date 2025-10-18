@@ -997,7 +997,7 @@ def inv_entry_delete():
 @app.route("/inv-entry-report")
 def inv_entry_report():
     cursor = mysql.cursor()
-    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id"
+    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id, ui.mrp MRP from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id order by itd.tagval"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -1116,9 +1116,10 @@ def update_inventory():
         item = request.form.get('item')
         buyer = request.form.get('buyer')
         quantity = request.form.get('quantity')
-        amt = request.form.get('amount')
+        cost = request.form.get('cost')
+        mrp = request.form.get('mrp')
 
-        sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s','%s')" % (item, buyer, quantity, tr_date, amt)
+        sql_vals = "insert into update_inventory values(NULL,'%s','%s','%s','%s',NULL,'%s','%s')" % (item, buyer, quantity, tr_date, cost, mrp)
         sub_id = insert_mysql_record(mysql,sql_vals)
         if sub_id > 0:
             #if item is not inserted earlier then insert with quantity

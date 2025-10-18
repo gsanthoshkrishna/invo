@@ -282,6 +282,8 @@ CREATE TABLE inv_count(
   PRIMARY KEY (`id`)
 ) 
 
+alter table update_inventory add column cost int;
+alter table update_inventory add column mrp int;
 /*******NEW****/
 create table inv_customer(
     id int AUTO_INCREMENT PRIMARY KEY,
