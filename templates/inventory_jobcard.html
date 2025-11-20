@@ -98,15 +98,16 @@
         <input type="text" id="pCustName" name="pCustName" required><br>
         <label for="location">Location:</label>
         <input type="text" id="pCustLoc" name="pCustLoc" required>
+		<input type="file" name="file">
         <input type="submit" value="Create">
         <button type="button" onclick="hidePopup()" >Cancel</button>
     </form>
 </div>
     <div class="jobcard-container">
         <h2>New Jobcard</h2>
-        <form method="POST" action="/submit" enctype="multipart/form-data">
+        <form method="POST" action="/submit-jobcard" enctype="multipart/form-data">
             <label>Customer Number:</label>
-            <input type="text" id="mobile" value="{{ inv_cust_mob }}" required>
+            <input type="text" id="mobile" name="mobile" value="{{ inv_cust_mob }}" required>
             <button onclick="getUser()">Search</button>
 
             <label>Name:</label>
@@ -114,13 +115,13 @@
             <input type="text" id="cust_id" name="cust_id" hidden>
 
             <label>Problem:</label>
-            <textarea name="problem" rows="3" required></textarea>
+            <textarea name="problem" id="problem" rows="3" required></textarea>
 
             <label>Remarks:</label>
-            <textarea name="remarks" rows="2"></textarea>
+            <textarea name="remarks" id="remarks" rows="2"></textarea>
 
             <label>Upload Photo:</label>
-            <input type="file" name="photo" accept="image/*">
+            <input type="file" name="photo" id="photo" accept="image/*">
 
             <button type="submit">Submit Jobcard</button>
         </form>

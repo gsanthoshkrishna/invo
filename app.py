@@ -817,9 +817,25 @@ def acc_dboard():
     return render_template('acc_dashboard.html', spendings=data)
 
 ######################### Inventory ######################################
+@app.route("/fetch-item-details",methods=['GET','POST'])
+def fetch_item_details():
+    if request.method == 'POST':
+        item = request.form['item']
+        cursor = mysql.cursor()
+        stmt = "select itd.id,itd.tagval,ui.quantity, ui.mrp MRP from update_inventory ui, item_details itd where itd.id = ui.item_id and itd.id="+item+" order by itd.tagval"
+        print(stmt)
+        cursor.execute(stmt)
+        items = cursor.fetchall()
+        cursor.close()
+        show_popup = True
+        return render_template("/inventory_home.html", entries=items,show_popup=show_popup)
 @app.route("/home")
 def inventory_home():
-    return render_template("inventory_home.html")
+    cursor = mysql.cursor()
+    cursor.execute("SELECT id,tagval from item_details order by tagval")
+    items = cursor.fetchall()
+    cursor.close()
+    return render_template("inventory_home.html",items=items)
 
 @app.route("/inv-sell-transaction")
 def inv_sell_transaction():
@@ -835,15 +851,16 @@ def inv_sell_transaction():
     if inv_cust_name == None:
         inv_cust_name = ""
     
-    
+    sqlqry = "select id,tagval from item_details order by tagval"
     print("In sell transaction")
     cursor = mysql.cursor()
-    sqlqry = "select id,tagval from item_details order by tagval"
+    
     print(sqlqry)
     cursor.execute(sqlqry)
     items = cursor.fetchall()
     cursor.close()
     return render_template('/inv_sell_transaction.html',items=items,inv_cust_id=inv_cust_id, inv_cust_name=inv_cust_name,inv_cust_mob=inv_cust_mob,current_date=date.today().strftime('%Y-%m-%d'))
+
 
 @app.route("/newjobcard",methods=['GET','POST'])
 def newjobcard():
@@ -888,6 +905,29 @@ def insert_inv_cust():
     sql_vals = "insert into inv_customer(mobile,name,location) values('%s','%s','%s')" % (custmob,custname,custloc)
     cust_id = insert_mysql_record(mysql,sql_vals)
     return redirect("/inv-sell-transaction?inv_cust_mob="+custmob+"&inv_cust_name="+custname+"&inv_cust_mob="+custmob+"&inv_cust_id="+str(cust_id))
+
+#NEXT: Complete this. form values taken need to test.
+@app.route("/submit-jobcard", methods=['POST'])
+def submit_jobcard():
+    cust_id = request.form['cust_id']
+    problem = request.form['problem']
+    remarks = request.form['remarks']
+    photofile = request.files['photo']
+    filename = photofile.filename
+    sql_vals = "insert into inv_jobcard(custno,problem,remarks) values('%s','%s','%s')" % (cust_id,problem,remarks)
+    
+    filepath = '/var/lib/mysql-files/uploads/'+filename
+    from werkzeug.utils import secure_filename
+    photofile.save(filepath)
+    
+    job_id = insert_mysql_record(mysql,sql_vals)
+    img_data = photofile.read()
+    sql_vals = "insert into job_card_image(jobcard_id,filename,img) values('%s','%s',LOAD_FILE('%s'))" % (job_id,filename,filepath)
+    cust_id = insert_mysql_record(mysql,sql_vals)
+    #TODO add successful message in return after verify.
+    return jsonify({'retval': "success"})
+
+
 
 @app.route("/inv-submit-transaction", methods=['POST'])
 def inv_submit_transaction():
@@ -937,6 +977,8 @@ def inv_submit_transaction():
         print("Generating reciept failed...")
         return jsonify({'retval': 'failure'})
 
+    #Generating Reciept
+    generateReciept(23)
     print("Reciept Generated.")
     
     for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
@@ -956,11 +998,88 @@ def inv_submit_transaction():
                 return jsonify({'retval': 'success'})
 
     return jsonify({'retval': 'failure'})
-        
+
+def generateReciept(recieptId):
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet
+    
+    #select * from tr_inv_sale limit 1;
+    #select * from inv_sale_reciept limit 1;
+    #Reciept Details
+    cursor = mysql.cursor()
+    sqlqry = "select * from inv_sale_reciept where id = "+recieptId
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    rData = cursor.fetchall()
+    
+    
+    #Reciept Item Details
+    sqlqry = "select * from tr_inv_sale where id = "+recieptId
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    rItems = cursor.fetchall()
+    cursor.close()
+    
+    
+    
+
+    # Output PDF file
+    pdf_file = "bill_reciept.pdf"
+
+    # Create document
+    doc = SimpleDocTemplate(pdf_file, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # Title
+    title = Paragraph("<b>Raghu Computers</b>", styles["Title"])
+    story.append(title)
+    story.append(Spacer(1, 20))
+    
+
+    # Sample student data in table form
+    data = [
+        ["Date", rData[0][2]],
+        ["Name", "rData[0][7]"],
+        ["Age", "13"],
+        ["Gender", "Male"],
+        ["Class / Grade", "8th Grade"],
+        ["Email", "santhosh@example.com"],
+        ["Phone Number", "9876543210"],
+        ["Address", "12, Gandhi Street, Chennai"],
+        ["Parent Name", "Mr. Ramesh"],
+        ["Parent Phone", "9123456789"]
+    ]
+
+    # Create table
+    table = Table(data, colWidths=[150, 300])
+
+    # Table styling
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+        ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+        ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 0), (-1, -1), 12),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    story.append(table)
+
+    # Build PDF
+    doc.build(story)
+
+    print("PDF created successfully:", pdf_file)
+
+
 @app.route("/sale-report")
 def sale_report():
     cursor = mysql.cursor()
-    sqlqry = "select tis.trdate, ic.name, itd.tagval item,tis.cost,tis.price,tis.quantity   from tr_inv_sale tis, inv_sale_reciept isr, item_details itd, inv_customer ic where isr.id = tis.reciept_num and itd.id = tis.itemid and ic.id = isr.cust_id"
+    sqlqry = "select tis.trdate, ic.name, itd.tagval item,tis.cost,tis.price,tis.quantity   from tr_inv_sale tis, inv_sale_reciept isr, item_details itd, inv_customer ic where isr.id = tis.reciept_num and itd.id = tis.itemid and ic.id = isr.cust_id order by tis.trdate desc"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -970,7 +1089,7 @@ def sale_report():
 @app.route("/inv-report")
 def inv_report():
     cursor = mysql.cursor()
-    sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id"
+    sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id order by i.tagval"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -997,7 +1116,7 @@ def inv_entry_delete():
 @app.route("/inv-entry-report")
 def inv_entry_report():
     cursor = mysql.cursor()
-    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id, ui.mrp MRP from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id order by itd.tagval"
+    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id, ui.mrp MRP from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id order by tr_date desc"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -1141,6 +1260,8 @@ def update_inventory():
         cursor.close()
         return render_template("/update_inventory.html",buyers=buyers, items=items,cur_date=date.today().strftime('%Y-%m-%d'))
 
+
+        
 @app.route("/add-tag", methods=['GET', 'POST'] )
 def add_tag():
     name = request.form['name']

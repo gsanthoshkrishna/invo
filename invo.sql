@@ -284,6 +284,22 @@ CREATE TABLE inv_count(
 
 alter table update_inventory add column cost int;
 alter table update_inventory add column mrp int;
+
+CREATE TABLE inv_jobcard(
+    id int AUTO_INCREMENT PRIMARY KEY,
+    cust_id int,
+    problem TEXT,
+	remarks TEXT,
+    FOREIGN key (cust_id) REFERENCES inv_customer(id)
+)
+
+CREATE TABLE job_card_image(
+id int AUTO_INCREMENT PRIMARY KEY,
+jobcard_id int,
+filename varchar(50),
+img MEDIUMBLOB,
+FOREIGN KEY (jobcard_id) REFERENCES inv_jobcard(id)
+)
 /*******NEW****/
 create table inv_customer(
     id int AUTO_INCREMENT PRIMARY KEY,

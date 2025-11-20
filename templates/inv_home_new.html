@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer Sales & Service Business</title>
+  <style>
+    body, html {
+      margin: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: url('/static/images/home-bg.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 30px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: rgba(255, 255, 240, 0.85);
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+      padding: 20px 18px;
+      max-width: 180px;
+      width: 100%;
+    }
+
+    .rounded-button {
+      height: 45px;
+      border-radius: 15px;
+      background-color: #7B3F00;  /* chocolate shade */
+      color: #FFF8DC;  /* creamy */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1em;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+      padding: 0 18px;
+      text-align: center;
+    }
+
+    .rounded-button:nth-child(2) {
+      background-color: #A9746E;  /* muted chocolate */
+      color: #FFF5E1;  /* creamy soft */
+    }
+
+    .rounded-button:nth-child(3) {
+      background-color: #D2B48C;  /* tan creamy */
+      color: #3E1F00;  /* dark chocolate text */
+    }
+
+    .rounded-button:nth-child(4) {
+      background-color: #C9A66B;  /* caramel creamy */
+      color: #331A00;  /* dark rich brown */
+    }
+
+    .rounded-button:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 16px 4px rgba(123, 63, 0, 0.5);
+      transform: scale(1.05);
+      color: #fff;
+    }
+
+    .rounded-button:nth-child(2):hover {
+      box-shadow: 0 0 16px 4px rgba(169, 116, 110, 0.5);
+    }
+
+    .rounded-button:nth-child(3):hover {
+      box-shadow: 0 0 16px 4px rgba(210, 180, 140, 0.5);
+      color: #3E1F00;
+    }
+
+    .rounded-button:nth-child(4):hover {
+      box-shadow: 0 0 16px 4px rgba(201, 166, 107, 0.5);
+      color: #331A00;
+    }
+
+    @media (max-width: 600px) {
+      body, html {
+        justify-content: center;
+        padding-right: 0;
+      }
+      .button-container {
+        flex-direction: row;
+        max-width: 100%;
+        width: auto;
+        padding: 10px 15px;
+        border-radius: 12px;
+        gap: 10px;
+      }
+      .rounded-button {
+        height: 40px;
+        font-size: 0.9em;
+        padding: 0 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <div class="rounded-button" title="Sales Section">Sales</div>
+    <div class="rounded-button" title="Reports Section">Reports</div>
+    <div class="rounded-button" title="JobCard Section">JobCard</div>
+    <div class="rounded-button" title="ISP Section">ISP</div>
+  </div>
+</body>
+</html>

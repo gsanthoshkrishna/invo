@@ -36,6 +36,13 @@
     </form>
 </div>
 
+<div id="successPopupForm" class="popup">
+    <form action="/inv-sell-transaction">
+        <label id="successPopupForm">Success</label>
+        <button type="button" onclick="hideSuccessPopup()" >Ok</button>
+    </form>
+</div>
+
 <div id="errPopupForm" class="popup">
     <form>
         <label id="errpopuptxt"></label>
@@ -83,6 +90,7 @@
 
 <button onclick="location.href='/home'">Home</button>
 </div>
+<iframe src="{{ url_for('static', filename='bill_reciept.pdf') }}" width="100%" height="600px" style="display:none;"></iframe>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function updateTotal(i){
@@ -137,11 +145,20 @@ function addRow(){
 function delRow(){
     var itemcntval = document.getElementById("itemcnt").value
     for (let i = 1; i <= itemcntval; i++) {
-
+		document.getElementById("items_"+i).selectedIndex = 0;
+		document.getElementById("qty_"+i).value = 0;
+		document.getElementById("price_"+i).value = 0;
+		document.getElementById("cost_"+i).value = 0;
+		document.getElementById("totalcost").value = "";
+		document.getElementById("mobile").value = "";
+		document.getElementById("cust_id").value = "";
+		document.getElementById("custname").value = "";
+		document.getElementById("itemcnt").value = "";
+		document.getElementById("row_"+i).style.display = 'none';
     }
     itemcnt = parseInt(itemcntval) + 1
     console.log("items_"+itemcnt)
-    document.getElementById("row_"+itemcnt).style.display = 'none';     
+         
 
 }
 
@@ -164,6 +181,15 @@ function showErrPopup(){
 function hideErrPopup(){    
     document.getElementById("errPopupForm").style.display = "none"
 }
+
+function showSuccessPopup(){    
+    document.getElementById("successPopupForm").style.display = "block"
+}
+
+function hideSuccessPopup(){    
+    document.getElementById("successPopupForm").style.display = "none"
+}
+
 
 function resetSale(){
     var itemcntval = document.getElementById("itemcnt").value
@@ -222,9 +248,10 @@ function sell() {
                     },
             dataType: 'json',
             success: function(response){
-                        if (response.retval == "Success"){
+                        if (response.retval == "success"){
                             console.log("in ajax response");
-                            window.open("/inv-sell-transaction", '_self');
+							delRow()
+                            showSuccessPopup()
                             //resetSale();
                         }
                         if (response.retval == "noresource"){
