@@ -822,13 +822,26 @@ def fetch_item_details():
     if request.method == 'POST':
         item = request.form['item']
         cursor = mysql.cursor()
-        stmt = "select itd.id,itd.tagval,ui.quantity, ui.mrp MRP from update_inventory ui, item_details itd where itd.id = ui.item_id and itd.id="+item+" order by itd.tagval"
-        print(stmt)
-        cursor.execute(stmt)
+        avail_stmt = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id and i.id = "+str(item)+" limit 1"
+        price_stmt = "select ui.mrp MRP from update_inventory ui where ui.item_id = "+item+" order by ui.tr_date desc limit 1"
+        print(avail_stmt)
+        cursor.execute(avail_stmt)
         items = cursor.fetchall()
+        print(items)
+        for item in items:
+            iid = item[0]
+            iname = item[1]
+            iqty = item[2]
+        
+        print(price_stmt)
+        cursor.execute(price_stmt)
+        mrp_res = cursor.fetchall()
+        print(mrp_res)
+        for mrprow in mrp_res:
+            mrp = mrprow[0]
         cursor.close()
         show_popup = True
-        return render_template("/inventory_home.html", entries=items,show_popup=show_popup)
+        return render_template("/inventory_home.html", iid = iid, iname=iname,iqty=iqty, mrp=mrp,show_popup=show_popup)
 @app.route("/home")
 def inventory_home():
     cursor = mysql.cursor()
@@ -1009,14 +1022,14 @@ def generateReciept(recieptId):
     #select * from inv_sale_reciept limit 1;
     #Reciept Details
     cursor = mysql.cursor()
-    sqlqry = "select * from inv_sale_reciept where id = "+recieptId
+    sqlqry = "select * from inv_sale_reciept where id = "+str(recieptId)
     print(sqlqry)
     cursor.execute(sqlqry)
     rData = cursor.fetchall()
     
     
     #Reciept Item Details
-    sqlqry = "select * from tr_inv_sale where id = "+recieptId
+    sqlqry = "select * from tr_inv_sale where id = "+str(recieptId)
     print(sqlqry)
     cursor.execute(sqlqry)
     rItems = cursor.fetchall()
@@ -1042,7 +1055,7 @@ def generateReciept(recieptId):
     # Sample student data in table form
     data = [
         ["Date", rData[0][2]],
-        ["Name", "rData[0][7]"],
+        ["Name", "Name"],
         ["Age", "13"],
         ["Gender", "Male"],
         ["Class / Grade", "8th Grade"],

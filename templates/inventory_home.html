@@ -119,13 +119,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for entry in entries %}
-            <tr id="row-{{ entry[4] }}">
-                <td><span class="editable" contenteditable="false">{{ entry[1] }}</span></td>
-                <td><span class="editable" contenteditable="false">{{ entry[2] }}</span></td>
-                <td><span class="editable" contenteditable="false">{{ entry[3] }}</span></td>
+            <tr>
+                <td><span class="editable" contenteditable="false">{{ iname }}</span></td>
+                <td><span class="editable" contenteditable="false">{{ iqty }}</span></td>
+                <td><span class="editable" contenteditable="false">{{ mrp }}</span></td>
            </tr>
-            {% endfor %}
         </tbody>
     </table>
         <button type="button" onclick="location.href='/home'" >Cancel</button>
