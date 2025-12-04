@@ -991,7 +991,7 @@ def inv_submit_transaction():
         return jsonify({'retval': 'failure'})
 
     #Generating Reciept
-    generateReciept(23)
+    generateReciept(111)
     print("Reciept Generated.")
     
     for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
@@ -1022,14 +1022,14 @@ def generateReciept(recieptId):
     #select * from inv_sale_reciept limit 1;
     #Reciept Details
     cursor = mysql.cursor()
-    sqlqry = "select * from inv_sale_reciept where id = "+str(recieptId)
+    sqlqry = "select sr.id as recieptnum, sr.bill_date, sr.amount, sr.item_cnt, c.name,c.mobile from inv_sale_reciept sr, inv_customer c where sr.id = "+str(recieptId)+" and c.id = sr.cust_id"
     print(sqlqry)
     cursor.execute(sqlqry)
     rData = cursor.fetchall()
     
     
     #Reciept Item Details
-    sqlqry = "select * from tr_inv_sale where id = "+str(recieptId)
+    sqlqry = "select i.tagval, tr.quantity, tr.price, tr.cost from tr_inv_sale tr,item_details i where reciept_num = "+str(recieptId)+" and i.id=tr.itemid"
     print(sqlqry)
     cursor.execute(sqlqry)
     rItems = cursor.fetchall()
@@ -1039,7 +1039,7 @@ def generateReciept(recieptId):
     
 
     # Output PDF file
-    pdf_file = "bill_reciept.pdf"
+    pdf_file = "static/bill_reciept.pdf"
 
     # Create document
     doc = SimpleDocTemplate(pdf_file, pagesize=A4)
@@ -1053,21 +1053,45 @@ def generateReciept(recieptId):
     
 
     # Sample student data in table form
+#        ["Date", rData[0][2]],
+ #       ["Name", rData[0][1]],
+ #       ["Age", "13"],
+#        ["Gender", "Male"],
+#        ["Class / Grade", "8th Grade"],
+#        ["Email", "santhosh@example.com"],
+#        ["Phone Number", "9876543210"],
+#        ["Address", "12, Gandhi Street, Chennai"],
+#        ["Parent Name", "Mr. Ramesh"],
+#        ["Parent Phone", "9123456789"]
+    hdata = [["Reciept No.", "Name","Mobile","Date","Items","Amount"]]
+    rInfo = []
+    rInfo.append(rData[0][0])
+    rInfo.append(rData[0][4])
+    rInfo.append(rData[0][5])
+    rInfo.append(rData[0][1])
+    rInfo.append(rData[0][3])
+    rInfo.append(rData[0][2])
+    hdata.append(rInfo)
     data = [
-        ["Date", rData[0][2]],
-        ["Name", "Name"],
-        ["Age", "13"],
-        ["Gender", "Male"],
-        ["Class / Grade", "8th Grade"],
-        ["Email", "santhosh@example.com"],
-        ["Phone Number", "9876543210"],
-        ["Address", "12, Gandhi Street, Chennai"],
-        ["Parent Name", "Mr. Ramesh"],
-        ["Parent Phone", "9123456789"]
+	["Item","Qty","Price","Cost"]
     ]
+    for itm in rItems:
+      data.append(itm)
 
+    mtable = Table(hdata)
     # Create table
-    table = Table(data, colWidths=[150, 300])
+    table = Table(data)
+
+    mtable.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+        ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+        ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 0), (-1, -1), 12),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+    ]))
 
     # Table styling
     table.setStyle(TableStyle([
@@ -1080,7 +1104,7 @@ def generateReciept(recieptId):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
         ("TOPPADDING", (0, 0), (-1, -1), 8),
     ]))
-
+    story.append(mtable)
     story.append(table)
 
     # Build PDF
@@ -1401,4 +1425,3 @@ if __name__ == '__main__':
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
 #Then insert into daily_task for that user from invo_task if it is on the same day_of_week.:1
-

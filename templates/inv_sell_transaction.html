@@ -90,7 +90,7 @@
 
 <button onclick="location.href='/home'">Home</button>
 </div>
-<iframe src="{{ url_for('static', filename='bill_reciept.pdf') }}" width="100%" height="600px" style="display:none;"></iframe>
+<iframe src="{{ url_for('static', filename='bill_reciept.pdf') }}" width="100%" height="600px" style="display:block;"></iframe>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function updateTotal(i){
@@ -264,3 +264,4 @@ function sell() {
         });
     }
 </script>
+
