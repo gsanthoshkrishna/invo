@@ -18,14 +18,15 @@ Session(app)
 config_data = {}
 
 env_val = sys.argv[1]
-file_name = "/home/invo/invo/config-"+env_val+".json"
+env_app_folder = sys.argv[2]
+file_name = env_app_folder+"/config-"+env_val+".json"
 print("file:"+file_name)
 with open(file_name, 'r') as config_file:
     config_data = json.load(config_file)
     db_name = config_data['database']
 # MySQL database configuration
 mysql = mysql.connector.connect(
-  host="localhost",
+  host="18.118.186.235",
   user="root",
   password="Pass@123",
   database=db_name,
@@ -38,7 +39,7 @@ def insert_many_mysql_record(mysql,sql,rows_to_insert):
     if not mysql.is_connected():
         print("Mysaql connection disconnected")
         mysql = mysql.connector.connect(
-            host="localhost",
+            host="",
             user="root",
             password="Pass@123",
             database=db_name,
@@ -991,7 +992,7 @@ def inv_submit_transaction():
         return jsonify({'retval': 'failure'})
 
     #Generating Reciept
-    generateReciept(111)
+    file_url = generateReciept(reciept_num)
     print("Reciept Generated.")
     
     for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
@@ -1008,7 +1009,7 @@ def inv_submit_transaction():
             sqlqry = "update inv_count set quantity = quantity - %s where item_id = %s"
             upd_cnt = insert_many_mysql_record(mysql,sqlqry,vals_to_update)
             if upd_cnt > 0:
-                return jsonify({'retval': 'success'})
+                return jsonify({'retval': 'success','file_url':"static/"+str(reciept_num)+"_bill_reciept.pdf"})
 
     return jsonify({'retval': 'failure'})
 
@@ -1039,8 +1040,9 @@ def generateReciept(recieptId):
     
 
     # Output PDF file
-    pdf_file = "static/bill_reciept.pdf"
-
+    pdf_file = env_app_folder+"/static/"+str(recieptId)+"_bill_reciept.pdf"
+    pdf_file = env_app_folder+"/static/"+str(recieptId)+"_bill_reciept.pdf"
+403
     # Create document
     doc = SimpleDocTemplate(pdf_file, pagesize=A4)
     styles = getSampleStyleSheet()
@@ -1111,6 +1113,7 @@ def generateReciept(recieptId):
     doc.build(story)
 
     print("PDF created successfully:", pdf_file)
+    return pdf_file
 
 
 @app.route("/sale-report")
