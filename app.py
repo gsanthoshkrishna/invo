@@ -26,7 +26,7 @@ with open(file_name, 'r') as config_file:
     db_name = config_data['database']
 # MySQL database configuration
 mysql = mysql.connector.connect(
-  host="18.118.186.235",
+  host="localhost",
   user="root",
   password="Pass@123",
   database=db_name,
@@ -824,10 +824,13 @@ def fetch_item_details():
         item = request.form['item']
         cursor = mysql.cursor()
         avail_stmt = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id and i.id = "+str(item)+" limit 1"
-        price_stmt = "select ui.mrp MRP from update_inventory ui where ui.item_id = "+item+" order by ui.tr_date desc limit 1"
+        price_stmt = "select ui.mrp, ui.cost MRP from update_inventory ui where ui.item_id = "+item+" order by ui.tr_date desc limit 1"
         print(avail_stmt)
         cursor.execute(avail_stmt)
         items = cursor.fetchall()
+        iid=0
+        iname = "NA"
+        iqty = 0
         print(items)
         for item in items:
             iid = item[0]
@@ -840,9 +843,10 @@ def fetch_item_details():
         print(mrp_res)
         for mrprow in mrp_res:
             mrp = mrprow[0]
+            cost = mrprow[1]
         cursor.close()
         show_popup = True
-        return render_template("/inventory_home.html", iid = iid, iname=iname,iqty=iqty, mrp=mrp,show_popup=show_popup)
+        return render_template("/inventory_home.html", iid = iid, iname=iname,iqty=iqty, mrp=mrp,cost=cost,show_popup=show_popup)
 @app.route("/home")
 def inventory_home():
     cursor = mysql.cursor()
@@ -990,10 +994,6 @@ def inv_submit_transaction():
     if reciept_num < 1 :
         print("Generating reciept failed...")
         return jsonify({'retval': 'failure'})
-
-    #Generating Reciept
-    file_url = generateReciept(reciept_num)
-    print("Reciept Generated.")
     
     for i,q, p, c in zip(items_list, qty_list, price_list, cost_list ):
         rows_to_insert.append((i, q, p, c))
@@ -1008,9 +1008,8 @@ def inv_submit_transaction():
             print("Items inserted:"+str(ins_cnt))
             sqlqry = "update inv_count set quantity = quantity - %s where item_id = %s"
             upd_cnt = insert_many_mysql_record(mysql,sqlqry,vals_to_update)
-            if upd_cnt > 0:
-                return jsonify({'retval': 'success','file_url':"static/"+str(reciept_num)+"_bill_reciept.pdf"})
-
+            generateReciept(reciept_num)
+            return jsonify({'retval': 'success'})
     return jsonify({'retval': 'failure'})
 
 def generateReciept(recieptId):
@@ -1034,6 +1033,7 @@ def generateReciept(recieptId):
     print(sqlqry)
     cursor.execute(sqlqry)
     rItems = cursor.fetchall()
+    print(rItems)
     cursor.close()
     
     
@@ -1042,7 +1042,6 @@ def generateReciept(recieptId):
     # Output PDF file
     pdf_file = env_app_folder+"/static/"+str(recieptId)+"_bill_reciept.pdf"
     pdf_file = env_app_folder+"/static/"+str(recieptId)+"_bill_reciept.pdf"
-403
     # Create document
     doc = SimpleDocTemplate(pdf_file, pagesize=A4)
     styles = getSampleStyleSheet()
@@ -1077,6 +1076,7 @@ def generateReciept(recieptId):
     data = [
 	["Item","Qty","Price","Cost"]
     ]
+    
     for itm in rItems:
       data.append(itm)
 
@@ -1106,6 +1106,9 @@ def generateReciept(recieptId):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
         ("TOPPADDING", (0, 0), (-1, -1), 8),
     ]))
+
+
+    
     story.append(mtable)
     story.append(table)
 
@@ -1162,6 +1165,21 @@ def inv_entry_report():
     data = cursor.fetchall()
     cursor.close()
     return render_template("inv_entry_report.html",entries=data)
+
+@app.route("/inv-sale-reciepts",methods=['GET', 'POST'])
+def inv_sale_reciepts():
+    cursor = mysql.cursor()
+    sqlqry = "select sr.id as recieptnum, sr.bill_date, sr.amount, sr.item_cnt, c.name,c.mobile from inv_sale_reciept sr, inv_customer c where c.id = sr.cust_id order by sr.id desc limit 30"
+    print(sqlqry)
+    cursor.execute(sqlqry)
+    rData = cursor.fetchall()
+    cursor.close()
+    if request.method == "POST":
+        #Generating Reciept
+        reciept_num = request.json['recieptid']
+        file_url = generateReciept(reciept_num)
+        print("Reciept Generated.")
+    return render_template("inv_sale_reciepts.html",entries=rData)
 
 @app.route("/add-buyer", methods=['GET', 'POST'])
 def add_buyer():
@@ -1416,6 +1434,173 @@ def insert_new_kirana_item():
     return redirect('/kirana')
 
 ######################### Kirana ######################################
+######################### AI Bot ######################################
+
+from pydantic import BaseModel
+from openai import AzureOpenAI
+from azure.search.documents import SearchClient
+from azure.core.credentials import AzureKeyCredential
+from dotenv import load_dotenv
+
+import os,uuid,json
+
+
+app = Flask(__name__)
+
+load_dotenv()
+debug_output = True
+
+
+##############################################################################
+openai_endpoint = "https://tejas-mj8ki4qk-eastus2.cognitiveservices.azure.com/"
+search_endpoint="https://triam-ai-search.search.windows.net"
+model_name = "text-embedding-3-small"
+deployment = "text-embedding-3-small"
+search_key=os.getenv("AI_SEARCH_KEY")
+api_key=os.getenv("OPENAI_API_KEY")
+AZURE_SEARCH_INDEX="rag-index"
+AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini"
+
+# Azure AI Search client
+openai_client = AzureOpenAI(
+    api_version="2024-12-01-preview",
+    azure_endpoint=openai_endpoint,
+    api_key=api_key
+)
+
+search_client = SearchClient(
+    endpoint=search_endpoint,
+    index_name=AZURE_SEARCH_INDEX,
+    credential=AzureKeyCredential(search_key)
+)
+
+class QuestionRequest(BaseModel):
+    question: str
+
+def get_embedding(text: str):
+    try:
+        response = openai_client.embeddings.create(
+            input=text,
+            model=deployment
+        )    
+        return response.data[0].embedding
+    except Exception as e:
+        # A general handler for any other exception
+        print(f"A embed exception error occurred:")
+    
+def retrieve_context(question: str, k: int = 3) -> str:
+    debug_msg("retrieving")
+    vector = get_embedding(question)
+    debug_msg(vector)
+    debug_msg("Debug2")
+    results = search_client.search(
+        search_text=question,
+        vector_queries=[{
+            "kind": "vector",
+            "vector": vector,
+            "k": k,
+            "fields": "embedding"
+        }],
+        select=["content"]
+    )
+
+    debug_msg("debug3")
+    retval = ""
+    for r in results:
+        debug_msg("==========")
+        debug_msg(r)
+        debug_msg("------")
+        retval = retval + r["content"]
+        debug_msg("==----------====")
+    #tmp = "\n".join([r.content for r in results])
+    debug_msg("====debug==========")
+    print(retval)
+    debug_msg("====-----==========")
+    return retval
+
+def generate_answer(question: str, context: str) -> str:
+    response = openai_client.chat.completions.create(
+        model=AZURE_OPENAI_CHAT_DEPLOYMENT,
+        messages=[
+            {
+                "role": "system",
+                "content": "Answer ONLY from the provided context. If not found, say 'Not available in knowledge base.'"
+            },
+            {
+                "role": "user",
+                "content": f"Context:\n{context}\n\nQuestion:\n{question}"
+            }
+        ]
+    )
+    debug_msg(response.choices)
+    return response.choices[0].message.content
+
+@app.route("/ask", methods=["GET", "POST"])
+def ask_question():
+    if request.method == "POST":
+        data = request.get_json()
+        question = data.get("question")
+        debug_msg("Question"+question)
+        context = retrieve_context(question)
+        answer = generate_answer(question, context)
+        return jsonify({"question": question,"answer": answer})
+            
+
+@app.route("/triam-ai")
+def triam_ai():
+    print("In triamai")
+    return render_template("triamai.html")
+
+def debug_msg(msg):
+    if debug_output == True:
+        print(msg)
+
+
+
+@app.route("/update-ai-doc", methods=["POST"])
+def update_ai_doc():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({"error": "No file selected"}), 400
+
+    # Read file content
+    filename = secure_filename(file.filename)
+    file_content = file.read()   # bytes
+
+    # (optional) convert to text
+    try:
+        content = file_content.decode("utf-8")
+        embedding2 = openai_client.embeddings.create(
+            model=deployment,
+            input=content
+        ).data[0].embedding
+        doc = {
+            "id": "dms",
+            "content": content,
+            "embedding": embedding2
+        }
+        search_client.upload_documents(documents=[doc])
+        print("TXT file uploaded")
+        
+        return jsonify({"message": "File uploaded successfully"})
+    except UnicodeDecodeError:
+        text = None
+
+    return jsonify({
+        "message": "File uploaded successfully",
+        "filename": filename,
+        "size_bytes": len(file_content)
+    })
+
+    
+
+
+######################### AI Bot ######################################
+
 if __name__ == '__main__':
     set_user_list()
 
@@ -1423,7 +1608,6 @@ if __name__ == '__main__':
     print(global_users_list)
     app.run(host='0.0.0.0',port=config_data['port'], debug=True)
     
-
 
 #TODO Completed status update page in tasks.html. next to Enter some valid tasks. and also users in invo_task table
 #TODO create a function to get the new tasks if any assigned in assign_task with status=0
