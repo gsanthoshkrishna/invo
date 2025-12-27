@@ -1444,9 +1444,6 @@ from dotenv import load_dotenv
 
 import os,uuid,json
 
-
-app = Flask(__name__)
-
 load_dotenv()
 debug_output = True
 
