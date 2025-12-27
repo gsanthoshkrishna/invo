@@ -30,3 +30,45 @@ From balance sheet get the values of below
 	compare this value with the D/E in screener.
 
 
+acc_item        
+account         
+assign_task     
+bucket          
+bucket_details  
+buyer           
+daily_indicators
+
+daily_script_updates 
+daily_task      
+indicators      
+
+inv_count       
+inv_customer    
+inv_jobcard     
+inv_sale_reciept
+inventory_item  
+item_details    
+item_details_bkp
+itembkp         
+items           
+job_card_image  
+
+
+invo_task       
+invo_user       
+item            
+kirana_category 
+kirana_item     
+scripts         
+seller          
+study_note      
+study_note_file 
+temp_groc_list  
+tr_account      
+tr_budget       
+tr_daily_changes
+tr_inv_sale     
+tr_kirana       
+tr_share        
+update_inventory
+watchlist       
