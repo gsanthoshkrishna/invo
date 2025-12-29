@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, flash, render_template, request, redirect, url_for, session, jsonify, current_app
 import mysql.connector, time, sys, json
 from datetime import date, datetime
 from flask_session import Session
@@ -16,6 +16,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 Session(app)
 config_data = {}
+
 
 env_val = sys.argv[1]
 env_app_folder = sys.argv[2]
@@ -1543,10 +1544,58 @@ def ask_question():
         return jsonify({"question": question,"answer": answer})
             
 
-@app.route("/triam-ai")
+@app.route("/triam-ai", methods=['GET', 'POST'])
 def triam_ai():
     print("In triamai")
-    return render_template("triamai.html")
+    if request.method != 'POST':
+        # Initial load
+        FILE_1 = current_app.root_path+"/static/dmsupdates.txt"   # DMS updates
+        FILE_2 = current_app.root_path+"/static/invpoints.txt"   # Inventory points
+
+        def read_file(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    return f.read()
+            except FileNotFoundError:
+                print(path+": File not found")
+                return ""
+
+
+        dmsupdates = read_file(FILE_1)
+        invpoints = read_file(FILE_2)
+        debug_msg(dmsupdates)
+        debug_msg(invpoints)
+        return render_template(
+            "/triamai.html",
+            dmsupdates=dmsupdates,
+            invpoints=invpoints
+        )
+    else:    
+        # Write the latest contents to a differnt file.
+        # To push to ai search with different ID.
+        # These contents will be appended to main file later.
+        debug_msg("in triam post")
+        
+        content1 = request.form.get("content1", "")
+        content2 = request.form.get("content2", "")
+
+        now = datetime.now()
+        filesufix = now.strftime("%Y%m%d%H%M%S")
+        upload_doc_ai_search(content1,"dms-"+filesufix)
+        upload_doc_ai_search(content2,"inv-"+filesufix)
+
+        # overwrite file1.txt
+        with open(current_app.root_path+"/static/dmsupdates.txt", "a", encoding="utf-8") as f1:
+            f1.write(content1)
+
+        # overwrite file2.txt
+        with open(current_app.root_path+"/static/invpoints.txt", "a", encoding="utf-8") as f2:
+            f2.write(content2)
+
+        return render_template("/triamai.html", message="Both files saved successfully!",dmsupdates=content1,invpoints=content2)
+                           
+
+
 
 def debug_msg(msg):
     if debug_output == True:
@@ -1567,16 +1616,22 @@ def update_ai_doc():
     # Read file content
     filename = secure_filename(file.filename)
     file_content = file.read()   # bytes
+    content = file_content.decode("utf-8")
 
-    # (optional) convert to text
+    return upload_doc_ai_search(content,"mycontent")
+
+    
+
+def upload_doc_ai_search(content,doc_id):
     try:
-        content = file_content.decode("utf-8")
         embedding2 = openai_client.embeddings.create(
             model=deployment,
             input=content
         ).data[0].embedding
+        now = datetime.now()
+        filesufix = now.strftime("%Y%m%d%H%M%S")
         doc = {
-            "id": "dms",
+            "id": doc_id,
             "content": content,
             "embedding": embedding2
         }
@@ -1586,15 +1641,9 @@ def update_ai_doc():
         return jsonify({"message": "File uploaded successfully"})
     except UnicodeDecodeError:
         text = None
-
-    return jsonify({
-        "message": "File uploaded successfully",
-        "filename": filename,
-        "size_bytes": len(file_content)
-    })
-
-    
-
+        return jsonify({
+            "message": "File uploaded failed"
+        })
 
 ######################### AI Bot ######################################
 

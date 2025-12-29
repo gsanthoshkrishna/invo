@@ -41,17 +41,22 @@ daily_indicators
 daily_script_updates 
 daily_task      
 indicators      
-
+itembkp         
+items           
 inv_count       
-inv_customer    
+
+job_card_image
 inv_jobcard     
+
+tr_inv_sale
 inv_sale_reciept
+
 inventory_item  
 item_details    
 item_details_bkp
-itembkp         
-items           
-job_card_image  
+
+  
+inv_customer 
 
 
 invo_task       
@@ -67,7 +72,7 @@ temp_groc_list
 tr_account      
 tr_budget       
 tr_daily_changes
-tr_inv_sale     
+     
 tr_kirana       
 tr_share        
 update_inventory
