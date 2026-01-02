@@ -7,6 +7,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
+
+        #library {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .library-btn {
+            background: #edf2ff;
+            color: #333;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+
+        .notes-window {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 520px;
+            height: 420px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .notes-header {
+            background: #667eea;
+            color: white;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .notes-body {
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .notes-controls span {
+            cursor: pointer;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -16,7 +72,7 @@
 
         .container {
             width: 900px;
-            margin: 30px auto;
+            margin: 30px 40px;
             background: #ffffff;
             padding: 25px;
             border-radius: 12px;
@@ -137,17 +193,34 @@
 
 <body>
 <div class="container">
+    <div id="toast" style="
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: #38a169;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 6px;
+        display: none;
+        font-size: 14px;
+    ">
+    </div>
 
-    <h2>📄 Inventory & DMS Updates</h2>
-    <form method="POST" action="/triam-ai">
+    <h3>📚 Library</h3>
+    <div id="library"></div>
+
+    <!-- Notes popup container -->
+    <div id="notes-area"></div>
+
+    <h2>📄 Investments & DMS Updates</h2>
         <div class="textarea-group">
-            <textarea name="content1" rows="15" placeholder="DMS Updates...">{{ dmsupdates }}</textarea>
-            <textarea name="content2" rows="15" placeholder="Inventory Points...">{{ invpoints }}</textarea>
+            <textarea id="content1" name="content1" rows="15" placeholder="DMS Updates..."></textarea>
+            <textarea id="content2" name="content2" rows="15" placeholder="Investment Points..."></textarea>
         </div>
         <br>
-        <button type="submit">💾 Update Content</button>
-    </form>
-
+        
+        <button onclick="updatecontents()">💾 Update Content</button>
+    
     <hr>
 
     <h2>💬 AI Chat</h2>
@@ -157,7 +230,6 @@
         <input type="text" id="message" placeholder="Type your message...">
         <button onclick="sendMessage()">Send</button>
     </div>
-
     <hr>
 
     <h3>📤 Upload File</h3>
@@ -167,8 +239,12 @@
     </div>
 
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    const notesData = {{ notes | tojson }};
+</script>
+<script>
+
 function sendMessage() {
     const message = document.getElementById("message").value;
     if (!message) return;
@@ -190,6 +266,38 @@ function sendMessage() {
     document.getElementById("message").value = "";
 }
 
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.style.display = "block";
+
+    setTimeout(() => {
+        toast.style.display = "none";
+    }, 700);
+}
+
+function updatecontents() {
+    const cont1 = document.getElementById("content1").value;
+    const cont2 = document.getElementById("content2").value;
+
+      $.ajax({
+        type: 'POST',
+        url: '/triam-ai',
+        data: JSON.stringify({ 'content1': cont1,'content2': cont2,'request_type': 'ajax' }), 
+        contentType: 'application/json; charset=utf-8', 
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                alert('Updated successfully!');                
+            }else {
+                alert("Update failed");
+            }
+        }
+        });
+ 
+}
+
+
 function uploadFile() {
     const fileInput = document.getElementById("file");
     const formData = new FormData();
@@ -204,6 +312,62 @@ function uploadFile() {
         alert(data.message || data.error);
     });
 }
+
+function renderLibrary() {
+    const lib = document.getElementById("library");
+    
+    notesData.forEach((note, index) => {
+        const btn = document.createElement("div");
+        btn.className = "library-btn";
+        btn.innerText = note.name;
+        btn.onclick = () => openNote(index);
+        lib.appendChild(btn);
+    });
+    console.log(notesData)
+}
+
+function openNote(index) {
+    const note = notesData[index];
+
+    // Prevent duplicate windows
+    if (document.getElementById("note-" + index)) return;
+
+    const win = document.createElement("div");
+    win.className = "notes-window";
+    win.id = "note-" + index;
+
+    win.innerHTML = `
+        <div class="notes-header">
+            <span>${note.name}</span>
+            <div class="notes-controls">
+                <span onclick="closeNote(${index})">×</span>
+            </div>
+        </div>
+        <div class="notes-body">${note.content}</div>
+    `;
+
+    document.body.appendChild(win);
+}
+
+
+
+function restoreNote(index) {
+    const tab = document.getElementById("tab-" + index);
+    if (tab) tab.remove();
+    openNote(index);
+}
+
+function closeNote(index) {
+    const win = document.getElementById("note-" + index);
+    const tab = document.getElementById("tab-" + index);
+    if (win) win.remove();
+    if (tab) tab.remove();
+}
+
+
+renderLibrary();
+
+
 </script>
 
 </body>

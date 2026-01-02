@@ -1546,53 +1546,71 @@ def ask_question():
 
 @app.route("/triam-ai", methods=['GET', 'POST'])
 def triam_ai():
-    print("In triamai")
-    if request.method != 'POST':
-        # Initial load
-        FILE_1 = current_app.root_path+"/static/dmsupdates.txt"   # DMS updates
-        FILE_2 = current_app.root_path+"/static/invpoints.txt"   # Inventory points
+    print("In triamai:"+request.method)
 
-        def read_file(path):
-            try:
-                with open(path, "r", encoding="utf-8") as f:
-                    return f.read()
-            except FileNotFoundError:
-                print(path+": File not found")
-                return ""
-
-
-        dmsupdates = read_file(FILE_1)
-        invpoints = read_file(FILE_2)
-        debug_msg(dmsupdates)
-        debug_msg(invpoints)
-        return render_template(
-            "/triamai.html",
-            dmsupdates=dmsupdates,
-            invpoints=invpoints
-        )
-    else:    
+    if request.method == 'POST':    
         # Write the latest contents to a differnt file.
         # To push to ai search with different ID.
         # These contents will be appended to main file later.
         debug_msg("in triam post")
         
-        content1 = request.form.get("content1", "")
-        content2 = request.form.get("content2", "")
+        #content1 = request.form.get("content1", "")
+        #content2 = request.form.get("content2", "")
+        content1 = request.json['content1']
+        content2 = request.json['content2']
 
         now = datetime.now()
         filesufix = now.strftime("%Y%m%d%H%M%S")
         upload_doc_ai_search(content1,"dms-"+filesufix)
         upload_doc_ai_search(content2,"inv-"+filesufix)
 
-        # overwrite file1.txt
-        with open(current_app.root_path+"/static/dmsupdates.txt", "a", encoding="utf-8") as f1:
+        # append data to existing conents
+        with open(current_app.root_path+"/notes/dmsupdates.txt", "a", encoding="utf-8") as f1:
             f1.write(content1)
 
-        # overwrite file2.txt
-        with open(current_app.root_path+"/static/invpoints.txt", "a", encoding="utf-8") as f2:
+        with open(current_app.root_path+"/notes/invpoints.txt", "a", encoding="utf-8") as f2:
             f2.write(content2)
 
-        return render_template("/triamai.html", message="Both files saved successfully!",dmsupdates=content1,invpoints=content2)
+        return jsonify({"message": "Content updated successfully!","status":"success"})
+
+    debug_msg("This is not a post method..............")
+    # Initial load
+    NOTES_DIR = current_app.root_path+"/notes"
+
+    notes = []
+
+    if os.path.exists(NOTES_DIR):
+        for filename in os.listdir(NOTES_DIR):
+            file_path = os.path.join(NOTES_DIR, filename)
+            if os.path.isfile(file_path):
+                with open(file_path, "r", encoding="utf-8") as f:
+                    notes.append({
+                        "name": os.path.splitext(filename)[0],
+                        "content": f.read()
+                    })
+    debug_msg(notes)
+                    
+    FILE_1 = current_app.root_path+"/notes/dmsupdates.txt"   # DMS updates
+    FILE_2 = current_app.root_path+"/notes/invpoints.txt"   # Inventory points
+
+    def read_file(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read()
+        except FileNotFoundError:
+            print(path+": File not found")
+            return ""
+
+
+    dmsupdates = read_file(FILE_1)
+    invpoints = read_file(FILE_2)
+    debug_msg(dmsupdates)
+    debug_msg(invpoints)
+    return render_template(
+        "/triamai.html",
+        notes = notes
+    )
+            
                            
 
 
@@ -1618,7 +1636,7 @@ def update_ai_doc():
     file_content = file.read()   # bytes
     content = file_content.decode("utf-8")
 
-    return upload_doc_ai_search(content,"mycontent")
+    return upload_doc_ai_search(content,filename)
 
     
 
@@ -1631,7 +1649,7 @@ def upload_doc_ai_search(content,doc_id):
         now = datetime.now()
         filesufix = now.strftime("%Y%m%d%H%M%S")
         doc = {
-            "id": doc_id,
+            "id": doc_id.replace(".","_")+"_"+filesufix,
             "content": content,
             "embedding": embedding2
         }
@@ -1644,6 +1662,10 @@ def upload_doc_ai_search(content,doc_id):
         return jsonify({
             "message": "File uploaded failed"
         })
+
+
+
+
 
 ######################### AI Bot ######################################
 
