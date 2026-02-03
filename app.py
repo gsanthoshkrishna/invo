@@ -824,7 +824,7 @@ def fetch_item_details():
     if request.method == 'POST':
         item = request.form['item']
         cursor = mysql.cursor()
-        avail_stmt = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id and i.id = "+str(item)+" limit 1"
+        avail_stmt = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where i.is_active = 1 and ic.item_id = i.id and i.id = "+str(item)+" limit 1"
         price_stmt = "select ui.mrp, ui.cost MRP from update_inventory ui where ui.item_id = "+item+" order by ui.tr_date desc limit 1"
         print(avail_stmt)
         cursor.execute(avail_stmt)
@@ -851,7 +851,7 @@ def fetch_item_details():
 @app.route("/home")
 def inventory_home():
     cursor = mysql.cursor()
-    cursor.execute("SELECT id,tagval from item_details order by tagval")
+    cursor.execute("SELECT id,tagval from item_details where is_active = 1 order by tagval")
     items = cursor.fetchall()
     cursor.close()
     return render_template("inventory_home.html",items=items)
@@ -870,7 +870,7 @@ def inv_sell_transaction():
     if inv_cust_name == None:
         inv_cust_name = ""
     
-    sqlqry = "select id,tagval from item_details order by tagval"
+    sqlqry = "select id,tagval from item_details where is_active = 1 order by tagval"
     print("In sell transaction")
     cursor = mysql.cursor()
     
@@ -968,7 +968,7 @@ def inv_submit_transaction():
     vals_to_update = []
     for i,q in zip(items_list, qty_list):
         cursor = mysql.cursor()
-        sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id and i.id =  "+i        
+        sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where i.is_active = 1 and ic.item_id = i.id and i.id =  "+i        
         print(sqlqry)
         cursor.execute(sqlqry)
         data = cursor.fetchall()
@@ -1030,7 +1030,7 @@ def generateReciept(recieptId):
     
     
     #Reciept Item Details
-    sqlqry = "select i.tagval, tr.quantity, tr.price, tr.cost from tr_inv_sale tr,item_details i where reciept_num = "+str(recieptId)+" and i.id=tr.itemid"
+    sqlqry = "select i.tagval, tr.quantity, tr.price, tr.cost from tr_inv_sale tr,item_details i where i.is_active = 1 and  reciept_num = "+str(recieptId)+" and i.id=tr.itemid"
     print(sqlqry)
     cursor.execute(sqlqry)
     rItems = cursor.fetchall()
@@ -1123,7 +1123,7 @@ def generateReciept(recieptId):
 @app.route("/sale-report")
 def sale_report():
     cursor = mysql.cursor()
-    sqlqry = "select tis.trdate, ic.name, itd.tagval item,tis.cost,tis.price,tis.quantity   from tr_inv_sale tis, inv_sale_reciept isr, item_details itd, inv_customer ic where isr.id = tis.reciept_num and itd.id = tis.itemid and ic.id = isr.cust_id order by tis.trdate desc"
+    sqlqry = "select tis.trdate, ic.name, itd.tagval item,tis.cost,tis.price,tis.quantity   from tr_inv_sale tis, inv_sale_reciept isr, item_details itd, inv_customer ic where itd.is_active = 1 and isr.id = tis.reciept_num and itd.id = tis.itemid and ic.id = isr.cust_id order by tis.trdate desc"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -1132,8 +1132,18 @@ def sale_report():
 
 @app.route("/inv-report")
 def inv_report():
+    sort_by = request.args.get("sort_by", "item")
+    order = request.args.get("order", "asc")
+    sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where i.is_active = 1 and ic.item_id = i.id "
     cursor = mysql.cursor()
-    sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where ic.item_id = i.id order by i.tagval"
+    if sort_by == "count":
+        sqlqry += "order by ic.quantity"
+    else :
+        if sort_by == "item":
+            sqlqry += "order by i.tagval"
+        else:
+            sqlqry += "order by i.tagval"
+    sqlqry += " "+order
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -1160,7 +1170,7 @@ def inv_entry_delete():
 @app.route("/inv-entry-report")
 def inv_entry_report():
     cursor = mysql.cursor()
-    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id, ui.mrp MRP from update_inventory ui, item_details itd, buyer b where itd.id = ui.item_id and b.id = ui.buyer_id order by tr_date desc"
+    sqlqry = "select tr_date,itd.tagval,concat(b.name,', ',city) buyer ,ui.quantity,ui.id update_id, ui.mrp MRP from update_inventory ui, item_details itd, buyer b where itd.is_active = 1 and itd.id = ui.item_id and b.id = ui.buyer_id order by tr_date desc"
     print(sqlqry)
     cursor.execute(sqlqry)
     data = cursor.fetchall()
@@ -1247,10 +1257,38 @@ def insert_inv_item():
             print(f"{key}: {value}")
             #sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, key, value)
             
-        sql = "insert into item_details values(NULL,'%s','%s','%s')" % (item_id, item_id, item_str.replace(item_id+";",''))
+        sql = "insert into item_details values(NULL,'%s','%s','%s',1)" % (item_id, item_id, item_str.replace(item_id+";",''))
         insert_mysql_record(mysql,sql)
     return redirect("/add-item")
-    
+
+# List Inventory
+@app.route("/listinventory")
+def listinventory():
+    cursor = mysql.cursor()
+    cursor.execute("SELECT id,tagval FROM item_details WHERE is_active = 1")
+    inventory = cursor.fetchall()
+    return render_template("list_inventory.html", inventory=inventory)
+
+# Soft delete
+@app.route("/inventorydelete", methods=['POST'])
+def delete_inventory():
+    id = request.form["id"]
+    cursor = mysql.cursor()
+    sql_vals = "UPDATE item_details SET is_active = 0 WHERE id = "+id 
+    print("in delete inventory:"+sql_vals)
+    sub_id = insert_mysql_record(mysql,sql_vals)
+    return redirect(url_for("listinventory"))
+
+@app.route("/inventoryedit", methods=['POST'])
+def edit_inventory():
+    id = request.form["id"]
+    tagval = request.form["name"]
+    cursor = mysql.cursor()
+    sql_vals = "UPDATE item_details SET tagval = '"+tagval+"' WHERE id = "+id 
+    print("in delete inventory:"+sql_vals)
+    sub_id = insert_mysql_record(mysql,sql_vals)
+    return "Ok"
+
 @app.route('/get_fields', methods=['Get','POST'])
 def get_fields():
     category_id = request.json['category_id']
@@ -1314,7 +1352,7 @@ def update_inventory():
     else:
         cursor.execute("SELECT id,name from buyer")
         buyers = cursor.fetchall()
-        cursor.execute("SELECT id,tagval from item_details order by tagval")
+        cursor.execute("SELECT id,tagval from item_details where is_active = 1 order by tagval")
         items = cursor.fetchall()
         cursor.close()
         return render_template("/update_inventory.html",buyers=buyers, items=items,cur_date=date.today().strftime('%Y-%m-%d'))
@@ -1576,6 +1614,7 @@ def triam_ai():
     debug_msg("This is not a post method..............")
     # Initial load
     NOTES_DIR = current_app.root_path+"/notes"
+    BUCKETS_DIR = current_app.root_path+"/buckets"
 
     notes = []
 
@@ -1588,7 +1627,20 @@ def triam_ai():
                         "name": os.path.splitext(filename)[0],
                         "content": f.read()
                     })
+
+    buckets = []
+
+    if os.path.exists(BUCKETS_DIR):
+        for filename in os.listdir(BUCKETS_DIR):
+            file_path = os.path.join(BUCKETS_DIR, filename)
+            if os.path.isfile(file_path):
+                with open(file_path, "r", encoding="utf-8") as f:
+                    buckets.append({
+                        "name": os.path.splitext(filename)[0],
+                        "content": f.read()
+                    })
     debug_msg(notes)
+    debug_msg(buckets)
                     
     FILE_1 = current_app.root_path+"/notes/dmsupdates.txt"   # DMS updates
     FILE_2 = current_app.root_path+"/notes/invpoints.txt"   # Inventory points
@@ -1608,7 +1660,8 @@ def triam_ai():
     debug_msg(invpoints)
     return render_template(
         "/triamai.html",
-        notes = notes
+        notes = notes,
+        buckets = buckets
     )
             
                            

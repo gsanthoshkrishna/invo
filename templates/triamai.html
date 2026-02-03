@@ -7,6 +7,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
+        /* Side-by-side Library & Bucket */
+    .side-panel {
+        display: flex;
+        width: 100%;
+        gap: 20px;                 /* space between panels */
+        box-sizing: border-box;
+    }
+
+    #library,
+    #bucket {
+        width: 50%;                /* EXACT half */
+        box-sizing: border-box;
+        background: #f9fafb;
+        padding: 12px;
+        border-radius: 10px;
+        min-height: 260px;
+    }
+
+
+    #library h3,
+    #bucket h3 {
+        margin-top: 0;
+        font-size: 16px;
+    }
+
+    /* Common fixed-size button style */
+    .library-btn,
+    .bucket-btn {
+        width: 180px;              /* fixed width */
+        height: 44px;              /* fixed height */
+        padding: 0 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;   /* show ... for long text */
+        line-height: 1;
+    }
+
+
+
+    /* Responsive: stack on small screens */
+    @media (max-width: 768px) {
+        .side-panel {
+            flex-direction: column;
+        }
+    }
+
 
         #library {
             display: flex;
@@ -205,12 +258,20 @@
         font-size: 14px;
     ">
     </div>
+<div class="side-panel">
 
-    <h3>📚 Library</h3>
-    <div id="library"></div>
+    <div id="library">
+        <h3>📚 Library</h3>
+    </div>
 
-    <!-- Notes popup container -->
-    <div id="notes-area"></div>
+    <div id="bucket">
+        <h3>🪣 Buckets</h3>
+    </div>
+
+</div>
+
+<!-- Notes popup container -->
+<div id="notes-area"></div>
 
     <h2>📄 Investments & DMS Updates</h2>
         <div class="textarea-group">
@@ -242,6 +303,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const notesData = {{ notes | tojson }};
+    const bucketsData = {{ buckets | tojson }};
 </script>
 <script>
 
@@ -326,6 +388,19 @@ function renderLibrary() {
     console.log(notesData)
 }
 
+function renderBuckets() {
+    const bktEle = document.getElementById("bucket");
+    
+    bucketsData.forEach((bucket, index) => {
+        const bktBtn = document.createElement("div");
+        bktBtn.className = "library-btn";
+        bktBtn.innerText = bucket.name;
+        bktBtn.onclick = () => openBucket(index);
+        bktEle.appendChild(bktBtn);
+    });
+    console.log(bucketsData)
+}
+
 function openNote(index) {
     const note = notesData[index];
 
@@ -335,6 +410,29 @@ function openNote(index) {
     const win = document.createElement("div");
     win.className = "notes-window";
     win.id = "note-" + index;
+
+    win.innerHTML = `
+        <div class="notes-header">
+            <span>${note.name}</span>
+            <div class="notes-controls">
+                <span onclick="closeNote(${index})">×</span>
+            </div>
+        </div>
+        <div class="notes-body">${note.content}</div>
+    `;
+
+    document.body.appendChild(win);
+}
+
+function openBucket(index) {
+    const note = bucketsData[index];
+
+    // Prevent duplicate windows
+    if (document.getElementById("bkt-" + index)) return;
+
+    const win = document.createElement("div");
+    win.className = "notes-window";
+    win.id = "bkt-" + index;
 
     win.innerHTML = `
         <div class="notes-header">
@@ -366,7 +464,7 @@ function closeNote(index) {
 
 
 renderLibrary();
-
+renderBuckets();
 
 </script>
 
