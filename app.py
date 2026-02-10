@@ -8,6 +8,7 @@ from bsedata.bse import BSE
 
 
 
+
 app = Flask(__name__)
 db_name = ""
 UPLOAD_FOLDER = 'study-notes/img'
@@ -19,7 +20,9 @@ config_data = {}
 
 
 env_val = sys.argv[1]
+print(env_val)
 env_app_folder = sys.argv[2]
+print(env_app_folder)
 file_name = env_app_folder+"/config-"+env_val+".json"
 print("file:"+file_name)
 with open(file_name, 'r') as config_file:
@@ -38,7 +41,7 @@ def insert_many_mysql_record(mysql,sql,rows_to_insert):
     print(sql)
     print(rows_to_insert)
     if not mysql.is_connected():
-        print("Mysaql connection disconnected")
+        print("Mysql connection disconnected")
         mysql = mysql.connector.connect(
             host="",
             user="root",
@@ -877,6 +880,9 @@ def inv_sell_transaction():
     print(sqlqry)
     cursor.execute(sqlqry)
     items = cursor.fetchall()
+    print(items)
+    for item in items:
+        print(item)
     cursor.close()
     return render_template('/inv_sell_transaction.html',items=items,inv_cust_id=inv_cust_id, inv_cust_name=inv_cust_name,inv_cust_mob=inv_cust_mob,current_date=date.today().strftime('%Y-%m-%d'))
 
@@ -935,7 +941,9 @@ def submit_jobcard():
     filename = photofile.filename
     sql_vals = "insert into inv_jobcard(custno,problem,remarks) values('%s','%s','%s')" % (cust_id,problem,remarks)
     
-    filepath = '/var/lib/mysql-files/uploads/'+filename
+    filepath = config_data['job_card_folder'] + filename
+    print("filepath:"+filepath)
+    # filepath = '/var/lib/mysql-files/uploads/'+filename
     from werkzeug.utils import secure_filename
     photofile.save(filepath)
     
@@ -1133,22 +1141,33 @@ def sale_report():
 @app.route("/inv-report")
 def inv_report():
     sort_by = request.args.get("sort_by", "item")
+    print("sort_by ", sort_by)
     order = request.args.get("order", "asc")
+    print("order", order)
+    search_inp = request.args.get("q", "").strip()
+    print("search", search_inp)
+    
     sqlqry = "select  ic.item_id,i.tagval, ic.quantity from inv_count ic , item_details i where i.is_active = 1 and ic.item_id = i.id "
     cursor = mysql.cursor()
+    params = []
+
+    if search_inp:
+        sqlqry += " and i.tagval LIKE %s "
+        params.append(f"%{search_inp}%")
+
     if sort_by == "count":
         sqlqry += "order by ic.quantity"
     else :
-        if sort_by == "item":
-            sqlqry += "order by i.tagval"
-        else:
-            sqlqry += "order by i.tagval"
-    sqlqry += " "+order
+        sqlqry += "order by i.tagval"
+    sqlqry += " " + order
     print(sqlqry)
-    cursor.execute(sqlqry)
+    print("params", params)
+    # cursor.execute(sqlqry)
+    cursor.execute(sqlqry, params)
     data = cursor.fetchall()
+    # print("data", data)
     cursor.close()
-    return render_template("inv_report.html",items=data)
+    return render_template("inv_report.html",items=data, q=search_inp)
 
 @app.route("/inv-entry-edit", methods=['GET', 'POST'])
 def inv_entry_edit():
@@ -1369,246 +1388,246 @@ def add_tag():
 
 ######################### AI Bot ######################################
 
-from pydantic import BaseModel
-from openai import AzureOpenAI
-from azure.search.documents import SearchClient
-from azure.core.credentials import AzureKeyCredential
-from dotenv import load_dotenv
+# from pydantic import BaseModel
+# from openai import AzureOpenAI
+# from azure.search.documents import SearchClient
+# from azure.core.credentials import AzureKeyCredential
+# from dotenv import load_dotenv
 
-import os,uuid,json
+# import os,uuid,json
 
-load_dotenv()
-debug_output = True
+# load_dotenv()
+# debug_output = True
 
 
-##############################################################################
-openai_endpoint = "https://tejas-mj8ki4qk-eastus2.cognitiveservices.azure.com/"
-search_endpoint="https://triam-ai-search.search.windows.net"
-model_name = "text-embedding-3-small"
-deployment = "text-embedding-3-small"
-search_key=os.getenv("AI_SEARCH_KEY")
-api_key=os.getenv("OPENAI_API_KEY")
-AZURE_SEARCH_INDEX="rag-index"
-AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini"
+# ##############################################################################
+# openai_endpoint = "https://tejas-mj8ki4qk-eastus2.cognitiveservices.azure.com/"
+# search_endpoint="https://triam-ai-search.search.windows.net"
+# model_name = "text-embedding-3-small"
+# deployment = "text-embedding-3-small"
+# search_key=os.getenv("AI_SEARCH_KEY")
+# api_key=os.getenv("OPENAI_API_KEY")
+# AZURE_SEARCH_INDEX="rag-index"
+# AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini"
 
-# Azure AI Search client
-openai_client = AzureOpenAI(
-    api_version="2024-12-01-preview",
-    azure_endpoint=openai_endpoint,
-    api_key=api_key
-)
+# # Azure AI Search client
+# openai_client = AzureOpenAI(
+#     api_version="2024-12-01-preview",
+#     azure_endpoint=openai_endpoint,
+#     api_key=api_key
+# )
 
-search_client = SearchClient(
-    endpoint=search_endpoint,
-    index_name=AZURE_SEARCH_INDEX,
-    credential=AzureKeyCredential(search_key)
-)
+# search_client = SearchClient(
+#     endpoint=search_endpoint,
+#     index_name=AZURE_SEARCH_INDEX,
+#     credential=AzureKeyCredential(search_key)
+# )
 
-class QuestionRequest(BaseModel):
-    question: str
+# class QuestionRequest(BaseModel):
+#     question: str
 
-def get_embedding(text: str):
-    try:
-        response = openai_client.embeddings.create(
-            input=text,
-            model=deployment
-        )    
-        return response.data[0].embedding
-    except Exception as e:
-        # A general handler for any other exception
-        print(f"A embed exception error occurred:")
+# def get_embedding(text: str):
+#     try:
+#         response = openai_client.embeddings.create(
+#             input=text,
+#             model=deployment
+#         )    
+#         return response.data[0].embedding
+#     except Exception as e:
+#         # A general handler for any other exception
+#         print(f"A embed exception error occurred:")
     
-def retrieve_context(question: str, k: int = 3) -> str:
-    debug_msg("retrieving")
-    vector = get_embedding(question)
-    debug_msg(vector)
-    debug_msg("Debug2")
-    results = search_client.search(
-        search_text=question,
-        vector_queries=[{
-            "kind": "vector",
-            "vector": vector,
-            "k": k,
-            "fields": "embedding"
-        }],
-        select=["content"]
-    )
+# def retrieve_context(question: str, k: int = 3) -> str:
+#     debug_msg("retrieving")
+#     vector = get_embedding(question)
+#     debug_msg(vector)
+#     debug_msg("Debug2")
+#     results = search_client.search(
+#         search_text=question,
+#         vector_queries=[{
+#             "kind": "vector",
+#             "vector": vector,
+#             "k": k,
+#             "fields": "embedding"
+#         }],
+#         select=["content"]
+#     )
 
-    debug_msg("debug3")
-    retval = ""
-    for r in results:
-        debug_msg("==========")
-        debug_msg(r)
-        debug_msg("------")
-        retval = retval + r["content"]
-        debug_msg("==----------====")
-    #tmp = "\n".join([r.content for r in results])
-    debug_msg("====debug==========")
-    print(retval)
-    debug_msg("====-----==========")
-    return retval
+#     debug_msg("debug3")
+#     retval = ""
+#     for r in results:
+#         debug_msg("==========")
+#         debug_msg(r)
+#         debug_msg("------")
+#         retval = retval + r["content"]
+#         debug_msg("==----------====")
+#     #tmp = "\n".join([r.content for r in results])
+#     debug_msg("====debug==========")
+#     print(retval)
+#     debug_msg("====-----==========")
+#     return retval
 
-def generate_answer(question: str, context: str) -> str:
-    response = openai_client.chat.completions.create(
-        model=AZURE_OPENAI_CHAT_DEPLOYMENT,
-        messages=[
-            {
-                "role": "system",
-                "content": "Answer ONLY from the provided context. If not found, say 'Not available in knowledge base.'"
-            },
-            {
-                "role": "user",
-                "content": f"Context:\n{context}\n\nQuestion:\n{question}"
-            }
-        ]
-    )
-    debug_msg(response.choices)
-    return response.choices[0].message.content
+# def generate_answer(question: str, context: str) -> str:
+#     response = openai_client.chat.completions.create(
+#         model=AZURE_OPENAI_CHAT_DEPLOYMENT,
+#         messages=[
+#             {
+#                 "role": "system",
+#                 "content": "Answer ONLY from the provided context. If not found, say 'Not available in knowledge base.'"
+#             },
+#             {
+#                 "role": "user",
+#                 "content": f"Context:\n{context}\n\nQuestion:\n{question}"
+#             }
+#         ]
+#     )
+#     debug_msg(response.choices)
+#     return response.choices[0].message.content
 
-@app.route("/ask", methods=["GET", "POST"])
-def ask_question():
-    if request.method == "POST":
-        data = request.get_json()
-        question = data.get("question")
-        debug_msg("Question"+question)
-        context = retrieve_context(question)
-        answer = generate_answer(question, context)
-        return jsonify({"question": question,"answer": answer})
+# @app.route("/ask", methods=["GET", "POST"])
+# def ask_question():
+#     if request.method == "POST":
+#         data = request.get_json()
+#         question = data.get("question")
+#         debug_msg("Question"+question)
+#         context = retrieve_context(question)
+#         answer = generate_answer(question, context)
+#         return jsonify({"question": question,"answer": answer})
             
 
-@app.route("/triam-ai", methods=['GET', 'POST'])
-def triam_ai():
-    print("In triamai:"+request.method)
+# @app.route("/triam-ai", methods=['GET', 'POST'])
+# def triam_ai():
+#     print("In triamai:"+request.method)
 
-    if request.method == 'POST':    
-        # Write the latest contents to a differnt file.
-        # To push to ai search with different ID.
-        # These contents will be appended to main file later.
-        debug_msg("in triam post")
+#     if request.method == 'POST':    
+#         # Write the latest contents to a differnt file.
+#         # To push to ai search with different ID.
+#         # These contents will be appended to main file later.
+#         debug_msg("in triam post")
         
-        #content1 = request.form.get("content1", "")
-        #content2 = request.form.get("content2", "")
-        content1 = request.json['content1']
-        content2 = request.json['content2']
+#         #content1 = request.form.get("content1", "")
+#         #content2 = request.form.get("content2", "")
+#         content1 = request.json['content1']
+#         content2 = request.json['content2']
 
-        now = datetime.now()
-        filesufix = now.strftime("%Y%m%d%H%M%S")
-        upload_doc_ai_search(content1,"dms-"+filesufix)
-        upload_doc_ai_search(content2,"inv-"+filesufix)
+#         now = datetime.now()
+#         filesufix = now.strftime("%Y%m%d%H%M%S")
+#         upload_doc_ai_search(content1,"dms-"+filesufix)
+#         upload_doc_ai_search(content2,"inv-"+filesufix)
 
-        # append data to existing conents
-        with open(current_app.root_path+"/notes/dmsupdates.txt", "a", encoding="utf-8") as f1:
-            f1.write(content1)
+#         # append data to existing conents
+#         with open(current_app.root_path+"/notes/dmsupdates.txt", "a", encoding="utf-8") as f1:
+#             f1.write(content1)
 
-        with open(current_app.root_path+"/notes/invpoints.txt", "a", encoding="utf-8") as f2:
-            f2.write(content2)
+#         with open(current_app.root_path+"/notes/invpoints.txt", "a", encoding="utf-8") as f2:
+#             f2.write(content2)
 
-        return jsonify({"message": "Content updated successfully!","status":"success"})
+#         return jsonify({"message": "Content updated successfully!","status":"success"})
 
-    debug_msg("This is not a post method..............")
-    # Initial load
-    NOTES_DIR = current_app.root_path+"/notes"
-    BUCKETS_DIR = current_app.root_path+"/buckets"
+#     debug_msg("This is not a post method..............")
+#     # Initial load
+#     NOTES_DIR = current_app.root_path+"/notes"
+#     BUCKETS_DIR = current_app.root_path+"/buckets"
 
-    notes = []
+#     notes = []
 
-    if os.path.exists(NOTES_DIR):
-        for filename in os.listdir(NOTES_DIR):
-            file_path = os.path.join(NOTES_DIR, filename)
-            if os.path.isfile(file_path):
-                with open(file_path, "r", encoding="utf-8") as f:
-                    notes.append({
-                        "name": os.path.splitext(filename)[0],
-                        "content": f.read()
-                    })
+#     if os.path.exists(NOTES_DIR):
+#         for filename in os.listdir(NOTES_DIR):
+#             file_path = os.path.join(NOTES_DIR, filename)
+#             if os.path.isfile(file_path):
+#                 with open(file_path, "r", encoding="utf-8") as f:
+#                     notes.append({
+#                         "name": os.path.splitext(filename)[0],
+#                         "content": f.read()
+#                     })
 
-    buckets = []
+#     buckets = []
 
-    if os.path.exists(BUCKETS_DIR):
-        for filename in os.listdir(BUCKETS_DIR):
-            file_path = os.path.join(BUCKETS_DIR, filename)
-            if os.path.isfile(file_path):
-                with open(file_path, "r", encoding="utf-8") as f:
-                    buckets.append({
-                        "name": os.path.splitext(filename)[0],
-                        "content": f.read()
-                    })
-    debug_msg(notes)
-    debug_msg(buckets)
+#     if os.path.exists(BUCKETS_DIR):
+#         for filename in os.listdir(BUCKETS_DIR):
+#             file_path = os.path.join(BUCKETS_DIR, filename)
+#             if os.path.isfile(file_path):
+#                 with open(file_path, "r", encoding="utf-8") as f:
+#                     buckets.append({
+#                         "name": os.path.splitext(filename)[0],
+#                         "content": f.read()
+#                     })
+#     debug_msg(notes)
+#     debug_msg(buckets)
                     
-    FILE_1 = current_app.root_path+"/notes/dmsupdates.txt"   # DMS updates
-    FILE_2 = current_app.root_path+"/notes/invpoints.txt"   # Inventory points
+#     FILE_1 = current_app.root_path+"/notes/dmsupdates.txt"   # DMS updates
+#     FILE_2 = current_app.root_path+"/notes/invpoints.txt"   # Inventory points
 
-    def read_file(path):
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return f.read()
-        except FileNotFoundError:
-            print(path+": File not found")
-            return ""
+#     def read_file(path):
+#         try:
+#             with open(path, "r", encoding="utf-8") as f:
+#                 return f.read()
+#         except FileNotFoundError:
+#             print(path+": File not found")
+#             return ""
 
 
-    dmsupdates = read_file(FILE_1)
-    invpoints = read_file(FILE_2)
-    debug_msg(dmsupdates)
-    debug_msg(invpoints)
-    return render_template(
-        "/triamai.html",
-        notes = notes,
-        buckets = buckets
-    )
+#     dmsupdates = read_file(FILE_1)
+#     invpoints = read_file(FILE_2)
+#     debug_msg(dmsupdates)
+#     debug_msg(invpoints)
+#     return render_template(
+#         "/triamai.html",
+#         notes = notes,
+#         buckets = buckets
+#     )
             
                            
 
 
 
-def debug_msg(msg):
-    if debug_output == True:
-        print(msg)
+# def debug_msg(msg):
+#     if debug_output == True:
+#         print(msg)
 
 
 
-@app.route("/update-ai-doc", methods=["POST"])
-def update_ai_doc():
-    if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
+# @app.route("/update-ai-doc", methods=["POST"])
+# def update_ai_doc():
+#     if "file" not in request.files:
+#         return jsonify({"error": "No file part"}), 400
 
-    file = request.files["file"]
+#     file = request.files["file"]
 
-    if file.filename == "":
-        return jsonify({"error": "No file selected"}), 400
+#     if file.filename == "":
+#         return jsonify({"error": "No file selected"}), 400
 
-    # Read file content
-    filename = secure_filename(file.filename)
-    file_content = file.read()   # bytes
-    content = file_content.decode("utf-8")
+#     # Read file content
+#     filename = secure_filename(file.filename)
+#     file_content = file.read()   # bytes
+#     content = file_content.decode("utf-8")
 
-    return upload_doc_ai_search(content,filename)
+#     return upload_doc_ai_search(content,filename)
 
     
 
-def upload_doc_ai_search(content,doc_id):
-    try:
-        embedding2 = openai_client.embeddings.create(
-            model=deployment,
-            input=content
-        ).data[0].embedding
-        now = datetime.now()
-        filesufix = now.strftime("%Y%m%d%H%M%S")
-        doc = {
-            "id": doc_id.replace(".","_")+"_"+filesufix,
-            "content": content,
-            "embedding": embedding2
-        }
-        search_client.upload_documents(documents=[doc])
-        print("TXT file uploaded")
+# def upload_doc_ai_search(content,doc_id):
+#     try:
+#         embedding2 = openai_client.embeddings.create(
+#             model=deployment,
+#             input=content
+#         ).data[0].embedding
+#         now = datetime.now()
+#         filesufix = now.strftime("%Y%m%d%H%M%S")
+#         doc = {
+#             "id": doc_id.replace(".","_")+"_"+filesufix,
+#             "content": content,
+#             "embedding": embedding2
+#         }
+#         search_client.upload_documents(documents=[doc])
+#         print("TXT file uploaded")
         
-        return jsonify({"message": "File uploaded successfully"})
-    except UnicodeDecodeError:
-        text = None
-        return jsonify({
-            "message": "File uploaded failed"
-        })
+#         return jsonify({"message": "File uploaded successfully"})
+#     except UnicodeDecodeError:
+#         text = None
+#         return jsonify({
+#             "message": "File uploaded failed"
+#         })
 
 
 

@@ -1,18 +1,19 @@
 <style>
-/* Make select2 fill table cell */
-.select2-container {
-    width: 100% !important;
-}
+    /* Make select2 fill table cell */
+    .select2-container {
+        width: 100% !important;
+    }
 
-/* Make dropdown wide */
-.select2-dropdown {
-    min-width: 500px;   /* increase as needed */
-}
+    /* Make dropdown wide */
+    .select2-dropdown {
+        min-width: 500px;
+        /* increase as needed */
+    }
 
-/* Make search input wide */
-.select2-search__field {
-    width: 100% !important;
-}
+    /* Make search input wide */
+    .select2-search__field {
+        width: 100% !important;
+    }
 
     .popup {
         display: none;
@@ -26,6 +27,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         z-index: 1000;
     }
+
     .overlay {
         display: none;
         position: fixed;
@@ -47,21 +49,21 @@
         <label for="location">Location:</label>
         <input type="text" id="pCustLoc" name="pCustLoc" required>
         <input type="submit" value="Create">
-        <button type="button" onclick="hidePopup()" >Cancel</button>
+        <button type="button" onclick="hidePopup()">Cancel</button>
     </form>
 </div>
 
 <div id="successPopupForm" class="popup">
     <form action="/inv-sell-transaction">
         <label id="successPopupForm">Success</label>
-        <button type="button" onclick="hideSuccessPopup()" >Ok</button>
+        <button type="button" onclick="hideSuccessPopup()">Ok</button>
     </form>
 </div>
 
 <div id="errPopupForm" class="popup">
     <form>
         <label id="errpopuptxt"></label>
-        <button type="button" onclick="hideErrPopup()" >Ok</button>
+        <button type="button" onclick="hideErrPopup()">Ok</button>
     </form>
 </div>
 
@@ -69,14 +71,19 @@
     <input type="date" id="tr_date" name="tr_date" value="{{ current_date }}" required><br>
     <label>Mobile:</label>
     <input type="text" id="mobile" value="{{ inv_cust_mob }}"><button onclick="getUser()">Search</button>
-    <input type="hidden" id="cust_id" value="{{ inv_cust_id }}" ><br>
+    <input type="hidden" id="cust_id" value="{{ inv_cust_id }}"><br>
     <label>Name</label>
     <input type="text" id="custname" value="{{ inv_cust_name }}" readonly><br>
     <input type="text" id="itemcnt" value="0" hidden="true">
     <table id="myTable">
-        <tr><th>Item</th><th>Quantity</th><th>Price</th><th>Cost</th></tr>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Cost</th>
+        </tr>
         {% for i in [1,2,3,4,5,6,7,8,9,10] %}
-        <tr  style="display:none;" id="row_{{ i }}">
+        <tr style="display:none;" id="row_{{ i }}">
             <td>
                 <select name="items_{{ i }}" id="items_{{ i }}" class="item-select">
                     <option value=""></option>
@@ -86,26 +93,32 @@
                 </select>
             </td>
             <td>
-                <input type="text" name="qty_{{ i }}" id="qty_{{ i }}" onchange="updateTotal({{ i }})" oninput="updateTotal({{ i }})" value="0">
+                <input type="text" name="qty_{{ i }}" id="qty_{{ i }}" onchange="updateTotal({{ i }})"
+                    oninput="updateTotal({{ i }})" value="0">
             </td>
             <td>
-                <input type="text" name="price_{{ i }}" id="price_{{ i }}" onchange="updateTotal({{ i }})" oninput="updateTotal({{ i }})" value="0">
+                <input type="text" name="price_{{ i }}" id="price_{{ i }}" onchange="updateTotal({{ i }})"
+                    oninput="updateTotal({{ i }})" value="0">
             </td>
             <td>
                 <input type="text" name="cost_{{ i }}" id="cost_{{ i }}" readonly="true" value="0">
-                
+
             </td>
         </tr>
         {% endfor %}
-        <td></td><td></td><td>Total Cost</td><td><input type="text" id="totalcost" readonly="true"></td>
+        <td></td>
+        <td></td>
+        <td>Total Cost</td>
+        <td><input type="text" id="totalcost" readonly="true"></td>
     </table>
-    <button type="button" onclick="addRow()" >Add</button>   
+    <button type="button" onclick="addRow()">Add</button>
 
     <button onclick="sell()">Submit</button>
 
-<button onclick="location.href='/home'">Home</button>
+    <button onclick="location.href='/home'">Home</button>
 </div>
-<iframe id="billFrame" src="{{ url_for('static', filename='bill_reciept.pdf') }}" width="100%" height="600px" style="display:none;"></iframe>
+<iframe id="billFrame" src="{{ url_for('static', filename='bill_reciept.pdf') }}" width="100%" height="600px"
+    style="display:none;"></iframe>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -113,204 +126,206 @@
 
 
 <script>
-    function updateTotal(i){
+    function updateTotal(i) {
         //console.log("arg:"+i)
-        var qty = document.getElementById("qty_"+i).value
-        var price = document.getElementById("price_"+i).value
-        var cost = document.getElementById("cost_"+i)
+        var qty = document.getElementById("qty_" + i).value
+        var price = document.getElementById("price_" + i).value
+        var cost = document.getElementById("cost_" + i)
         cost.value = parseInt(price) * parseInt(qty)
         var totcost = 0;
         for (const rc of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
             //console.log("rc:"+rc)
-            totcost = totcost + parseInt(document.getElementById("cost_"+rc).value);
+            totcost = totcost + parseInt(document.getElementById("cost_" + rc).value);
         }
         //console.log("totcost:"+totcost)
         // TODO here cost is summing up but cost_6 textbox value is not setting to totcost
         var totcosttxt = document.getElementById("totalcost")
         totcosttxt.value = totcost;
     }
-function getUser() {
-    var mobno = document.getElementById('mobile').value;
-    //console.log("in ajax call")
-    $.ajax({
-        type: 'POST',
-        url: '/inv-load-transaction',
-        data: JSON.stringify({ 'mobile': mobno}), 
-        headers: {
-        "Content-Type": "application/json"
-        }, 
-        dataType: 'json',
-        success: function(response){
-            
-            if (response.cust_id == -1){
-                console.log("Customer Not Available")
-                showPopup()
-            }else{
-                console.log("Customer Available")
-                document.getElementById('custname').value = response.custname;
-                document.getElementById('cust_id').value = response.cust_id;   
-            }
-        } 
-    });
-}
-/*
-function addRow(){
-    var itemcntval = document.getElementById("itemcnt").value
-    itemcnt = parseInt(itemcntval) + 1
-    //console.log("items_"+itemcnt)
-    document.getElementById("row_"+itemcnt).style.display = 'table-row'; 
-    document.getElementById("itemcnt").value = itemcnt
-
-}
-*/
-function addRow(){
-    var itemcntval = document.getElementById("itemcnt").value;
-    var itemcnt = parseInt(itemcntval) + 1;
-
-    document.getElementById("row_"+itemcnt).style.display = 'table-row'; 
-    document.getElementById("itemcnt").value = itemcnt;
-
-    // Enable search on newly visible select
-    $('#items_' + itemcnt).select2({
-        placeholder: "Search item",
-        allowClear: true,
-        width: 'resolve',
-        dropdownAutoWidth: true,
-        dropdownParent: $('body')
-    });
-}
-
-function delRow(){
-    var itemcntval = document.getElementById("itemcnt").value
-    for (let i = 1; i <= itemcntval; i++) {
-		document.getElementById("items_"+i).selectedIndex = 0;
-		document.getElementById("qty_"+i).value = 0;
-		document.getElementById("price_"+i).value = 0;
-		document.getElementById("cost_"+i).value = 0;
-		document.getElementById("totalcost").value = "";
-		document.getElementById("mobile").value = "";
-		document.getElementById("cust_id").value = "";
-		document.getElementById("custname").value = "";
-		document.getElementById("itemcnt").value = "";
-		document.getElementById("row_"+i).style.display = 'none';
-    }
-    itemcnt = parseInt(itemcntval) + 1
-    //console.log("items_"+itemcnt)
-         
-
-}
-
-function showPopup(){    
-    var pCustMob = document.getElementById("pCustMob");
-    var tempmob = document.getElementById("mobile");
-    pCustMob.value = tempmob.value
-    pCustMob.readOnly = true
-    document.getElementById("popupForm").style.display = "block"
-}
-
-
-function hidePopup(){
-    document.getElementById("popupForm").style.display = "none"
-}
-function showErrPopup(){    
-    document.getElementById("errPopupForm").style.display = "block"
-}
-
-function hideErrPopup(){    
-    document.getElementById("errPopupForm").style.display = "none"
-}
-
-function showSuccessPopup(){    
-    document.getElementById("successPopupForm").style.display = "block"
-}
-
-function hideSuccessPopup(){    
-    document.getElementById("successPopupForm").style.display = "none"
-}
-
-
-function resetSale(){
-    var itemcntval = document.getElementById("itemcnt").value
-    let qty = [];
-    let price = [];
-    let cost = [];
-    let items = [];
-    
-    //console.log("Values list")
-    for (let i = 1; i <= itemcntval; i++) {
-      //console.log("resetting ")
-      $('#qty_' + i).val() = 
-      price.push($('#price_' + i).val());
-      cost.push($('#cost_' + i).val());
-      items.push($('#items_'+ i).val());
-    }
-}
-
-function sell() {
-    //First get the total items count form itemcnt
-    var itemcntval = document.getElementById("itemcnt").value
-    let qty = [];
-    let price = [];
-    let cost = [];
-    let items = [];
-    
-    //console.log("Values list")
-    for (let i = 1; i <= itemcntval; i++) {
-        //console.log("ItemVal:")
-        //console.log($('#items_'+ i).val())
-        //console.log($('#qty_' + i).val())
-      qty.push($('#qty_' + i).val());
-      price.push($('#price_' + i).val());
-      cost.push($('#cost_' + i).val());
-      items.push($('#items_'+ i).val());
-    }
-    let data = {
-      qty: qty,
-      price: price,
-      cost: cost,
-      items: items
-    };
-        //console.log(data)
-	var cust_id =	 document.getElementById('cust_id').value;
-	var custname =  document.getElementById('custname').value;
-	var tr_date =  document.getElementById('tr_date').value;
-    var tot_cost =  document.getElementById('totalcost').value;
-    
+    function getUser() {
+        var mobno = document.getElementById('mobile').value;
+        //console.log("in ajax call")
         $.ajax({
             type: 'POST',
-            url: '/inv-submit-transaction',
-            data: JSON.stringify({ 'itemscnt':itemcntval, 'cust_id': cust_id, 'custname': custname, "totcost": tot_cost, 
-                                    "tr_date": tr_date, 'data': data }),
+            url: '/inv-load-transaction',
+            data: JSON.stringify({ 'mobile': mobno }),
             headers: {
-                    "Content-Type": "application/json"
-                    },
+                "Content-Type": "application/json"
+            },
             dataType: 'json',
-            success: function(response){
-                        if (response.retval == "success"){
-                            console.log("in ajax response");
-							delRow()
-                            showSuccessPopup()
-                            document.getElementById("itemcnt").value = 0
-							//const iframe = document.getElementById("billFrame");
-							//iframe.src = response.recieptid;
-							//iframe.style.display = "block";
-                            //resetSale();
-                        }
-                        if (response.retval == "noresource"){
-                            errpopelement = document.getElementById("errpopuptxt")
-                            errpopelement.textContent = response.msg
-                            showErrPopup()
-                        }
-                    }
-            
+            success: function (response) {
+
+                if (response.cust_id == -1) {
+                    console.log("Customer Not Available")
+                    showPopup()
+                } else {
+                    console.log("Customer Available")
+                    document.getElementById('custname').value = response.custname;
+                    document.getElementById('cust_id').value = response.cust_id;
+                }
+            }
+        });
+    }
+    /*
+    function addRow(){
+        var itemcntval = document.getElementById("itemcnt").value
+        itemcnt = parseInt(itemcntval) + 1
+        //console.log("items_"+itemcnt)
+        document.getElementById("row_"+itemcnt).style.display = 'table-row'; 
+        document.getElementById("itemcnt").value = itemcnt
+    
+    }
+    */
+    function addRow() {
+        var itemcntval = document.getElementById("itemcnt").value;
+        var itemcnt = parseInt(itemcntval) + 1;
+
+        document.getElementById("row_" + itemcnt).style.display = 'table-row';
+        document.getElementById("itemcnt").value = itemcnt;
+
+        // Enable search on newly visible select
+        $('#items_' + itemcnt).select2({
+            placeholder: "Search item",
+            allowClear: true,
+            width: 'resolve',
+            dropdownAutoWidth: true,
+            dropdownParent: $('body')
         });
     }
 
-$(document).ready(function () {
-    $('.item-select').select2({
-        placeholder: "Search item",
-        allowClear: true,
-        width: '100%'
-    });
-});
+    function delRow() {
+        var itemcntval = document.getElementById("itemcnt").value
+        for (let i = 1; i <= itemcntval; i++) {
+            document.getElementById("items_" + i).selectedIndex = 0;
+            document.getElementById("qty_" + i).value = 0;
+            document.getElementById("price_" + i).value = 0;
+            document.getElementById("cost_" + i).value = 0;
+            document.getElementById("totalcost").value = "";
+            document.getElementById("mobile").value = "";
+            document.getElementById("cust_id").value = "";
+            document.getElementById("custname").value = "";
+            document.getElementById("itemcnt").value = "";
+            document.getElementById("row_" + i).style.display = 'none';
+        }
+        itemcnt = parseInt(itemcntval) + 1
+        //console.log("items_"+itemcnt)
+
+
+    }
+
+    function showPopup() {
+        var pCustMob = document.getElementById("pCustMob");
+        var tempmob = document.getElementById("mobile");
+        pCustMob.value = tempmob.value
+        pCustMob.readOnly = true
+        document.getElementById("popupForm").style.display = "block"
+    }
+
+
+    function hidePopup() {
+        document.getElementById("popupForm").style.display = "none"
+    }
+    function showErrPopup() {
+        document.getElementById("errPopupForm").style.display = "block"
+    }
+
+    function hideErrPopup() {
+        document.getElementById("errPopupForm").style.display = "none"
+    }
+
+    function showSuccessPopup() {
+        document.getElementById("successPopupForm").style.display = "block"
+    }
+
+    function hideSuccessPopup() {
+        document.getElementById("successPopupForm").style.display = "none"
+    }
+
+
+    function resetSale() {
+        var itemcntval = document.getElementById("itemcnt").value
+        let qty = [];
+        let price = [];
+        let cost = [];
+        let items = [];
+
+        //console.log("Values list")
+        for (let i = 1; i <= itemcntval; i++) {
+            //console.log("resetting ")
+            $('#qty_' + i).val() =
+                price.push($('#price_' + i).val());
+            cost.push($('#cost_' + i).val());
+            items.push($('#items_' + i).val());
+        }
+    }
+
+    function sell() {
+        //First get the total items count form itemcnt
+        var itemcntval = document.getElementById("itemcnt").value
+        let qty = [];
+        let price = [];
+        let cost = [];
+        let items = [];
+
+        //console.log("Values list")
+        for (let i = 1; i <= itemcntval; i++) {
+            //console.log("ItemVal:")
+            //console.log($('#items_'+ i).val())
+            //console.log($('#qty_' + i).val())
+            qty.push($('#qty_' + i).val());
+            price.push($('#price_' + i).val());
+            cost.push($('#cost_' + i).val());
+            items.push($('#items_' + i).val());
+        }
+        let data = {
+            qty: qty,
+            price: price,
+            cost: cost,
+            items: items
+        };
+        //console.log(data)
+        var cust_id = document.getElementById('cust_id').value;
+        var custname = document.getElementById('custname').value;
+        var tr_date = document.getElementById('tr_date').value;
+        var tot_cost = document.getElementById('totalcost').value;
+
+        $.ajax({
+            type: 'POST',
+            url: '/inv-submit-transaction',
+            data: JSON.stringify({
+                'itemscnt': itemcntval, 'cust_id': cust_id, 'custname': custname, "totcost": tot_cost,
+                "tr_date": tr_date, 'data': data
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.retval == "success") {
+                    console.log("in ajax response");
+                    delRow()
+                    showSuccessPopup()
+                    document.getElementById("itemcnt").value = 0
+                    //const iframe = document.getElementById("billFrame");
+                    //iframe.src = response.recieptid;
+                    //iframe.style.display = "block";
+                    //resetSale();
+                }
+                if (response.retval == "noresource") {
+                    errpopelement = document.getElementById("errpopuptxt")
+                    errpopelement.textContent = response.msg
+                    showErrPopup()
+                }
+            }
+
+        });
+    }
+
+    // $(document).ready(function () {
+    //     $('.item-select').select2({
+    //         placeholder: "Search item",
+    //         allowClear: true,
+    //         width: '100%'
+    //     });
+    // });
 </script>

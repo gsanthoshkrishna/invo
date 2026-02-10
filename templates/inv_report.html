@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Inventory Report</title>
@@ -16,15 +17,17 @@
 
         .page {
             display: flex;
-            justify-content: center;   /* center horizontally */
+            justify-content: center;
+            /* center horizontally */
             padding: 40px 20px;
         }
 
         .card {
-            width: 600px;              /* tighter width */
+            width: 600px;
+            /* tighter width */
             background: white;
             border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -44,9 +47,12 @@
             color: white;
         }
 
-        th, td {
-            padding: 12px 14px;        /* reduced gap */
-            font-size: 15px;           /* slightly larger font */
+        th,
+        td {
+            padding: 12px 14px;
+            /* reduced gap */
+            font-size: 15px;
+            /* slightly larger font */
         }
 
         th {
@@ -75,7 +81,7 @@
             margin-left: 6px;
             font-size: 12px;
             text-decoration: none;
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .sort:hover {
@@ -94,49 +100,82 @@
 
 <body>
 
-<h1>📦 Inventory Report</h1>
+    <h1>📦 Inventory Report</h1>
 
-<div class="page">
-    <div class="card">
+    <div class="page">
+        <div class="card">
+            <form method="get" action="/inv-report" style="padding: 12px 16px;">
+                <input type="text" name="q" value="{{ q }}" placeholder="Search item" style="
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+        ">
+            </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Item
-                        <a class="sort" href="?sort_by=item&order=asc">▲</a>
-                        <a class="sort" href="?sort_by=item&order=desc">▼</a>
-                    </th>
-                    <th class="count">
-                        Count
-                        <a class="sort" href="?sort_by=count&order=asc">▲</a>
-                        <a class="sort" href="?sort_by=count&order=desc">▼</a>
-                    </th>
-                </tr>
-            </thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Item
+                            <a class="sort" href="?q={{ q }}&sort_by=item&order=asc">▲</a>
+                            <a class=" sort" href="?q={{ q }}&sort_by=item&order=desc">▼</a>
+                        </th>
+                        <th class=" count">
+                            Count
+                            <a class="sort" href="?q={{ q }}&sort_by=count&order=asc">▲</a>
+                            <a class=" sort" href="?q={{ q }}&sort_by=count&order=desc">▼</a>
+                        </th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item[1] }}</td>
-                    <td class="count">{{ item[2] }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="2" style="text-align:center;color:#999;">
-                        No inventory data found
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <tbody id="inventoryTable">
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item[1] }}</td>
+                        <td class=" count">{{ item[2] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" style="text-align:center;color:#999;">
+                            No inventory data found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-        <div class="footer">
-            Total records: {{ items|length }}
+            <div class="footer">
+                Total records: {{ items|length }}
+            </div>
+
         </div>
-
     </div>
-</div>
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const tableBody = document.getElementById("inventoryTable");
+
+        searchInput.addEventListener("keyup", function () {
+            const filter = searchInput.value.toLowerCase();
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const itemCell = rows[i].getElementsByTagName("td")[0];
+                if (!itemCell) continue;
+
+                const text = itemCell.textContent || itemCell.innerText;
+
+                if (text.toLowerCase().includes(filter)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        });
+    </script>
 
 </body>
+
 </html>
