@@ -931,6 +931,20 @@ def insert_inv_cust():
     cust_id = insert_mysql_record(mysql,sql_vals)
     return redirect("/inv-sell-transaction?inv_cust_mob="+custmob+"&inv_cust_name="+custname+"&inv_cust_mob="+custmob+"&inv_cust_id="+str(cust_id))
 
+@app.route("/get-jobCard-details", methods=['POST'])
+def get_jobCard_details():
+    cust_id = request.form['customer_id']
+    print(cust_id)
+
+    sql_query = "select * from inv_jobcard where id=" + cust_id
+    print("SQL Q ", sql_query)
+    cursor = mysql.cursor()
+    cursor.execute(sql_query)
+    cust_data = cursor.fetchone()
+    print("Data ", cust_data) 
+
+    return render_template('show_customer_details.html', cust_data=cust_data)
+
 #NEXT: Complete this. form values taken need to test.
 @app.route("/submit-jobcard", methods=['POST'])
 def submit_jobcard():
@@ -939,10 +953,11 @@ def submit_jobcard():
     remarks = request.form['remarks']
     photofile = request.files['photo']
     filename = photofile.filename
+    print("filename:  ", filename)
     sql_vals = "insert into inv_jobcard(custno,problem,remarks) values('%s','%s','%s')" % (cust_id,problem,remarks)
     
     filepath = config_data['job_card_folder'] + filename
-    print("filepath:"+filepath)
+    print("filepath:  "+ filepath)
     # filepath = '/var/lib/mysql-files/uploads/'+filename
     from werkzeug.utils import secure_filename
     photofile.save(filepath)
